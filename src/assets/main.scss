@@ -1,0 +1,69 @@
+$box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+$border-radius: .25rem;
+
+$carousel-transition-duration: .15s;
+$dropdown-font-size: 0.92rem;
+$dropdown-link-active-bg: var(--bs-dropdown-link-hover-bg);
+$dropdown-link-active-color: var(--bs-dropdown-link-color);
+$tooltip-max-width: auto; // 200px
+$enable-negative-margins: true;
+
+@import 'bootstrap/scss/bootstrap';
+
+.btn-close {
+  background-size: .9rem;
+}
+
+.dropdown-toggle::after {
+  position: relative;
+  top: 1px;
+}
+
+/* Bootstrap */
+
+.dropdown-item {
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item.router-link-active {
+  font-weight: 600;
+}
+
+.dropdown-menu,
+.modal-content {
+  border: none;
+}
+
+.tooltip {
+  font-weight: 600;
+}
+
+[readonly] {
+  cursor: default;
+}
+
+@import './transitions/fade.css';
+@import './transitions/flash.css';
+@import './transitions/slide-up.css';
+@import './data-box.css';
+
+@import 'vanillajs-datepicker/sass/datepicker';
+
+/* Google */
+body {
+  --gg-light-1: #f8fafd;
+  --gg-light-2: #e9eef6;
+}
+
+.bg-light-1 {
+  background-color: var(--gg-light-1);
+}
+
+.bg-light-2 {
+  background-color: var(--gg-light-2);
+}

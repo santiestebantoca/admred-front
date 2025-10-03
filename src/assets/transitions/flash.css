@@ -1,0 +1,31 @@
+.flash-enter-active {
+  transition: background-color 0.7s ease 0.6s;
+}
+
+/* Estado final después de entrar */
+.flash-enter-from {
+  background-color: rgba(255, 0, 0, .5);
+}
+
+/* Estado final cuando se ha completado la entrada */
+.flash-enter-to {
+  background-color: transparent;
+  /* Cambia el color de fondo */
+}
+
+/* Estado inicial antes de salir */
+.flash-leave-active {
+  /* transition: background-color 0.5s ease; */
+}
+
+/* Estado final cuando se ha completado la salida */
+.flash-leave-from {
+  /* background-color: rgba(255, 0, 0, .5); */
+  /* Comienza con el color de fondo */
+}
+
+/* Estado final después de salir */
+.flash-leave-to {
+  /* background-color: transparent; */
+  /* Vuelve al fondo transparente */
+}

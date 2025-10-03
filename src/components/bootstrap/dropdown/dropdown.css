@@ -1,0 +1,8 @@
+.no-interaction {
+  pointer-events: none;
+  /* Disable all pointer events */
+}
+
+.dropdown-menu {
+  pointer-events: auto;
+}

@@ -1,0 +1,41 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"vscodeTodo.enableWideView": true
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch:localhost",
+				"request": "launch",
+				"runtimeArgs": [
+					"run-script",
+					"dev"
+				],
+				"runtimeExecutable": "npm",
+				"skipFiles": [
+					"<node_internals>/**"
+				],
+				"type": "node"
+			},
+			{
+				"name": "Launch:corp",
+				"request": "launch",
+				"runtimeArgs": [
+					"run-script",
+					"dev_corp"
+				],
+				"runtimeExecutable": "npm",
+				"skipFiles": [
+					"<node_internals>/**"
+				],
+				"type": "node"
+			}
+		]
+	}
+}
