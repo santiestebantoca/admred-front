@@ -7,11 +7,12 @@ const props = defineProps({
 import { ref } from 'vue'
 
 const height = ref(`${props.lines * props.lineHeight}rem`)
-const vOverflow = el => (el.offsetHeight < el.scrollHeight) && el.parentNode.classList.add('overflow')
+const overflow = ref(null)
+const vOverflow = el => overflow.value = el.offsetHeight < el.scrollHeight
 </script>
 
 <template>
-  <div>
+  <div :class="{ overflow }">
     <div class="a" v-overflow>
       <slot></slot>
     </div>
