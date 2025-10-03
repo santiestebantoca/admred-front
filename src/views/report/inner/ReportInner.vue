@@ -134,7 +134,7 @@ onBeforeUnmount(() => report.internas.reset())
             </td>
             <td v-text="_.destino" />
             <td v-text="_.objetivo" />
-            <td v-text="_.formatTime(_.solicitado_en)" />
+            <td v-text="formatTime(_.solicitado_en)" />
             <td v-text="_.terminado_en && formatTime(_.terminado_en)" />
             <td v-text="_.estado" />
             <td class="p-0 striped">
