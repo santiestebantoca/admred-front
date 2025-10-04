@@ -8,12 +8,16 @@ import { router } from './router'
 import bootstrap from '@/components/bootstrap/index'
 import appConponents from '@/components/app/index'
 
+import JsonExcel from 'vue-json-excel3'
+
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 app.use(bootstrap)
 app.use(appConponents)
+
+app.component('downloadExcel', JsonExcel)
 
 app.mount('#app')
 
