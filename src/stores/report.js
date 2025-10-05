@@ -2,6 +2,7 @@ import axios from './axios'
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { tidy, mutate, groupBy, summarize, mean } from '@tidyjs/tidy'
+import { sortAlphabetical } from '../use/useSort'
 import { timeDeltaW, timeDeltaWToDH } from '@/use/useTimeDelta'
 
 const usePending = defineStore('report-pending', () => {
@@ -28,7 +29,7 @@ const useExternasAreas = defineStore('report-externas-areas', () => {
   function get() {
     axios
       .get('/report/areas?nivel=4')
-      .then(res => data.value = res.data)
+      .then(res => data.value = sortAlphabetical(res.data))
       .catch(() => { })
   }
   return { data, get }
@@ -59,7 +60,7 @@ const useInternasAreas = defineStore('report-internas-areas', () => {
   function get() {
     axios
       .get('/report/areas')
-      .then(res => data.value = res.data)
+      .then(res => data.value = sortAlphabetical(res.data))
       .catch(() => { })
   }
   return { data, get }
@@ -245,7 +246,7 @@ const useBuscar = defineStore('report-buscar', () => {
   function get(codigo) {
     axios
       .get('/report/buscar?codigo=' + codigo)
-      .then(res => data.value = res.data)
+      .then(res => data.value = sortAlphabetical(res.data))
       .catch(() => { })
   }
   const reset = () => data.value = null

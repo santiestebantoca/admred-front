@@ -1,5 +1,6 @@
 import axios from './axios'
 import usePagination from '../use/usePagination'
+import { sortAlphabetical } from '../use/useSort'
 import { ref, computed, watch, nextTick, reactive } from 'vue'
 import { defineStore } from 'pinia'
 
@@ -72,7 +73,7 @@ const useNivelesStore = defineStore('admin-areas-niveles', () => {
   const get = () =>
     !data.value && axios
       .get('/admin_area/niveles')
-      .then((res) => data.value = res.data)
+      .then(res => data.value = sortAlphabetical(res.data))
       .catch(() => { })
   return { data, get }
 })
@@ -87,10 +88,11 @@ const usePadresStore = defineStore('admin-areas-padres', () => {
   const data = ref([])
   const query = ref({})
   const setData = _data => {
-    data.value = _data.map(d => ({
+    data.value = sortAlphabetical(_data.map(d => ({
       id: d[0],
       nombre: d[1],
-    }))
+    })))
+
   }
   const get = () => {
     const params = { ...query.value }

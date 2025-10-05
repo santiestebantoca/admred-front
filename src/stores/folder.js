@@ -1,5 +1,6 @@
 import axios from './axios'
 import usePagination from '../use/usePagination'
+import { sortAlphabetical } from '../use/useSort'
 import { defineStore } from 'pinia'
 import { tidy } from '@tidyjs/tidy'
 import { orderByObject } from './tidy-aux'
@@ -86,13 +87,13 @@ const useDestinos = defineStore('folder-destinos', () => {
 })
 const useTramitadores = defineStore('folder-tramitadores', () => {
   const state = ref(null)
-  const data = ref(null)
+  const data = ref([])
   const get = () => {
     if (!state.value) {
       state.value = 1
       axios
         .get('/folder/tramitadores')
-        .then((res) => data.value = res.data)
+        .then((res) => data.value = sortAlphabetical(res.data))
         .catch(() => { })
     }
   }

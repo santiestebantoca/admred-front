@@ -1,5 +1,6 @@
 import axios from './axios'
 import usePagination from '../use/usePagination'
+import { sortAlphabetical } from '../use/useSort'
 import { ref, computed, watch, nextTick, reactive } from 'vue'
 import { defineStore } from 'pinia'
 
@@ -84,7 +85,7 @@ const useAreasStore = defineStore('admin-users-areas', () => {
   const get = () =>
     !data.value && axios
       .get('/admin_user/areas')
-      .then((res) => data.value = res.data)
+      .then(res => data.value = sortAlphabetical(res.data))
       .catch(() => { })
   return { data, get }
 })
@@ -95,7 +96,7 @@ const useAuthgroupStore = defineStore('admin-users-authgroup', () => {
   const get = () =>
     axios
       .get('/admin_user/authgroup')
-      .then(res => data.value = res.data)
+      .then(res => data.value = sortAlphabetical(res.data))
       .catch(() => { })
   return { get, data }
 })
