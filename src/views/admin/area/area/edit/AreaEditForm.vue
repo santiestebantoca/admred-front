@@ -21,7 +21,7 @@ watch(() => store.area.data, d => {
   form.value = {
     nombre: d.nombre,
     nivel: d.nivel.id,
-    padre: d.padre.id,
+    padre: d.padre?.id,
   }
 }, { immediate: true })
 const padreDisabled = ref(null)
