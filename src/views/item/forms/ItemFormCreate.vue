@@ -61,6 +61,7 @@ const errors = () => sending.value = false
       <TipoWidget v-model:error="result.errors.tipo" v-model:value="form.tipo" />
       <CumplirWidget v-model:error="result.errors.cumplir_en" v-model:value="form.cumplir_en" />
     </bs-dialog-footer>
+    <bs-dialog-capsule label="Nueva solicitud" />
   </bs-dialog>
 </template>
 

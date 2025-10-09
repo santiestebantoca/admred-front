@@ -65,5 +65,6 @@ const errors = () => sending.value = false
         <bs-tooltip placement="top" offset="0,10">Adjuntar documento</bs-tooltip>
       </bs-btn-icon>
     </bs-dialog-footer>
+    <bs-dialog-capsule label="Responder solicitud" />
   </bs-dialog>
 </template>

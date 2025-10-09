@@ -14,6 +14,7 @@ import ButtonSaveCancel from './hight-level/ButtonSaveCancel.vue'
 import ButtonAccept from './hight-level/ButtonAccept.vue'
 import ButtonSend from './hight-level/ButtonSend.vue'
 import ButtonReset from './hight-level/ButtonReset.vue'
+import ButtonMinimize from './ButtonMinimize.vue'
 
 export {
     Button,
@@ -31,5 +32,6 @@ export {
     ButtonSaveCancel,
     ButtonAccept,
     ButtonSend,
-    ButtonReset
+    ButtonReset,
+    ButtonMinimize
 }

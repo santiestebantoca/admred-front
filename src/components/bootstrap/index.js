@@ -1,4 +1,4 @@
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from './dialog/index'
+import { Dialog, DialogHeader, DialogBody, DialogFooter, DialogCapsule } from './dialog/index'
 import Offcanvas from './Offcanvas.vue'
 import Spinner from './Spinner.vue'
 import Toast from './Toast.vue'
@@ -10,7 +10,7 @@ import { Table, TableTh, TableScroller } from './table/index'
 import Badge from './Badge.vue'
 import {
   Button, ButtonBack, ButtonMenu, ButtonPgUp, ButtonPgDown, ButtonCaret, ButtonFooter, ButtonClose, ButtonCollapse, ButtonIcon,
-  ButtonSave, ButtonCancel, ButtonSaveCancel, ButtonAccept, ButtonSend, ButtonReset
+  ButtonSave, ButtonCancel, ButtonSaveCancel, ButtonAccept, ButtonSend, ButtonReset, ButtonMinimize
 } from './button/index'
 import Collapse from './Collapse.vue'
 import Icon from './icons/Icon.vue'
@@ -45,11 +45,13 @@ export default {
     app.component('bsBtnAccept', ButtonAccept)
     app.component('bsBtnSend', ButtonSend)
     app.component('bsBtnReset', ButtonReset)
+    app.component('bsBtnMinimize', ButtonMinimize)
     // bs-dialog
     app.component('bsDialog', Dialog)
     app.component('bsDialogHeader', DialogHeader)
     app.component('bsDialogBody', DialogBody)
     app.component('bsDialogFooter', DialogFooter)
+    app.component('bsDialogCapsule', DialogCapsule)
     // bs-tab
     app.component('bsTabContent', TabContent)
     app.component('bsTabPane', TabPane)
