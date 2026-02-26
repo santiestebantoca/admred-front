@@ -114,7 +114,8 @@ const drawer = ref(null)
               <div class="subtitle">Fecha de cumplimiento</div>
               <div v-text="formatDate(data.cumplir_en)" />
             </div>
-            <div v-if="data.adjuntos_solicitud.length" class="mt-2 border-1 rounded" style="padding:2px">
+            <div v-if="data.adjuntos_solicitud.length" class="mt-2 border-1 rounded"
+              style="padding:2px;background-color: aliceblue;">
               <div type="button" @click="collapse1 = !collapse1" class="hstack" style="height:32px">
                 <bs-icon name="paperclip" class="px-1" fs="1.1rem" />
                 {{ data.adjuntos_solicitud.length }}
@@ -138,7 +139,8 @@ const drawer = ref(null)
               <div class="subtitle">Observaciones</div>
               <div v-text="data.observaciones" />
             </div>
-            <div v-if="data.adjuntos_respuesta.length" class="mt-2 border-1 rounded" style="padding:2px">
+            <div v-if="data.adjuntos_respuesta.length" class="mt-2 border-1 rounded"
+              style="padding:2px;background-color: aliceblue;">
               <div type="button" @click="collapse2 = !collapse2" class="hstack" style="height:32px">
                 <bs-icon name="paperclip" class="px-1" fs="1.1rem" />
                 {{ data.adjuntos_respuesta.length }}

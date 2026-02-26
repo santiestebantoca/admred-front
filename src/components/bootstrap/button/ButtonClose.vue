@@ -5,3 +5,9 @@ import BsBtn from './ButtonIcon.vue'
 <template>
   <bs-btn class="btn-close p-0" flat />
 </template>
+
+<style scoped>
+.btn-close[sm] {
+  background-size: 12px;
+}
+</style>

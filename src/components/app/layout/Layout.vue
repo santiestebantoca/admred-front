@@ -15,6 +15,7 @@ const header = ref({
   height: 0,
   left: 0,
   right: 0,
+  stopShadowOnScroll: true
 })
 const left = ref({
   width: 0,

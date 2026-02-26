@@ -16,25 +16,30 @@ useResizeObserver(el, entries => {
 onUnmounted(() => header.value.height = 0)
 //
 // css
-const position = computed(() => view.value.slice(0, 3).includes('H') ? 'fixed' : 'absolute')
 const left_ = computed(() => ['l', 'L'].includes(view.value[0]) ? `${left.value.width}px` : 0)
 const right_ = computed(() => ['r', 'R'].includes(view.value[2]) ? `${right.value.width}px` : 0)
-const shadow = computed(() => view.value.slice(0, 3).includes('H') && y.value)
+const fixed = computed(() => view.value.slice(0, 3).includes('H'))
+const shadow = computed(() => fixed.value && y.value && !header.value.stopShadowOnScroll)
 </script>
 
 <template>
-  <header ref="el" :class="{ shadow }">
+  <header ref="el" :class="{ fixed, shadow }">
     <slot />
   </header>
 </template>
 
 <style scoped>
 header {
-  position: v-bind(position);
+  --position: absolute;
+  --background-color: unset;
+  --box-shadow: unset;
+  position: var(--position);
   top: 0;
   left: v-bind(left_);
   right: v-bind(right_);
   z-index: 1030;
+  box-shadow: var(--box-shadow);
+  background-color: var(--background-color);
 }
 
 header :deep(.navbar-brand) {
@@ -45,8 +50,12 @@ header :deep(.navbar-brand) {
   --bs-navbar-brand-hover-color: rgba(var(--bs-emphasis-color-rgb), 1);
 }
 
+.fixed {
+  --position: fixed;
+  --background-color: rgba(255, 255, 255, 0.96);
+}
+
 .shadow {
-  background-color: rgba(255, 255, 255, 0.96);
-  box-shadow: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 2px 6px 2px rgba(60, 64, 67, 0.15);
+  --box-shadow: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 2px 6px 2px rgba(60, 64, 67, 0.15);
 }
 </style>
