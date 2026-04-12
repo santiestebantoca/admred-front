@@ -45,7 +45,7 @@ const useAuth = defineStore('auth', () => {
   const getAuthUser = () =>
     axios.get('/auth/login').then(setAuthUser).catch(() => { })
   const setAuthUser = ({ data }) => authUser.value = data
-  return { auth, authUser, login, logout, getAuthUser, setAuthUser, impersonate }
+  return { auth, authUser, login, logout, getAuthUser, impersonate }
 })
 
 export default useAuth
