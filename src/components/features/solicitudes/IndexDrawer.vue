@@ -1,7 +1,7 @@
 <script setup>
 import AppsWidget from '@/views/app/widgets/apps/Collapse.vue'
 import UserWidget from '@/views/app/widgets/user/Dialog.vue'
-import FolderTree from './base/FolderTree.vue'
+import FolderTree from '@/components/features/solicitudes/FolderTree.vue'
 </script>
 
 <template>

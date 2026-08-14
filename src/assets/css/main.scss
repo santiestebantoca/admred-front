@@ -1,3 +1,15 @@
+// Temporal
+$enable-negative-margins: true;
+@import 'bootstrap/scss/bootstrap';
+//
+@import 'vanillajs-datepicker/sass/datepicker';
+// @import 'bootstrap-vue-next';
+@import 'tokens';
+@import 'utilities';
+@import 'overrides';
+
+
+/** lo viejo
 $box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
   0px 8px 10px 1px rgba(0, 0, 0, 0.14),
   0px 3px 14px 2px rgba(0, 0, 0, 0.12);
@@ -22,7 +34,6 @@ $enable-negative-margins: true;
   top: 1px;
 }
 
-/* Bootstrap */
 
 .dropdown-item {
   height: 38px;
@@ -54,7 +65,8 @@ $enable-negative-margins: true;
 
 @import 'vanillajs-datepicker/sass/datepicker';
 
-/* Google */
+:root {}
+
 body {
   --gg-light-1: #f8fafd;
   --gg-light-2: #e9eef6;
@@ -66,4 +78,4 @@ body {
 
 .bg-light-2 {
   background-color: var(--gg-light-2);
-}
+} */

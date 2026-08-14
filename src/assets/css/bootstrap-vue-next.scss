@@ -1,0 +1,38 @@
+.nav-tabs {
+  .nav-link {
+    border: none !important;
+    margin-bottom: 0 !important;
+    line-height: normal;
+    position: relative;
+    padding-bottom: 12px;
+    font-size: 14px;
+
+    &::after {
+      display: block;
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      --up-after-background-color: transparent;
+      background-color: var(--up-after-background-color);
+      transition: all .3s;
+    }
+
+    &:hover {
+
+      &::after {
+        --up-after-background-color: var(--bs-gray-300);
+      }
+    }
+
+    &.active {
+      color: var(--bs-nav-link-hover-color) !important;
+
+      &::after {
+        --up-after-background-color: var(--bs-primary);
+      }
+    }
+  }
+}

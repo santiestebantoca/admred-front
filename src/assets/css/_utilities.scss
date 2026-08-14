@@ -1,0 +1,139 @@
+/* General */
+.letter-spacing-1 {
+  letter-spacing: .01rem;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
+.ms-n1 {
+  margin-left: -0.25rem !important;
+}
+
+.ms-n2 {
+  margin-left: -0.5rem !important;
+}
+
+.ms-n3 {
+  margin-left: -1rem !important;
+}
+
+.ms-n4 {
+  margin-left: -1.5rem !important;
+}
+
+.ms-n5 {
+  margin-left: -3rem !important;
+}
+
+.mx-n1 {
+  margin-left: -0.25rem !important;
+  margin-right: -0.25rem !important;
+}
+
+.mx-n2 {
+  margin-left: -0.5rem !important;
+  margin-right: -0.5rem !important;
+}
+
+.mx-n3 {
+  margin-left: -1rem !important;
+  margin-right: -1rem !important;
+}
+
+.mx-n4 {
+  margin-left: -1.5rem !important;
+  margin-right: -1.5rem !important;
+}
+
+.mx-n5 {
+  margin-left: -3rem !important;
+  margin-right: -3rem !important;
+}
+
+*:not(:hover)>.d-hover {
+  display: none;
+}
+
+/* Medidas fijas (extensión de las utilidades de tamaño de Bootstrap) */
+.w-90 {
+  width: 90px !important;
+}
+
+.w-33 {
+  width: 33px !important;
+}
+
+.h-32 {
+  height: 32px !important;
+}
+
+.h-34 {
+  height: 34px !important;
+}
+
+.h-38 {
+  height: 38px !important;
+}
+
+.h-40 {
+  height: 40px !important;
+}
+
+.h-80 {
+  height: 80px !important;
+}
+
+.min-h-32 {
+  min-height: 32px !important;
+}
+
+.max-w-400 {
+  max-width: 400px !important;
+}
+
+.min-w-340 {
+  min-width: 340px !important;
+}
+
+.w-20rem {
+  width: 20rem !important;
+}
+
+.w-256 {
+  width: 256px !important;
+}
+
+/* Colores de texto no incluidos por Bootstrap */
+.text-teal {
+  color: var(--bs-teal) !important;
+}
+
+.text-pink {
+  color: var(--bs-pink) !important;
+}
+
+.text-yellow {
+  color: var(--bs-yellow) !important;
+}
+
+.text-yellow-700 {
+  color: var(--bs-yellow-700) !important;
+}
+
+.text-success-400 {
+  color: var(--bs-success-400) !important;
+}
+
+.text-gray-500 {
+  color: var(--bs-gray-500) !important;
+}
+
+.text-gray-600 {
+  color: var(--bs-gray-600) !important;
+}

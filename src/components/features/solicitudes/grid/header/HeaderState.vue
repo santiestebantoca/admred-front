@@ -5,7 +5,7 @@ import { computed } from 'vue'
 const folder = useFolderStore()
 const states = computed(() => ([
   { label: 'Todas', value: undefined, active: !folder.query.stateId },
-  { label: 'Solicitadas', value: 1, active: folder.query.stateId === 1 },
+  { label: 'No atendidas', value: 1, active: folder.query.stateId === 1, danger: true },
   { label: 'En proceso', value: 2, active: folder.query.stateId === 2 },
   { label: 'En evaluación', value: 3, active: folder.query.stateId === 3 }
 ]))
@@ -22,8 +22,8 @@ const query = val => folder.query = { ...folder.query, stateId: val }
       </bs-btn>
     </bs-dropdown-toggle>
     <bs-dropdown-menu>
-      <bs-dropdown-item v-for="{ active, label, value } in states" :key="value" @click="query(value)">
-        <span class="check-text" :class="{ active }" v-text="label" />
+      <bs-dropdown-item v-for="{ active, label, value, danger } in states" :key="value" @click="query(value)">
+        <span class="check-text" :class="{ active, danger }" v-text="label" />
       </bs-dropdown-item>
     </bs-dropdown-menu>
   </bs-dropdown>
@@ -34,6 +34,10 @@ const query = val => folder.query = { ...folder.query, stateId: val }
   padding-left: 32px;
   position: relative;
   left: -4px
+}
+
+.danger {
+  color: var(--bs-danger);
 }
 
 .check-text.active {
