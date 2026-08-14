@@ -10,11 +10,11 @@ const icon = computed(() => params.value.tray === 'recibidas' ? 'download' : 'se
 <template>
   <bs-dropdown :class="{ mobile }">
     <bs-dropdown-toggle>
-      <bs-btn class="tab" @click="$emit('showNav')" flat sactive square size="50px">
+      <bs-btn class="tab" @click="$emit('showNav')" flat>
         <bs-icon :name="icon" fs="18px" v-if="!mobile" class="me-3" />
         <span class="tab-label pe-1">
-          <span v-text="params.tray + ' '" />
-          <span class="fw-semibold" v-text="params.state" />
+          <span class="text-dark text-opacity-75" v-text="params.tray + ' '" />
+          <span class="fw-semibold-" v-text="params.state" />
         </span>
         <bs-btn-caret v-if="!mobile" class="ms-3" />
       </bs-btn>
@@ -33,6 +33,9 @@ const icon = computed(() => params.value.tray === 'recibidas' ? 'download' : 'se
   padding: var(--tab-padding-y) var(--tab-padding-x);
   position: relative;
   background-color: var(--gg-light-2);
+  border-radius: 10px;
+  height: 46px;
+  margin: 4px;
 }
 
 .mobile .tab {
@@ -44,7 +47,7 @@ const icon = computed(() => params.value.tray === 'recibidas' ? 'download' : 'se
   letter-spacing: var(--letter-spacing);
 }
 
-.tab::after {
+/* .tab::after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -54,5 +57,5 @@ const icon = computed(() => params.value.tray === 'recibidas' ? 'download' : 'se
   right: 2px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-}
+} */
 </style>

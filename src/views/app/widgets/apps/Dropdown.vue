@@ -5,7 +5,7 @@ import { computed } from 'vue'
 const authUser = computed(() => useAuthStore().authUser)
 const apps = computed(() => {
   return [
-    { title: 'Solicitudes', path: '/folder', icon: 'inboxes' },
+    { title: 'Solicitudes', path: '/solicitudes', icon: 'inboxes' },
     { title: 'Reportes', path: '/report', icon: 'graph-up' },
     ...authUser.value?.admin
       ? [{ title: 'Administración', path: '/admin', icon: 'gear' }]

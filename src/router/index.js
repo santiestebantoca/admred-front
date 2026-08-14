@@ -11,8 +11,8 @@ const folderDefault = () => {
   ]
   const folder = useStorage('admred_router_folder', 'enviadas/pendientes')
   return folders.includes(folder.value)
-    ? `/folder/${folder.value}`
-    : '/folder/enviadas/pendientes'
+    ? `/solicitudes/${folder.value}`
+    : '/solicitudes/enviadas/pendientes'
 }
 
 const routesAuth = [
@@ -56,13 +56,13 @@ const routesAuth = [
 
 const routesFolder = [
   {
-    path: '/folder',
+    path: '/solicitudes',
     redirect: folderDefault,
     children: [
       {
         path: ':tray/:state',
-        name: 'folder',
-        component: () => import('@/views/folder/FolderIndex.vue'),
+        name: 'solicitudes',
+        component: () => import('@/views/solicitudes/index.vue'),
         meta: { requiresAuth: true, saveFolder: true },
         props: route => ({
           baseQuery: { tray: route.params.tray, state: route.params.state },
@@ -379,7 +379,7 @@ export const router = createRouter({
       path: '/home',
       name: 'home',
       alias: ['/'],
-      redirect: '/folder' // landing page
+      redirect: '/solicitudes' // landing page
     },
     {
       path: '/:pathMatch(.*)*',

@@ -1,10 +1,10 @@
 <script setup>
 const props = defineProps({ baseQuery: Object, compose: Object })
 
-import IndexNav from './IndexNav.vue'
-import IndexDrawer from './IndexDrawer.vue'
-import FolderHeader from './header/FolderHeader.vue'
-import FolderGrid from './grid/FolderGrid.vue'
+import IndexNav from '../../components/features/solicitudes/IndexNav.vue/index.js'
+import IndexDrawer from '../../components/features/solicitudes/IndexDrawer.vue/index.js'
+import FolderHeader from '../../components/features/solicitudes/header/FolderHeader.vue'
+import FolderGrid from '../../components/features/solicitudes/grid/FolderGrid.vue'
 import ItemCreate from '../item/forms/ItemFormCreate.vue'
 import { ref, computed, provide, inject } from 'vue'
 

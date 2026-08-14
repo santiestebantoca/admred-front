@@ -32,6 +32,8 @@ const actualizar = () => {
 
 <style scoped>
 .bg {
-  background: linear-gradient(var(--gg-light-1) 49px, var(--gg-light-2));
+  /* background: linear-gradient(var(--gg-light-1) 49px, var(--gg-light-2)); */
+  /* background: linear-gradient(90deg, var(--gg-light-1), var(--gg-light-2)); */
+  background: var(--gg-light-1);
 }
 </style>
