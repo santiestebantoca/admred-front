@@ -113,7 +113,7 @@ onBeforeUnmount(() => report.externas.reset())
             <th>Presentada</th>
             <th>Terminada</th>
             <th>Estado</th>
-            <th>Solicitudes relacionadas</th>
+            <th>Solicitudes hijas</th>
           </tr>
         </template>
 
@@ -141,14 +141,3 @@ onBeforeUnmount(() => report.externas.reset())
     </template>
   </div>
 </template>
-
-<style scoped>
-.form-label {
-  font-weight: 600;
-  font-size: .875em;
-}
-
-.striped>div:nth-of-type(2n+1) {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-</style>

@@ -43,10 +43,3 @@ title.value = 'Buscar código'
     </div>
   </div>
 </template>
-
-<style scoped>
-.form-label {
-  font-weight: 600;
-  font-size: .875em;
-}
-</style>

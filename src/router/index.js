@@ -54,7 +54,7 @@ const routesAuth = [
   }
 ]
 
-const routesFolder = [
+const routesSolicitudes = [
   {
     path: '/solicitudes',
     redirect: folderDefault,
@@ -84,7 +84,7 @@ const routesReport = [
   {
     path: '/report',
     name: 'report',
-    component: () => import('../views/report/ReportIndex.vue'),
+    component: () => import('../views/report/index.vue'),
     meta: { requiresAuth: true },
     children: [
       {
@@ -121,6 +121,11 @@ const routesReport = [
         path: 'person',
         name: 'report-person',
         component: () => import('@/views/report/person/ReportPerson.vue'),
+      },
+      {
+        path: 'provision',
+        name: 'report-provision',
+        component: () => import('@/views/report/provision/index.vue'),
       }
     ]
   }
@@ -131,7 +136,7 @@ const routesAdmin = [
     path: '/admin',
     name: 'admin',
     redirect: { name: 'admin-home' },
-    component: () => import('@/views/admin/AdminIndex.vue'),
+    component: () => import('@/views/admin/index.vue'),
     meta: { requiresAuth: true },
     children: [
       {
@@ -372,7 +377,7 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     ...routesAuth,
-    ...routesFolder,
+    ...routesSolicitudes,
     ...routesReport,
     ...routesAdmin,
     {

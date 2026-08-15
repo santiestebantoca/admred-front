@@ -64,10 +64,3 @@ const update = async (group_id, action) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-:deep(.form-label) {
-  font-weight: 600;
-  font-size: .875em;
-}
-</style>

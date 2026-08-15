@@ -39,16 +39,3 @@ onUnmounted(() => report.person.solicitudes.reset())
     </template>
   </div>
 </template>
-
-<style scoped>
-.form-label {
-  color: grey;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.striped>div:nth-of-type(2n+1) {
-  background-color: rgba(0, 0, 0, 0.05);
-
-}
-</style>

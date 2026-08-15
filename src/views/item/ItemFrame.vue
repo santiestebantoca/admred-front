@@ -5,7 +5,7 @@ if item: get data then show ItemView
 else: hide ItemView the set data to null
 -->
 <script setup>
-import ItemView from './ItemView.vue'
+import ItemView from './index.vue'
 import useItemStore from '@/stores/item'
 import { useRoute } from 'vue-router'
 import { computed, watchEffect, inject } from 'vue'
@@ -41,7 +41,7 @@ const leave = () => item.reset()
   z-index: 1035;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: white;
+  background-color: var(--bs-surface-1);
 }
 
 @media(min-width:1200px) {

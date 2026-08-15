@@ -51,10 +51,3 @@ const errors = () => sending.value = false
     </bs-dialog-footer>
   </bs-dialog>
 </template>
-
-<style scoped>
-:deep(.form-label) {
-  font-weight: 600;
-  font-size: .875em;
-}
-</style>

@@ -11,26 +11,13 @@ const adjuntos = computed(() => item.data.adjuntos_respuesta)
 
 <template>
   <div>
-    <a v-for="{ id, file, filename, filesize } in adjuntos" :key="id" :title="filename" :href="file">
-      <FileIcon :filename="filename" />
-      <span class="text-truncate" v-text="filename" />
-      <span class="text-nowrap opacity-75 mx-1" v-text="fileSize(filesize)" />
-    </a>
+    <bs-btn v-for="{ id, file, filename, filesize } in adjuntos" :key="id" :title="filename" :href="file" flat
+      class="w-100 fs-6" size="sm">
+      <div class="hstack gap-2">
+        <FileIcon :filename="filename" />
+        <span class="text-truncate" v-text="filename" />
+        <span class="text-nowrap opacity-75 mx-1" v-text="fileSize(filesize)" />
+      </div>
+    </bs-btn>
   </div>
 </template>
-
-<style scoped>
-a {
-  text-decoration: none;
-  display: flex;
-  height: 35px;
-  align-items: center;
-  gap: 16px;
-  padding: 0 8px;
-  color: var(--bs-gray-800);
-}
-
-a:hover {
-  background-color: var(--bs-gray-200);
-}
-</style>

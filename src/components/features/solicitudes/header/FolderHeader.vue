@@ -8,7 +8,7 @@ const to = ref({ query: { compose: 'new' } })
 </script>
 
 <template>
-  <div class="hstack px-3 bg">
+  <div class="container-fluid hstack">
     <div v-if="mobile" class="text-dark">
       /<span v-text="params.tray" />/<span class="fw-semibold" v-text="params.state" />
     </div>

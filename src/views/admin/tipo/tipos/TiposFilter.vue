@@ -72,12 +72,6 @@ const direct = computed(() => !filtered.value || ((filtered.value === 1) && stor
   white-space: nowrap;
 }
 
-.form-label {
-  padding-right: 16px;
-  font-weight: 600;
-  font-size: .875em;
-}
-
 @media(min-width:500px) {
   .label-input {
     display: flex;
@@ -86,13 +80,6 @@ const direct = computed(() => !filtered.value || ((filtered.value === 1) && stor
 
   .label-input>*:nth-child(2) {
     flex-grow: 1;
-  }
-
-  .form-label {
-    font-size: 1em !important;
-    font-weight: normal !important;
-    color: var(--bs-gray-700);
-    margin-bottom: 0;
   }
 }
 

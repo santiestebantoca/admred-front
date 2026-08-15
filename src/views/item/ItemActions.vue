@@ -1,4 +1,8 @@
 <script setup>
+const props = defineProps({
+  horizontal: Boolean
+})
+
 import useAuthStore from '@/stores/auth'
 import useItemStore from '@/stores/item'
 import { useRoute, useRouter } from 'vue-router'
@@ -90,20 +94,25 @@ const emit = defineEmits(['action'])
 </script>
 
 <template>
-  <div class="text-bg-primary vh-100">
+  <div v-if="horizontal" class="hstack">
     <div v-for="item in items" :key="item.title">
-      <hr v-if="item.divider" class="mx-2" />
-      <bs-btn v-else @click="go(item.action)" square color="primary" class="px-4 w-100 hstack gap-3">
+      <bs-btn v-if="!item.divider" @click="go(item.action)" flat class="w-100 hstack gap-2">
         <bs-icon :name="item.icon" />
         <span v-text="item.title" class="small" />
-        <bs-badge v-if="item.badge" :label="item.badge" color="info" class="mt-1" />
+        <span v-if="item.badge" class="text-secondary">
+          ({{ item.badge }})
+        </span>
+      </bs-btn>
+    </div>
+  </div>
+  <div v-else class="vh-100 p-2">
+    <div v-for="item in items" :key="item.title">
+      <hr v-if="item.divider" class="mx-2" />
+      <bs-btn v-else @click="go(item.action)" flat class="w-100 hstack gap-2">
+        <bs-icon :name="item.icon" />
+        <span v-text="item.title" class="small" />
+        <span v-if="item.badge" v-text="item.badge" class="text-secondary ms-auto" />
       </bs-btn>
     </div>
   </div>
 </template>
-
-<style scoped>
-.btn:hover {
-  background: rgba(0, 0, 0, 0.06);
-}
-</style>

@@ -252,6 +252,26 @@ const useBuscar = defineStore('report-buscar', () => {
   const reset = () => data.value = null
   return { data, get, reset }
 })
+const useProvision = defineStore('report-provision', () => {
+  const data = ref(null)
+  const count = ref(null)
+  const loading = ref(false)
+  function setData(_data) {
+    count.value = _data?.length
+    data.value = _data
+  }
+  function get(params) {
+    loading.value = true
+    axios
+      .get('/report/provision', { params })
+      .then(res => setData(res.data))
+      .catch(() => { })
+      .finally(() => loading.value = false)
+  }
+  const reset = () => setData([])
+  const noData = computed(() => !loading.value && !count.value)
+  return { data, noData, get, reset, loading }
+})
 
 export default defineStore('http-client', () => {
   const pending = usePending()
@@ -260,5 +280,6 @@ export default defineStore('http-client', () => {
   const consultadas = useConsultadas()
   const person = usePerson()
   const buscar = useBuscar()
-  return { pending, externas, internas, consultadas, person, buscar }
+  const provision = useProvision()
+  return { pending, externas, internas, consultadas, person, buscar, provision }
 })

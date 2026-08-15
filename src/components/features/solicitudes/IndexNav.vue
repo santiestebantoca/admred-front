@@ -8,20 +8,19 @@ const mobile = inject('app:mobile')
 </script>
 
 <template>
-  <nav class="header" :class="{ mobile }">
-    <slot />
-    <span class="header-title text-truncate ms-1">
-      Solicitudes
-    </span>
-    <span class="ms-auto" />
-    <Notifications />
-    <template v-if="!mobile">
-      <AppsDropdown />
-      <UserDropdown />
-    </template>
+  <nav class="navbar">
+    <div class="container-fluid gap-1">
+      <slot />
+      <span class="navbar-brand px-xl-2">Solicitudes</span>
+      <span class="ms-auto" />
+      <Notifications />
+      <template v-if="!mobile">
+        <AppsDropdown />
+        <UserDropdown />
+      </template>
+    </div>
   </nav>
 </template>
-
 <style scoped>
 .header {
   --header-px: 4px;
@@ -48,4 +47,4 @@ const mobile = inject('app:mobile')
   font-size: var(--header-title-font-size);
   /* color: var(--bs-gray-700); */
 }
-</style>
+</style> -->

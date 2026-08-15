@@ -33,10 +33,10 @@ const drawer = ref(null)
 </script>
 
 <template>
-  <app-layout :view="mobile ? 'hhh lpr fff' : 'lhh lPr lff'">
+  <app-layout :view="mobile ? 'hhh lpr fff' : 'lhh lPr lff'" class="bg-light-1">
     <app-header>
-      <nav class="navbar py-0" style="height: 48px">
-        <div class="container-fluid px-1">
+      <nav class="navbar">
+        <div class="container-fluid">
           <bs-btn-menu v-if="mobile" @click="drawer = true" />
           <transition name="flash" appear mode="out-in">
             <span v-text="data.codigo" class="ms-auto p-2" :key="data.codigo" />
@@ -48,22 +48,21 @@ const drawer = ref(null)
         </div>
       </nav>
     </app-header>
-    <app-drawer v-model="drawer" class="bg-primary">
-      <div class="p-3 mb-3">
-        <bs-btn-icon color="primary" @click="close" icon="arrow-left-circle" style="font-size:30px">
-          <bs-tooltip placement="bottom" offset="0,10">Volver</bs-tooltip>
-        </bs-btn-icon>
+    <app-drawer v-if="mobile" v-model="drawer" class="bg-white">
+      <div class="nav navbar px-1">
+        <bs-btn-close @click="drawer = false" class="ms-auto" />
       </div>
       <ItemActions @close="close" @action="drawer = false" />
     </app-drawer>
     <app-page-container>
       <app-page :key="data?.id || 0">
-        <div class="grid">
-          <div class="grid-header">
-            <div style="font-size:22px">Solicitud</div>
+        <div class="container grid">
+          <div class="grid-header px-2 hstack">
+            <h5>Solicitud</h5>
+            <ItemActions horizontal class="ms-auto" />
           </div>
           <!-- Col A -->
-          <div class="grid-A">
+          <div class="grid-A border rounded-3">
             <div v-if="data.root && xlDown" class="text-center">(Demanda inicial)</div>
             <div>
               <div class="subtitle">Estado</div>
@@ -94,14 +93,14 @@ const drawer = ref(null)
               </template>
             </div>
             <div v-if="data.padre || data.hijos.length">
-              <div class="subtitle">Solicitudes relacionadas</div>
+              <div class="subtitle">Solicitudes hijas</div>
               <div style="max-width: 280px">
                 <ItemRelatedItems />
               </div>
             </div>
           </div>
           <!-- Col B -->
-          <div class="grid-B">
+          <div class="grid-B border rounded-3">
             <div>
               <div class="subtitle">Área consultada</div>
               <div v-text="data.destino.nombre" />
@@ -114,19 +113,17 @@ const drawer = ref(null)
               <div class="subtitle">Fecha de cumplimiento</div>
               <div v-text="formatDate(data.cumplir_en)" />
             </div>
-            <div v-if="data.adjuntos_solicitud.length" class="mt-2 border-1 rounded"
-              style="padding:2px;background-color: aliceblue;">
-              <div type="button" @click="collapse1 = !collapse1" class="hstack" style="height:32px">
-                <bs-icon name="paperclip" class="px-1" fs="1.1rem" />
-                {{ data.adjuntos_solicitud.length }}
-                {{ data.adjuntos_solicitud.length === 1 ? 'adjunto' : 'adjuntos' }}
-                <bs-btn-caret line class="ps-2" />
-              </div>
-              <bs-collapse v-model="collapse1" class="px-1 pb-2">
+            <div v-if="data.adjuntos_solicitud.length">
+              <bs-btn @click="collapse1 = !collapse1" class="ps-0">
+                <div class="hstack">
+                  <bs-icon :name="!collapse1 ? 'chevron-right' : 'chevron-down'" class="me-1 text-secondary" /> Adjuntos
+                  ({{ data.adjuntos_solicitud.length }})
+                </div>
+              </bs-btn>
+              <bs-collapse v-model="collapse1" class="mx-2 border-start px-1 pb-2">
                 <ItemDocEntrada />
               </bs-collapse>
             </div>
-            <!-- <div class="border-top" /> -->
             <div class="dashed" />
             <div class="text-danger">
               <span v-if="data.respuesta_en">Respuesta del área consultada</span>
@@ -139,15 +136,14 @@ const drawer = ref(null)
               <div class="subtitle">Observaciones</div>
               <div v-text="data.observaciones" />
             </div>
-            <div v-if="data.adjuntos_respuesta.length" class="mt-2 border-1 rounded"
-              style="padding:2px;background-color: aliceblue;">
-              <div type="button" @click="collapse2 = !collapse2" class="hstack" style="height:32px">
-                <bs-icon name="paperclip" class="px-1" fs="1.1rem" />
-                {{ data.adjuntos_respuesta.length }}
-                {{ data.adjuntos_respuesta.length === 1 ? 'adjunto' : 'adjuntos' }}
-                <bs-btn-caret line class="ps-2" />
-              </div>
-              <bs-collapse v-model="collapse2" class="px-1 pb-2">
+            <div v-if="data.adjuntos_respuesta.length">
+              <bs-btn @click="collapse2 = !collapse2" class="ps-0">
+                <div class="hstack">
+                  <bs-icon :name="!collapse2 ? 'chevron-right' : 'chevron-down'" class="me-1 text-secondary" /> Adjuntos
+                  ({{ data.adjuntos_respuesta.length }})
+                </div>
+              </bs-btn>
+              <bs-collapse v-model="collapse2" class="mx-2 border-start px-1 pb-2">
                 <ItemDocSalida />
               </bs-collapse>
             </div>
@@ -176,16 +172,14 @@ const drawer = ref(null)
 
 <style scoped>
 .grid {
-  --grid-padding-x: 12px;
   --template-columns: 1fr;
   --template-rows: auto auto;
   --template-areas:
     "a"
     "b";
-  padding-left: var(--grid-padding-x);
-  padding-right: var(--grid-padding-x);
-  padding-bottom: 24px;
+  padding: 8px;
   display: grid;
+  gap: 8px;
   grid-template-columns: var(--template-columns);
   grid-template-rows: var(--template-rows);
   grid-template-areas: var(--template-areas);
@@ -202,8 +196,8 @@ const drawer = ref(null)
   flex-direction: column;
   gap: 24px;
   overflow: auto;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(var(--bs-primary-rgb), .2);
+  padding: 8px 12px;
+  background-color: white;
 }
 
 .grid-B {
@@ -212,38 +206,28 @@ const drawer = ref(null)
   flex-direction: column;
   gap: 24px;
   overflow: auto;
-  padding-top: 32px;
+  padding: 8px 12px;
+  background-color: white;
 }
 
 /* xl */
 @media(min-width:1200px) {
   .grid {
     height: 100%;
-    max-width: 1200px;
-    --grid-padding-x: 24px;
     --template-columns: minmax(240px, 7fr) 16fr;
-    --template-rows: 60px 1fr;
+    --template-rows: auto 1fr;
     --template-areas:
       "h h"
       "a b";
   }
 
   .grid-header {
-    display: block;
+    display: flex;
   }
 
-  .grid-A {
-    padding-bottom: 0;
-    border-bottom: unset;
-    padding-right: 16px;
-    border-right: 1px solid rgba(var(--bs-primary-rgb), .2);
-  }
+  .grid-A {}
 
-  .grid-B {
-    padding-top: unset;
-    padding-left: 32px;
-    padding-right: 16px;
-  }
+  .grid-B {}
 }
 
 .dashed {

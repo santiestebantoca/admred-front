@@ -1,15 +1,11 @@
-.btn {
-  border-radius: 19px !important;
+.form-label {
+  font-weight: 600;
+  font-size: .875em;
 }
 
-// .btn-close {
-//   background-size: .9rem;
-// }
-
-// .dropdown-toggle::after {
-//   position: relative;
-//   top: 1px;
-// }
+.btn-close {
+  background-size: .9rem;
+}
 
 .dropdown-item {
   height: 38px;
@@ -20,11 +16,6 @@
 .dropdown-item.router-link-active {
   font-weight: 600;
 }
-
-// .dropdown-menu,
-// .modal-content {
-//   border: none;
-// }
 
 .tooltip {
   font-weight: 600;

@@ -93,14 +93,3 @@ onBeforeUnmount(() => report.consultadas.reset())
     </template>
   </div>
 </template>
-
-<style scoped>
-.form-label {
-  font-weight: 600;
-  font-size: .875em;
-}
-
-tbody tr:last-child td {
-  font-weight: bold;
-}
-</style>

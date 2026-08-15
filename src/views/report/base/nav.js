@@ -35,6 +35,11 @@ export default function useNavOptions() {
           label: 'Buscar código',
           to: { name: 'report-find' },
           icon: 'search'
+        },
+        {
+          label: 'Solicitudes de provisión',
+          to: { name: 'report-provision' },
+          icon: 'play-circle'
         }
       ] : []
     ]
