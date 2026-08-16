@@ -1,8 +1,8 @@
 <script setup>
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { ref, computed } from 'vue'
 
-const authUser = computed(() => useAuthStore().authUser)
+const { authUser } = useAuthQuery()
 const actions = computed(() => {
   return [
     { title: 'Cerrar sesión', path: { name: 'auth-logout' }, icon: 'box-arrow-right' },

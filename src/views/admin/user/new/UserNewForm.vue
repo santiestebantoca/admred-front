@@ -10,11 +10,12 @@ import EmailInput from '../base/inputs/UserEmailInput.vue'
 import MovilInput from '../base/inputs/UserMovilInput.vue'
 import FijoInput from '../base/inputs/UserFijoInput.vue'
 import AreaSelect from '../base/inputs/UserAreaSelect.vue'
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import useStore from '@/stores/admin-users'
 import { ref, computed } from 'vue'
 
 const process = useHandleSubmit()
+const { authUser } = useAuthQuery()
 const store = useStore().user
 const sending = ref(false)
 const form = ref({
@@ -27,7 +28,7 @@ const form = ref({
   area: null
 })
 const result = ref({ errors: {} })
-const areaSelectable = computed(() => useAuthStore().authUser.AR)
+const areaSelectable = computed(() => authUser.value?.AR)
 const validate = () => {
   const errors = {}
   if (!form.value.first_name) errors.first_name = 'Este campo no puede estar vacío'

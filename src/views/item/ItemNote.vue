@@ -1,7 +1,7 @@
 <script setup>
 import useHandleSubmit from '@/use/useHandleSubmit.js'
 import useItemStore from '@/stores/item'
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { formatHM, formatDate } from '@/use/useDates'
 import { tidy, groupBy, mutate } from '@tidyjs/tidy'
 import { useRoute } from 'vue-router'
@@ -53,11 +53,11 @@ const data = computed(() => {
 })
 const writable = computed(() => {
   const itemData = item.data
-  const authUser = useAuthStore().authUser
-  if (itemData && authUser) {
-    const imTramitador = itemData.tramitador && itemData.tramitador.id === authUser.id
-    const imSupervisor = itemData.supervisor && itemData.supervisor.id === authUser.id
-    const imSender = itemData.remitente.id === authUser.id
+  const { authUser } = useAuthQuery()
+  if (itemData && authUser.value) {
+    const imTramitador = itemData.tramitador && itemData.tramitador.id === authUser.value.id
+    const imSupervisor = itemData.supervisor && itemData.supervisor.id === authUser.value.id
+    const imSender = itemData.remitente.id === authUser.value.id
     return itemData.estado.id !== 4 && (imTramitador || imSender || imSupervisor)
   } else return false
 })

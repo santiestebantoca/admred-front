@@ -2,7 +2,7 @@
 const props = defineProps(['person'])
 
 import useReportStore from '@/stores/report'
-import MonthPicker from '@/components/MonthPicker.vue'
+import MonthPicker from '@/components/commons/MonthPicker.vue'
 import PersonAsSupervisor from './PersonAsSupervisor.vue'
 import PersonAsTramitador from './PersonAsTramitador.vue'
 import { onUnmounted, computed } from 'vue'

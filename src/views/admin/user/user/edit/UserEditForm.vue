@@ -2,7 +2,7 @@
 const props = defineProps({ id: Number, back: Function })
 
 import useHandleSubmit from '@/use/useHandleSubmit.js'
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import useStore from '@/stores/admin-users'
 import FirstNameInput from '../../base/inputs/UserFirstNameInput.vue'
 import LastNameInput from '../../base/inputs/UserLastNameInput.vue'
@@ -14,6 +14,7 @@ import AreaSelect from '../../base/inputs/UserAreaSelect.vue'
 import { ref, watch, computed } from 'vue'
 
 const process = useHandleSubmit()
+const { authUser } = useAuthQuery()
 const store = useStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -37,7 +38,7 @@ watch(() => store.user.data, d => {
     area: d.area.id
   }
 }, { immediate: true })
-const areaSelectable = computed(() => useAuthStore().authUser.AR)
+const areaSelectable = computed(() => authUser.value?.AR)
 const validate = () => {
   const errors = {}
   if (!form.value.first_name) errors.first_name = 'Este campo no puede estar vacío'

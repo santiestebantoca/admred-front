@@ -1,8 +1,8 @@
 <script setup>
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { computed } from 'vue'
 
-const authUser = computed(() => useAuthStore().authUser)
+const { authUser } = useAuthQuery()
 const apps = computed(() => {
   return [
     { title: 'Solicitudes', path: '/solicitudes', icon: 'inboxes' },

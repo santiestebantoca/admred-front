@@ -1,8 +1,9 @@
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { computed } from 'vue'
 
 export default function useNavOptions() {
-  const AR = useAuthStore().authUser.AR
+  const { authUser } = useAuthQuery()
+  const AR = authUser.value?.AR
   const options = computed(() => {
     return [
       {

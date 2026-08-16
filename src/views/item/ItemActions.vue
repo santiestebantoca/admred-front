@@ -3,7 +3,7 @@ const props = defineProps({
   horizontal: Boolean
 })
 
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import useItemStore from '@/stores/item'
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
@@ -12,13 +12,13 @@ const route = useRoute()
 const router = useRouter()
 const item = useItemStore()
 const data = computed(() => item.data)
-const authUser = computed(() => useAuthStore().authUser)
+const { authUser } = useAuthQuery()
 const items = computed(() => {
   if (!data.value) return []
   const im = {
-    supervisor: data.value.destino.id === authUser.value.area && authUser.value.supervisor,
-    tramitador: data.value.tramitador && data.value.tramitador.id === authUser.value.id,
-    demandante: data.value.remitente.id === authUser.value.id
+    supervisor: data.value.destino.id === authUser.value?.area && authUser.value?.supervisor,
+    tramitador: data.value.tramitador && data.value.tramitador.id === authUser.value?.id,
+    demandante: data.value.remitente.id === authUser.value?.id
   }
 
   const assign = data.value.estado.id < 3 && im.supervisor
@@ -28,7 +28,7 @@ const items = computed(() => {
   const approve =
     data.value.estado.id === 3 &&
     data.value.supervisor &&
-    data.value.supervisor.id === authUser.value.id
+    data.value.supervisor.id === authUser.value?.id
   const rate = data.value.estado.id === 4 && !data.value.evaluacion && im.demandante
 
   const items = []

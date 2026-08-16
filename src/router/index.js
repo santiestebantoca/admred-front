@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery, useLogout } from '@/stores/auth'
+import { until } from '@vueuse/core'
 import { useStorage } from '@vueuse/core'
 
 const folderDefault = () => {
@@ -19,12 +20,12 @@ const routesAuth = [
   {
     path: '/auth',
     name: 'auth',
-    component: () => import('../views/auth/AuthIndex.vue'),
+    component: () => import('../views/auth/index.vue'),
     children: [
       {
         path: 'login',
         name: 'auth-login',
-        component: () => import('@/views/auth/login/AuthLogin.vue'),
+        component: () => import('@/views/auth/login.vue'),
         meta: { logout: true },
         props: route => ({
           next: () => router.push(route.query.next || '/home')
@@ -33,22 +34,24 @@ const routesAuth = [
       {
         path: 'impersonate',
         name: 'auth-impersonate',
-        component: () => import('@/views/auth/impersonate/AuthImpersonate.vue'),
+        component: () => import('@/views/auth/impersonate.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'logout',
         name: 'auth-logout',
-        component: () => import('@/views/auth/logout/AuthLogout.vue'),
+        component: () => import('@/views/auth/logout.vue'),
         meta: { logout: true }
       },
       {
         path: 'expired',
         name: 'auth-expired',
-        component: () => import('@/views/auth/expired/AuthExpired.vue'),
+        component: () => import('@/views/auth/expired.vue'),
         meta: { logout: true },
         beforeEnter: (to, from) => replaceQuery(to, 'next', from ? from.fullPath : '/'),
-        props: route => ({ next: route.query.next }),
+        props: route => ({
+          next: () => router.push(route.query.next)
+        }),
       }
     ]
   }
@@ -373,6 +376,22 @@ const routesAdmin = [
   }
 ]
 
+// const routesApp = [
+//   {
+//     path: '/index',
+//     name: 'index',
+//     component: () => import('@/views/app/index.vue'),
+//     meta: { requiresAuth: true },
+//     children: [
+//       {
+//         path: '',
+//         name: 'app-home',
+//         component: () => import('@/views/app/home.vue')
+//       }
+//     ]
+//   },
+// ]
+
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -380,6 +399,7 @@ export const router = createRouter({
     ...routesSolicitudes,
     ...routesReport,
     ...routesAdmin,
+    // ...routesApp,
     {
       path: '/home',
       name: 'home',
@@ -388,14 +408,16 @@ export const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      component: () => import('@/views/NotFound.vue')
+      component: () => import('@/views/not_found.vue')
     }
   ]
 })
 
 router.afterEach((to) => {
-  const auth = useAuthStore()
-  if (to.matched.some((record) => record.meta.logout)) auth.auth && auth.logout()
+  const { authUser } = useAuthQuery()
+  const { mutate: logout } = useLogout()
+  if (to.matched.some((record) => record.meta.logout) && authUser.value)
+    logout()
   if (to.matched.some((record) => record.meta.saveFolder)) {
     const folder = useStorage('admred_router_folder')
     folder.value = `${to.params.tray}/${to.params.state}`
@@ -403,12 +425,10 @@ router.afterEach((to) => {
 })
 
 router.beforeEach(async (to, from) => {
-  const auth = useAuthStore()
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (auth.auth === null) // browser navigation (initial state)
-      await auth.getAuthUser()
-    if (!auth.auth)
-      return { name: 'auth-login', query: { next: to.fullPath } }
+  const { authUser, isPending } = useAuthQuery()
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    await until(isPending).toBe(false) // browser initial navigation
+    if (!authUser.value) return { name: 'auth-login', query: { next: to.fullPath } }
   }
 })
 

@@ -1,11 +1,9 @@
 <script setup>
 import { computed } from 'vue'
-import useAuthStore from '@/stores/auth'
 import useItemStore from '@/stores/item'
 const item = useItemStore()
 const data = computed(() => item.data)
 const items = computed(() => {
-  const authUser = useAuthStore().authUser
   const items = []
   if (data.value.padre) {
     items.push({

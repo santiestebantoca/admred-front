@@ -2,11 +2,12 @@
 const props = defineProps(['me', 'data', 'root'])
 
 import Node from './PendingNode.vue'
-import useAuthStore from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { computed } from 'vue'
 
+const { authUser } = useAuthQuery()
 const terminado = computed(() => props.me.estado === 4)
-const enabled = computed(() => props.root || useAuthStore().authUser.AR)
+const enabled = computed(() => props.root || authUser.value?.AR)
 </script>
 
 <template>
