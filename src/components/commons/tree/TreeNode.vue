@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
   data: Record<string, any>
-  level?: number
+  level?: number,
+  open?: boolean
 }>(), {
-  level: 0,
+  level: 0
 })
 
 import { ref, inject, computed, onMounted, onUnmounted, type Ref } from 'vue'
@@ -13,7 +14,7 @@ const list = inject<Ref<boolean>>('tree:list', { value: false } as Ref<boolean>)
 const childrenNames = inject<Ref<string[]>>('tree:childrenNames', { value: [] } as Ref<string[]>)
 const itemIdName = inject<Ref<string>>('tree:itemIdName', { value: 'id' } as Ref<string>)
 const active = inject<Ref<string | number | null>>('tree:active', { value: null } as Ref<string | number | null>)
-const open = ref(false)
+const open = ref(props.open)
 const childrenName = computed(() => [...childrenNames.value, 'children'].find(name => Object.prototype.hasOwnProperty.call(props.data, name)) || 'children')
 const leaf = computed(() => !props.data[childrenName.value]?.length)
 const descendantIds = computed(() => getAllNodeIds(props.data))
