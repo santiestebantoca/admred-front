@@ -1,0 +1,1 @@
+export { useNotificacionesQuery } from './useNotificacionesQuery'

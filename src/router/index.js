@@ -68,7 +68,17 @@ const routesSolicitudes = [
         component: () => import('@/views/solicitudes/index.vue'),
         meta: { requiresAuth: true, saveFolder: true },
         props: route => ({
-          baseQuery: { tray: route.params.tray, state: route.params.state },
+          params: {
+            tray: route.params.tray,
+            state: route.params.state
+          },
+          query: route.query,
+          // query: {
+          //   period: route.query.period ? parseInt(route.query.period) : undefined,
+          //   status: route.query.status ? parseInt(route.query.status) : undefined,
+          //   search: route.query.search
+          //   search_in: route.query.search_in
+          // },
           compose: {
             new: route.query.compose === 'new',
             back: () => router.replace({
@@ -83,52 +93,52 @@ const routesSolicitudes = [
   }
 ]
 
-const routesReport = [
+const routesReportes = [
   {
-    path: '/report',
-    name: 'report',
-    component: () => import('../views/report/index.vue'),
+    path: '/reportes',
+    name: 'reportes',
+    component: () => import('../views/reportes/index.vue'),
     meta: { requiresAuth: true },
     children: [
       {
         path: '',
-        name: 'report-home',
-        component: () => import('@/views/report/home/ReportHome.vue'),
+        name: 'reportes-home',
+        component: () => import('@/views/reportes/home/ReportHome.vue'),
       },
       {
         path: 'pending',
-        name: 'report-pending',
-        component: () => import('@/views/report/pending/ReportPending.vue'),
+        name: 'reportes-pending',
+        component: () => import('@/views/reportes/pending/ReportPending.vue'),
       },
       {
         path: 'outer',
-        name: 'report-outer',
-        component: () => import('@/views/report/outer/ReportOuter.vue'),
+        name: 'reportes-outer',
+        component: () => import('@/views/reportes/outer/ReportOuter.vue'),
       },
       {
         path: 'inner',
-        name: 'report-inner',
-        component: () => import('@/views/report/inner/ReportInner.vue'),
+        name: 'reportes-inner',
+        component: () => import('@/views/reportes/inner/ReportInner.vue'),
       },
       {
         path: 'consultadas',
-        name: 'report-consultadas',
-        component: () => import('@/views/report/consultadas/ReportConsultadas.vue'),
+        name: 'reportes-consultadas',
+        component: () => import('@/views/reportes/consultadas/ReportConsultadas.vue'),
       },
       {
         path: 'find',
-        name: 'report-find',
-        component: () => import('@/views/report/find/ReportFind.vue'),
+        name: 'reportes-find',
+        component: () => import('@/views/reportes/find/ReportFind.vue'),
       },
       {
         path: 'person',
-        name: 'report-person',
-        component: () => import('@/views/report/person/ReportPerson.vue'),
+        name: 'reportes-person',
+        component: () => import('@/views/reportes/person/ReportPerson.vue'),
       },
       {
         path: 'provision',
-        name: 'report-provision',
-        component: () => import('@/views/report/provision/index.vue'),
+        name: 'reportes-provision',
+        component: () => import('@/views/reportes/provision/index.vue'),
       }
     ]
   }
@@ -397,7 +407,7 @@ export const router = createRouter({
   routes: [
     ...routesAuth,
     ...routesSolicitudes,
-    ...routesReport,
+    ...routesReportes,
     ...routesAdmin,
     // ...routesApp,
     {

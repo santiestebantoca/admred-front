@@ -2,7 +2,7 @@
 const model = defineModel()
 const props = defineProps({
   auto: { type: String, default: 'true' },
-  icon: Boolean
+  icon: Boolean || String
 })
 
 import { Dropdown } from 'bootstrap'

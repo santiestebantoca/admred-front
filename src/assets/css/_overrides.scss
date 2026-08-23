@@ -1,3 +1,7 @@
+.btn {
+  --bs-btn-border-radius: var(--bs-border-radius-lg) !important;
+}
+
 .form-label {
   font-weight: 600;
   font-size: .875em;
@@ -5,16 +9,6 @@
 
 .btn-close {
   background-size: .9rem;
-}
-
-.dropdown-item {
-  height: 38px;
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-item.router-link-active {
-  font-weight: 600;
 }
 
 .tooltip {
@@ -52,10 +46,35 @@
 }
 
 /* BootstrapVueNext */
-.dropdown-item svg {
-  position: relative;
-  top: -2px;
+.dropdown-item {
+  height: 34px;
+  display: flex !important;
+  gap: 12px;
+
+  &.active,
+  &:active {
+    color: inherit !important;
+    background-color: var(--bs-dropdown-btn-active-bg) !important;
+  }
+
+  .highlighted>&,
+  .allow-highlight>&.router-link-exact-active,
+  .allow-highlight-in-route>&.router-link-active {
+    font-weight: 600;
+    background-color: #d3e3fd !important;
+  }
+
+  >svg {
+    position: relative;
+    top: 3px;
+  }
+
 }
+
+// .highlighted>.dropdown-item {
+//   font-weight: 600;
+//   background-color: #d3e3fd !important;
+// }
 
 .spinner-border {
   // --bs-spinner-border-width: 0.25em;

@@ -42,9 +42,34 @@ import BiBoxArrowUpRight from '~icons/bi/box-arrow-up-right'
 import BiInfoCircle from '~icons/bi/info-circle'
 import BiDot from '~icons/bi/dot'
 import BiPersonGear from '~icons/bi/person-gear'
+import BiBell from '~icons/bi/bell'
+import BiInboxes from '~icons/bi/inboxes'
+import BiGraphUp from '~icons/bi/graph-up'
+import BiFolder from '~icons/bi/folder'
+import BiDownload from '~icons/bi/download'
+import BiSendFill from '~icons/bi/send-fill'
+import BiMenuApp from '~icons/bi/menu-app'
+import MdiApps from '~icons/mdi/apps'
+import BiPencilSquare from '~icons/bi/pencil-square'
+import BiFolderCheck from '~icons/bi/folder-check'
+import BiForward from '~icons/bi/forward'
+import BiArrowRepeat from '~icons/bi/arrow-repeat'
+import BiFiletypeCsv from '~icons/bi/filetype-csv'
 
 export const iconMap = {
-    // 'mdi-home': MdiHome,
+    'bi-filetype-csv': BiFiletypeCsv,
+    'bi-arrow-repeat': BiArrowRepeat,
+    'bi-forward': BiForward,
+    'bi-folder-check': BiFolderCheck,
+    'bi-pencil-square': BiPencilSquare,
+    'mdi-apps': MdiApps,
+    'bi-menu-app': BiMenuApp,
+    'bi-send-fill': BiSendFill,
+    'bi-download': BiDownload,
+    'bi-folder': BiFolder,
+    'bi-inboxes': BiInboxes,
+    'bi-graph-up': BiGraphUp,
+    'bi-bell': BiBell,
     'bi-person-gear': BiPersonGear,
     'bi-dot': BiDot,
     'bi-info-circle': BiInfoCircle,

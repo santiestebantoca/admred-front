@@ -12,6 +12,13 @@ export const queryKeys = {
     listas: () => [...queryKeys.authMembership.root, 'lista'],
     lista: (filtros) => [...queryKeys.authMembership.listas(), { ...filtros }],
   },
+  solicitudes: {
+    root: ['solicitudes'],
+    listas: () => [...queryKeys.solicitudes.root, 'lista'],
+    lista: (filtros) => [...queryKeys.solicitudes.listas(), { ...filtros }],
+    detalles: () => [...queryKeys.solicitudes.root, 'detalle'],
+    detalle: (id) => [...queryKeys.solicitudes.detalles(), id],
+  },
   grupos: {
     root: ['grupos'],
     listas: () => [...queryKeys.grupos.root, 'lista'],

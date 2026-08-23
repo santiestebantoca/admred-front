@@ -11,7 +11,7 @@ const nav = useNavOptions().options
 <template>
   <div class="h-100 d-flex flex-column bg-light-1 overflow-auto gap-1 pb-4">
     <bs-btn-close v-if="down" @click="$emit('hide')" class="m-1 ms-auto" />
-    <h5 v-else class="p-3 mb-3">Administración</h5>
+    <h5 v-else class="p-3 mb-3">Reportes</h5>
     <div class="px-1">
       <bs-btn v-for="_ in nav" flat color="primary" :to="_.to" @click="$emit('hide')" class="w-100 text-start">
         <i :class="`bi-${_.icon}`" class="me-3" />

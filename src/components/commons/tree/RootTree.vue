@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   childrenNames: () => [] as string[],
   itemIdName: 'id',
+  selectable: true
 })
 
 import { provide, toRef, ref, watchEffect, onMounted, onUnmounted, type Ref } from 'vue'
@@ -35,7 +36,7 @@ onUnmounted(() => active.value = null)
 </script>
 
 <template>
-  <ul class="m-0 p-0">
+  <ul class="m-0 p-0 list-unstyled">
     <slot></slot>
   </ul>
 </template>

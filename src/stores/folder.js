@@ -7,22 +7,6 @@ import { orderByObject } from './tidy-aux'
 import { useStorage } from '@vueuse/core'
 import { ref, computed, watch, nextTick, reactive } from 'vue'
 
-const usePending = defineStore('folder-pending', () => {
-  const data = ref({})
-  const setData = data_ => {
-    data.value = {
-      ...data_,
-      sum: data_.incoming + data_.outgoing,
-      tasks: data_.assign.length + data_.reply.length + data_.approve.length
-    }
-  }
-  const get = () =>
-    axios
-      .get('/folder/pending')
-      .then((res) => setData(res.data))
-      .catch(() => { })
-  return { data, get }
-})
 const useDestinos = defineStore('folder-destinos', () => {
   const state = ref(null)
   const search = ref(null)
@@ -115,8 +99,6 @@ const useTipos = defineStore('folder-tipos', () => {
 })
 
 export default defineStore('folder', () => {
-  // Server side pagination & filtering // ordering in client
-  const pending = usePending()
   // for inputs data
   const destinos = useDestinos()
   const tramitadores = useTramitadores()
@@ -193,5 +175,5 @@ export default defineStore('folder', () => {
     // orderBy.value = { ...orderByDefault }
     nextTick(() => status.value.resetting = false) // otherwise, resetting is false in query watcher
   }
-  return { data, page, get, status, query, orderBy, filterBy, searchBy, $reset, pending, destinos, tramitadores, tipos }
+  return { data, page, get, status, query, orderBy, filterBy, searchBy, $reset, destinos, tramitadores, tipos }
 })

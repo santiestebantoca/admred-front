@@ -2,7 +2,6 @@
 const props = withDefaults(defineProps<{
   data: Record<string, any>
   level?: number,
-  open?: boolean
 }>(), {
   level: 0
 })
@@ -14,7 +13,8 @@ const list = inject<Ref<boolean>>('tree:list', { value: false } as Ref<boolean>)
 const childrenNames = inject<Ref<string[]>>('tree:childrenNames', { value: [] } as Ref<string[]>)
 const itemIdName = inject<Ref<string>>('tree:itemIdName', { value: 'id' } as Ref<string>)
 const active = inject<Ref<string | number | null>>('tree:active', { value: null } as Ref<string | number | null>)
-const open = ref(props.open)
+const emit = defineEmits(['click'])
+const open = ref(props.data.open ?? false)
 const childrenName = computed(() => [...childrenNames.value, 'children'].find(name => Object.prototype.hasOwnProperty.call(props.data, name)) || 'children')
 const leaf = computed(() => !props.data[childrenName.value]?.length)
 const descendantIds = computed(() => getAllNodeIds(props.data))
@@ -33,19 +33,20 @@ function getAllNodeIds(node: Record<string, any>) {
   traverse(node)
   return ids.slice(1)
 }
+const toggle = () => open.value = !open.value
 </script>
 
 <template>
-  <TreeItem v-model="open" :level="level" :leaf="leaf" :treeItemId="data[itemIdName]"
-    :descendantActive="isDescendantActive" :open="open">
-    <slot :data="data" :leaf="leaf" />
+  <TreeItem v-model:open="open" :level="level" :leaf="leaf" :treeItemId="data[itemIdName]"
+    :descendantActive="isDescendantActive" :key="data[itemIdName]">
+    <slot :data="data" :leaf="leaf" :toggle="toggle" :open="open" />
   </TreeItem>
   <template v-if="!list && !leaf && childrenName">
     <span v-show="open">
       <TreeNode v-for="(child, index) in data[childrenName]" :key="child[itemIdName] || index" :data="child"
         :level="level + 1">
-        <template #default="{ data, leaf }">
-          <slot :data="data" :leaf="leaf" />
+        <template #default="{ data, leaf, toggle, open }">
+          <slot :data="data" :leaf="leaf" :toggle="toggle" :open="open" />
         </template>
       </TreeNode>
     </span>

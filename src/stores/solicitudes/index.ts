@@ -1,0 +1,1 @@
+export { useSolicitudesQuery } from './useSolicitudesQuery'
