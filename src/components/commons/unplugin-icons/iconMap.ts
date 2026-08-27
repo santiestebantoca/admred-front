@@ -55,8 +55,16 @@ import BiFolderCheck from '~icons/bi/folder-check'
 import BiForward from '~icons/bi/forward'
 import BiArrowRepeat from '~icons/bi/arrow-repeat'
 import BiFiletypeCsv from '~icons/bi/filetype-csv'
+import BiClockHistory from '~icons/bi/clock-history'
+import BiClock from '~icons/bi/clock'
+import BiPaperclip from '~icons/bi/paperclip'
+import BiTag from '~icons/bi/tag'
 
 export const iconMap = {
+    'bi-tag': BiTag,
+    'bi-paperclip': BiPaperclip,
+    'bi-clock-history': BiClockHistory,
+    'bi-clock': BiClock,
     'bi-filetype-csv': BiFiletypeCsv,
     'bi-arrow-repeat': BiArrowRepeat,
     'bi-forward': BiForward,

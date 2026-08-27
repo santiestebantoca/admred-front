@@ -75,12 +75,10 @@ const model = ref(false)
 
 <style scoped lang="scss">
 .mark {
-  color: var(--bs-gray-800);
   --bs-highlight-bg: var(--bs-yellow-300);
 
   &.warning {
     --bs-highlight-bg: var(--bs-warning);
-    color: var(--bs-gray-900);
   }
 
   &.info {

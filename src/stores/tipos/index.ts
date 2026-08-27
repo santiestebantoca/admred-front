@@ -1,0 +1,1 @@
+export { useTiposQuery } from './useTiposQuery'

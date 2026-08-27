@@ -12,7 +12,7 @@ const label = computed(() => periods.value.find(d => d.highlighted).label)
 </script>
 
 <template>
-  <BDropdown :text="label" v-tippy="'Terminadas en el período'" variant="list-header" class="position-relative">
+  <BDropdown :text="label" v-tippy="'Terminadas en el período'" variant="list-header">
     <BDropdownItem v-for="{ label, to, highlighted } in periods" :to="to" :class="{ highlighted }">
       {{ label }}
     </BDropdownItem>

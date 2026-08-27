@@ -8,7 +8,7 @@ onMounted(() => setTimeout(() => navigation.value = false, 3000))
 
 <template>
   <div v-if="navigation" class="vh-100 d-flex align-items-center justify-content-center">
-    <h4 class="text-primary-emphasis fw-semibold animate">SMS</h4>
+    <h4 class="text-primary-emphasis fw-semibold animate">ADM Red</h4>
   </div>
   <slot v-else></slot>
 </template>

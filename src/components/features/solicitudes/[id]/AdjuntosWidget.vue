@@ -56,25 +56,64 @@ defineExpose({ select, ids })
 </script>
 
 <template>
-  <div>
-    <div class="vstack gap-1">
-      <div v-for="{ id, key, filename, file, filesize } in uploaded" :key="id || key"
-        class="hstack gap-2 px-1 text-bg-light" style="max-width: 540px; height: 34px">
-        <a :title="filename" :class="{ disabled: !file }" :href="file"
-          class="btn btn-link p-0 text-decoration-none text-truncate" v-text="filename" style="max-width: 75%" />
-        <span class="text-nowrap text-muted" v-text="'(' + fileSize(filesize) + ')'" />
-        <div class="mx-auto" />
-        <div v-if="!id" class="">
-          <div class="progress" style="height: 12px; width: 100px">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%" />
-          </div>
-        </div>
-        <bs-btn v-else class="lh-1 p-0" size="24px" flat @click.prevent.stop="del(id)">
-          <bs-icon name="x" fs="20px" />
-          <bs-tooltip placement="bottom" offset="0,10">Quitar adjunto</bs-tooltip>
-        </bs-btn>
-      </div>
-    </div>
-    <input type="file" multiple class="d-none" ref="input" @change="change" />
-  </div>
+  <ul>
+    <li v-for="{ id, key, filename, file, filesize } in uploaded" :key="id || key">
+      <BRow class="mx-0">
+        <BCol cols="10">
+          <a :title="filename" :class="{ disabled: !file }" :href="file">
+            {{ filename }}
+          </a>
+          <span class="text-nowrap text-muted">
+            ({{ fileSize(filesize) }})
+          </span>
+        </BCol>
+        <BCol cols="2">
+          <BProgress v-if="!id" striped :value="100" />
+          <BButton v-else @click.prevent.stop="del(id)" v-tippy="'Quitar adjunto'" class="btn-eliminar" variant="link">
+            <UIcon name="bi-x" />
+          </BButton>
+        </BCol>
+      </BRow>
+    </li>
+  </ul>
+  <input type="file" multiple class="d-none" ref="input" @change="change" />
 </template>
+
+<style scoped>
+ul {
+  width: 540px;
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    height: 34px;
+    position: relative;
+    background-color: var(--bs-primary-100);
+    margin-bottom: 2px;
+    border-radius: var(--bs-border-radius-lg);
+    padding-top: 5px;
+
+    a {
+      text-decoration: none;
+    }
+
+    .btn-eliminar {
+      margin-left: auto;
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      --bs-btn-hover-bg: var(--bs-primary-200);
+      --bs-btn-active-bg: var(--bs-primary-200);
+
+      &>svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}
+</style>

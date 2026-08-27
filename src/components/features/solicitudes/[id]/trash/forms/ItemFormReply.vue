@@ -9,7 +9,7 @@ import useWebSocketAlt from '@/use/useWebSocketAlt.js'
 import useItemStore from '@/stores/item'
 import ObservacionesTextarea from '../inputs/ItemObservacionesTextarea.vue'
 import AdjuntosSelf from '../inputs/ItemAdjuntosSelf.vue'
-import AdjuntosWidget from '../inputs/ItemAdjuntosWidget.vue'
+import AdjuntosWidget from '../../AdjuntosWidget.vue/index.js'
 import { ref, computed, watch } from 'vue'
 
 const process = useHandleSubmit()

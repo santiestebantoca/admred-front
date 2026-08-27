@@ -10,6 +10,16 @@ export interface UsuarioUpdate extends UsuarioCreate {
   registration_key?: string
 }
 
+// Solicitudes
+export interface SolicitudCreate {
+  destino: number,
+  objetivo: string,
+  adjuntos: number[],
+  tipo: number,
+  cumplir_en?: string
+}
+
+
 // Grupos
 export interface GrupoCreate {
   nombre: string

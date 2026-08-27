@@ -68,24 +68,19 @@ const routesSolicitudes = [
         component: () => import('@/views/solicitudes/index.vue'),
         meta: { requiresAuth: true, saveFolder: true },
         props: route => ({
-          params: {
-            tray: route.params.tray,
-            state: route.params.state
-          },
+          params: route.params,
           query: route.query,
-          // query: {
-          //   period: route.query.period ? parseInt(route.query.period) : undefined,
-          //   status: route.query.status ? parseInt(route.query.status) : undefined,
-          //   search: route.query.search
-          //   search_in: route.query.search_in
-          // },
-          compose: {
-            new: route.query.compose === 'new',
-            back: () => router.replace({
-              query: {
-                compose: undefined,
-              }
-            })
+          flows: {
+            crear: {
+              active: route.query.crear === 'true',
+              go: () => router.replace({ query: { ...route.query, crear: 'true' } }),
+              back: () => router.replace({ query: { crear: undefined } })
+            },
+            solicitud: {
+              active: parseInt(route.query.solicitudId),
+              go: (solicitudId) => router.replace({ query: { ...route.query, solicitudId } }),
+              back: () => router.replace({ query: { solicitudId: undefined } })
+            },
           }
         })
       }

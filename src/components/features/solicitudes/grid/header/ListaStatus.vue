@@ -12,7 +12,7 @@ const label = computed(() => status.value.find(d => d.highlighted).label)
 </script>
 
 <template>
-  <BDropdown :text="label" v-tippy="'Estado pendiente'" size="sm" variant="list-header">
+  <BDropdown :text="label" v-tippy="'Estado pendiente'" variant="list-header">
     <BDropdownItem v-for="{ label, to, highlighted } in status" :to="to" :class="{ highlighted }">
       {{ label }}
     </BDropdownItem>

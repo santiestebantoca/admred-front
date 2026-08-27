@@ -2,7 +2,7 @@
 import useHandleSubmit from '@/use/useHandleSubmit.js'
 import useWebSocketAlt from '@/use/useWebSocketAlt.js'
 import TramitadorSelect from '../inputs/ItemTramitadorSelect.vue'
-import TipoWidget from '../inputs/ItemTipoWidget.vue'
+import TipoWidget from '../../TipoWidget.vue/index.js'
 import useItemStore from '@/stores/item'
 import { ref, watch } from 'vue'
 

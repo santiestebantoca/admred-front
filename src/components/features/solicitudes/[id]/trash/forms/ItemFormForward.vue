@@ -2,12 +2,12 @@
 import useHandleSubmit from '@/use/useHandleSubmit'
 import useWebSocketAlt from '@/use/useWebSocketAlt'
 import useItemStore from '@/stores/item'
-import DestinoSelect from '../inputs/ItemDestinoSelect.vue'
-import ObjetivoTextarea from '../inputs/ItemObjetivoTextarea.vue'
+import DestinoSelect from '../SeleccionarDestino.vue/index.js'
+import ObjetivoTextarea from '../../ObjetivoTextarea.vue/index.js'
 import AdjuntosParent from '../inputs/ItemAdjuntosParent.vue'
-import AdjuntosWidget from '../inputs/ItemAdjuntosWidget.vue'
-import TipoWidget from '../inputs/ItemTipoWidget.vue'
-import CumplirWidget from '../inputs/ItemCumplirWidget.vue'
+import AdjuntosWidget from '../../AdjuntosWidget.vue/index.js'
+import TipoWidget from '../../TipoWidget.vue/index.js'
+import CumplirWidget from '../../CumplirWidget.vue/index.js'
 import { ref, computed, watch } from 'vue'
 
 const process = useHandleSubmit()

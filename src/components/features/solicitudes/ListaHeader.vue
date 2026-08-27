@@ -5,7 +5,7 @@ import { inject, ref } from 'vue'
 
 const mobile = inject('app:mobile')
 const params = inject('solicitudes:params')
-const to = ref({ query: { compose: 'new' } })
+const flows = inject('solicitudes:flows')
 const model = ref(false)
 </script>
 
@@ -36,7 +36,7 @@ const model = ref(false)
           <UIcon name="bi-pencil-square" />
         </BButton>
         <template v-else>
-          <BButton variant="primary" icon="plus-lg" :to="to">
+          <BButton variant="primary" icon="plus-lg" @click="flows.crear.go">
             <UIcon name="bi-plus-lg" /> Nueva solicitud
           </BButton>
         </template>
