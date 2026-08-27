@@ -1,6 +1,6 @@
 <script setup>
 import useItemStore from '@/stores/item'
-import { formatTime } from '@/use/useDates'
+import { formatTime } from '@/composables/useDates'
 import { ref, computed } from 'vue'
 
 const item = useItemStore()

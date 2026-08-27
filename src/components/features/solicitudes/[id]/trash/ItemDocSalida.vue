@@ -1,6 +1,6 @@
 <script setup>
 import FileIcon from '@/components/FileIcon.vue'
-import useFileSize from '@/use/useFileSize.js'
+import useFileSize from '@/composables/useFileSize.js'
 import useItemStore from '@/stores/item'
 import { computed } from 'vue'
 

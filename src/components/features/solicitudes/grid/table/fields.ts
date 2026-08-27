@@ -1,5 +1,5 @@
 import type { TableFieldRaw } from 'bootstrap-vue-next'
-import { shorterTime, listTime } from '@/use/useDates'
+import { listTime } from '@/composables/useDates'
 import { ref, computed } from 'vue'
 
 type SolicitudRecibida = [

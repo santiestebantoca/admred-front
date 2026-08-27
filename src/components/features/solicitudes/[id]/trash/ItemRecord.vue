@@ -1,6 +1,6 @@
 <script setup>
 import useItemStore from '@/stores/item'
-import { formatTime } from '@/use/useDates'
+import { formatTime } from '@/composables/useDates'
 import { useRoute } from 'vue-router'
 import { ref, computed, onUnmounted } from 'vue'
 

@@ -1,7 +1,7 @@
 import axios from './axios'
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { timeDeltaDH, timeDeltaWDH } from '@/use/useTimeDelta'
+import { timeDeltaDH, timeDeltaWDH } from '@/composables/useTimeDelta'
 
 const useRecord = defineStore('item-record', () => {
   const data = ref(null)

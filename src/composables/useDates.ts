@@ -2,11 +2,17 @@ import { useDateFormat } from "@vueuse/core"
 import { ref, watch, onScopeDispose, type Ref } from "vue"
 
 /**
+ * Tipo aceptado por las funciones de fecha: Date, string o timestamp numérico,
+ * así como valores nulos/indefinidos que se tratan como fecha inválida.
+ */
+type DateInput = Date | string | number | null | undefined
+
+/**
  * Convierte un valor a objeto Date de forma segura.
- * @param val - Fecha en formato Date, string, o null/undefined.
+ * @param val - Fecha en formato Date, string, número, o null/undefined.
  * @returns Instancia de Date o null si no es convertible.
  */
-const getDate = (val: Date | string | null | undefined): Date | null => {
+const getDate = (val: DateInput): Date | null => {
   if (val instanceof Date) return val
   if (typeof val === "string" || typeof val === "number") {
     const d = new Date(val)
@@ -20,7 +26,7 @@ const getDate = (val: Date | string | null | undefined): Date | null => {
  * @param val - Fecha en formato Date, string, o null/undefined.
  * @returns Número de días calendario o undefined si la fecha es inválida.
  */
-const daysAgo = (val: Date | string | null | undefined): number | undefined => {
+const daysAgo = (val: DateInput): number | undefined => {
   const date = getDate(val)
   if (!date) return undefined
 
@@ -105,7 +111,7 @@ export function useDateTime(): { day: Ref<number>; hour: Ref<number> } {
  * @param strDate - Fecha a formatear (Date, string, o null/undefined).
  * @returns Ref<string | null> - Texto formateado o null si la fecha es inválida.
  */
-export function shortTime(strDate: Date | string | null | undefined): Ref<string | null> {
+export function shortTime(strDate: DateInput): Ref<string | null> {
   const res = ref<string | null>(null)
   const date = getDate(strDate)
 
@@ -138,4 +144,126 @@ export function shortTime(strDate: Date | string | null | undefined): Ref<string
   })
 
   return res
+}
+
+/**
+ * Devuelve una referencia reactiva con un texto formateado compacto que
+ * representa la fecha relativa al día actual. Ejemplos:
+ *   - Si es hoy: "14:30"
+ *   - Si fue ayer: "Ayer"
+ *   - Otros días: "12/03/2025"
+ *
+ * La referencia se actualiza automáticamente cuando cambia el día (a medianoche)
+ * gracias al watcher sobre `day` de `useDateTime`.
+ *
+ * @param strDate - Fecha a formatear (Date, string, o null/undefined).
+ * @returns Ref<string | null> - Texto formateado o null si la fecha es inválida.
+ */
+export function shorterTime(strDate: DateInput): Ref<string | null> {
+  const res = ref<string | null>(null)
+  const date = getDate(strDate)
+
+  if (!date) {
+    return res // devolvemos null directamente
+  }
+
+  // Obtenemos la ref compartida del día actual
+  const { day } = useDateTime()
+
+  // Función que actualiza el valor de res según la fecha dada
+  const updateValue = (): void => {
+    const ago = daysAgo(date)
+    if (ago === 0) {
+      res.value = useDateFormat(date, "HH:mm").value
+    } else if (ago === 1) {
+      res.value = "Ayer"
+    } else {
+      res.value = useDateFormat(date, "DD/MM/YYYY").value
+    }
+  }
+
+  // Creamos el watcher y guardamos su función de parada
+  const stopWatch = watch(day, updateValue, { immediate: true })
+
+  // Al desmontar el componente, detenemos este watcher y limpiamos la ref
+  onScopeDispose(() => {
+    stopWatch()
+    res.value = null
+  })
+
+  return res
+}
+
+/**
+ * Devuelve una referencia reactiva con un texto formateado de tipo lista que
+ * representa la fecha relativa al día actual. Ejemplos:
+ *   - Si es hoy: "14:30"
+ *   - Otros días: "12/03/2025 14:30"
+ *
+ * La referencia se actualiza automáticamente cuando cambia el día (a medianoche)
+ * gracias al watcher sobre `day` de `useDateTime`.
+ *
+ * @param strDate - Fecha a formatear (Date, string, o null/undefined).
+ * @returns Ref<string | null> - Texto formateado o null si la fecha es inválida.
+ */
+export function listTime(strDate: DateInput): Ref<string | null> {
+  const res = ref<string | null>(null)
+  const date = getDate(strDate)
+
+  if (!date) {
+    return res // devolvemos null directamente
+  }
+
+  // Obtenemos la ref compartida del día actual
+  const { day } = useDateTime()
+
+  // Función que actualiza el valor de res según la fecha dada
+  const updateValue = (): void => {
+    if (daysAgo(date) === 0) {
+      res.value = useDateFormat(date, "HH:mm").value
+    } else {
+      res.value = useDateFormat(date, "DD/MM/YYYY HH:mm").value
+    }
+  }
+
+  // Creamos el watcher y guardamos su función de parada
+  const stopWatch = watch(day, updateValue, { immediate: true })
+
+  // Al desmontar el componente, detenemos este watcher y limpiamos la ref
+  onScopeDispose(() => {
+    stopWatch()
+    res.value = null
+  })
+
+  return res
+}
+
+/**
+ * Devuelve el texto de una fecha con formato día/mes/año y hora.
+ * @param strDate - Fecha a formatear (Date, string, o null/undefined).
+ * @returns Texto "DD/MM/YYYY HH:mm" o null si la fecha es inválida.
+ */
+export function formatTime(strDate: DateInput): string | null {
+  const date = getDate(strDate)
+  return date ? useDateFormat(date, "DD/MM/YYYY HH:mm").value : null
+}
+
+/**
+ * Devuelve el texto de una fecha con formato día/mes/año.
+ * @param strDate - Fecha a formatear (Date, string, o null/undefined).
+ * @returns Texto "DD/MM/YYYY" o null si la fecha es inválida.
+ */
+export function formatDate(strDate: DateInput): string | null {
+  const date = getDate(strDate)
+  return date ? useDateFormat(date, "DD/MM/YYYY").value : null
+}
+
+/**
+ * Devuelve el texto de una fecha con formato de hora y minutos.
+ * @param strDate - Fecha a formatear (Date, string, o null/undefined).
+ * @returns Texto "HH:mm" o null si la fecha es inválida.
+ */
+export function formatHM(strDate: DateInput): string | null {
+  const date = getDate(strDate)
+  return date ? useDateFormat(date, "HH:mm").value : null
 }

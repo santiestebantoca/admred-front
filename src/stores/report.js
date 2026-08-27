@@ -2,8 +2,8 @@ import axios from './axios'
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { tidy, mutate, groupBy, summarize, mean } from '@tidyjs/tidy'
-import { sortAlphabetical } from '../use/useSort'
-import { timeDeltaW, timeDeltaWToDH } from '@/use/useTimeDelta'
+import { sortAlphabetical } from '../composables/useSort'
+import { timeDeltaW, timeDeltaWToDH } from '@/composables/useTimeDelta'
 
 const usePending = defineStore('report-pending', () => {
   const data = ref(null)

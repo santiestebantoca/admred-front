@@ -1,6 +1,6 @@
 import axios from './axios'
 import usePagination from '../use/usePagination'
-import { sortAlphabetical } from '../use/useSort'
+import { sortAlphabetical } from '../composables/useSort'
 import { ref, computed, watch, nextTick, reactive } from 'vue'
 import { defineStore } from 'pinia'
 

@@ -6,7 +6,7 @@ const props = defineProps({
 })
 
 import { Datepicker } from 'vanillajs-datepicker'
-import { formatDate } from '@/use/useDates'
+import { formatDate } from '@/composables/useDates'
 import { ref, watch } from 'vue'
 
 const datepicker = ref(null)

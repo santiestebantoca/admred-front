@@ -8,7 +8,7 @@ Receive attachment [{id, solicitud_id, upload_id, {...upload}]
 <script setup>
 const props = defineProps(['parent'])
 
-import useFileSize from '@/use/useFileSize.js'
+import useFileSize from '@/composables/useFileSize.js'
 import { ref } from 'vue'
 
 const { fileSize } = useFileSize()

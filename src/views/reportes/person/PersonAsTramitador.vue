@@ -1,6 +1,6 @@
 <script setup>
 import useReportStore from '@/stores/report'
-import { formatTime } from '@/use/useDates'
+import { formatTime } from '@/composables/useDates'
 import { ref, computed } from 'vue'
 
 const report = useReportStore()

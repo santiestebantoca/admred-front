@@ -11,7 +11,7 @@
 const uploaded = ref([])
 
 import useHandleSubmit from '@/use/useHandleSubmit.js'
-import useFileSize from '@/use/useFileSize.js'
+import useFileSize from '@/composables/useFileSize.js'
 import useUploadStore from '@/stores/upload'
 import { ref } from 'vue'
 

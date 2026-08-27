@@ -2,7 +2,7 @@
 import useReportStore from '@/stores/report'
 import DateRangePicker from '@/components/commons/DateRangePicker.vue'
 import useExportCSV from '@/composables/useExportCSV'
-import { formatTime } from '@/use/useDates'
+import { formatTime } from '@/composables/useDates'
 import { ref, computed, inject, onBeforeUnmount } from 'vue'
 
 const title = inject('page:title')

@@ -1,6 +1,6 @@
 <script setup>
 import useFolderStore from '@/stores/folder'
-import { formatHM } from '@/use/useDates'
+import { formatHM } from '@/composables/useDates'
 import { ref, watch, onBeforeUnmount } from 'vue'
 
 const folder = useFolderStore()

@@ -14,7 +14,7 @@ import ItemRelatedItems from './ItemRelatedItems.vue'
 import ItemDocEntrada from './ItemDocEntrada.vue'
 import ItemDocSalida from './ItemDocSalida.vue'
 import useItemStore from '@/stores/item'
-import { formatDate } from '@/use/useDates'
+import { formatDate } from '@/composables/useDates'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, inject } from 'vue'
 
