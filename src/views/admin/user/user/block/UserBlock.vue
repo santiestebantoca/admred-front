@@ -2,12 +2,10 @@
 const props = defineProps({ back: Function })
 
 import useSnackbarStore from '@/stores/snackbar'
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import useStore from '@/stores/admin-users'
 import { ref, computed, inject } from 'vue'
 
 const loading = inject('app:loading')
-const process = useHandleSubmit()
 const snackbar = useSnackbarStore()
 const model = ref(true)
 const store = useStore()
@@ -15,17 +13,17 @@ const user = computed(() => store.user.data)
 const submit = () => {
   loading.value++
   const data = { registration_key: user.value.blocked ? '' : 'blocked' }
-  store.user.put({ id: user.value.id, data })
-    .then(res => process.PUT(res.data,
-      () => Promise.all([
-        store.users.get(),
-        store.user.get(user.value.id)
-      ]).then(() => {
-        snackbar.add(msg.value[4])
-        model.value = false
-        loading.value--
-      }),
-      () => { }))
+  // store.user.put({ id: user.value.id, data })
+  //   .then(res => process.PUT(res.data,
+  //     () => Promise.all([
+  //       store.users.get(),
+  //       store.user.get(user.value.id)
+  //     ]).then(() => {
+  //       snackbar.add(msg.value[4])
+  //       model.value = false
+  //       loading.value--
+  //     }),
+  //     () => { }))
 }
 const msg = ref(user.value.blocked
   ? ['desbloquear', 'permite', 'Desbloquear', 'Desbloquear registro', 'Registro desbloqueado.']

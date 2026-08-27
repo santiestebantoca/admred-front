@@ -1,6 +1,4 @@
 <script setup>
-import useHandleSubmit from '@/use/useHandleSubmit'
-import useWebSocketAlt from '@/use/useWebSocketAlt'
 import useItemStore from '@/stores/item'
 import DestinoSelect from '../SeleccionarDestino.vue/index.js'
 import ObjetivoTextarea from '../../ObjetivoTextarea.vue/index.js'
@@ -10,8 +8,6 @@ import TipoWidget from '../../TipoWidget.vue/index.js'
 import CumplirWidget from '../../CumplirWidget.vue/index.js'
 import { ref, computed, watch } from 'vue'
 
-const process = useHandleSubmit()
-const { handlePost } = useWebSocketAlt()
 const item = useItemStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -47,11 +43,11 @@ function submit() {
   if (!validate()) return
   sending.value = true
   form.value.adjuntos = adjuntos.value.ids().concat(adjuntosParent.value.ids())
-  item.post(form.value).then(res => process.POST(res.data, accepted, errors))
+  // item.post(form.value).then(res => process.POST(res.data, accepted, errors))
 }
 function accepted() {
   dialog.value = false
-  handlePost({ action: 'forward' })
+  // handlePost({ action: 'forward' })
 }
 const errors = () => sending.value = false
 </script>

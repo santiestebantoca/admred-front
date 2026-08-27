@@ -4,16 +4,12 @@
    / calculate form.adjuntos (from AdjuntosSelf and AdjuntosWidget)
 -->
 <script setup>
-import useHandleSubmit from '@/use/useHandleSubmit.js'
-import useWebSocketAlt from '@/use/useWebSocketAlt.js'
 import useItemStore from '@/stores/item'
 import ObservacionesTextarea from '../inputs/ItemObservacionesTextarea.vue'
 import AdjuntosSelf from '../inputs/ItemAdjuntosSelf.vue'
 import AdjuntosWidget from '../../AdjuntosWidget.vue/index.js'
 import { ref, computed, watch } from 'vue'
 
-const process = useHandleSubmit()
-const { handlePost } = useWebSocketAlt()
 const item = useItemStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -40,11 +36,11 @@ function submit() {
   sending.value = true
   adjuntosSelf.value.sync() // execute attachment deletions if any
   form.value.adjuntos = adjuntos.value.ids() // adjuntos
-  item.put({ id: item.data.id, data: form.value }).then(res => process.PUT(res.data, accepted, errors))
+  // item.put({ id: item.data.id, data: form.value }).then(res => process.PUT(res.data, accepted, errors))
 }
 function accepted() {
   dialog.value = false
-  handlePost({ action: 'reply' })
+  // handlePost({ action: 'reply' })
 }
 const errors = () => sending.value = false
 </script>

@@ -1,5 +1,4 @@
 <script setup>
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import useItemStore from '@/stores/item'
 import { useAuthQuery } from '@/stores/auth'
 import { formatHM, formatDate } from '@/composables/useDates'
@@ -7,7 +6,6 @@ import { tidy, groupBy, mutate } from '@tidyjs/tidy'
 import { useRoute } from 'vue-router'
 import { ref, computed, onUnmounted, watch, nextTick } from 'vue'
 
-const process = useHandleSubmit()
 const item = useItemStore()
 const sending = ref(false)
 const route = useRoute()
@@ -68,7 +66,7 @@ onUnmounted(() => item.note.reset())
 const scroll = () => modalBody.value.scrollTop = modalBody.value.scrollHeight
 function submit() {
   sending.value = true
-  item.note.post(form.value).then(res => process.POST(res.data, accepted, errors))
+  // item.note.post(form.value).then(res => process.POST(res.data, accepted, errors))
 }
 function accepted() {
   item.note.get(route.query.item).then(() => sending.value = false)

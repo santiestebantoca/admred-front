@@ -1,11 +1,7 @@
 <script setup>
-import useHandleSubmit from '@/use/useHandleSubmit.js'
-import useWebSocketAlt from '@/use/useWebSocketAlt.js'
 import useItemStore from '@/stores/item'
 import { ref, watch } from 'vue'
 
-const process = useHandleSubmit()
-const { handlePost } = useWebSocketAlt()
 const item = useItemStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -25,11 +21,11 @@ function validate() {
 function submit() {
   if (!validate()) return
   sending.value = true
-  item.put({ id: item.data.id, data: form.value }).then(res => process.PUT(res.data, accepted, errors))
+  // item.put({ id: item.data.id, data: form.value }).then(res => process.PUT(res.data, accepted, errors))
 }
 function accepted() {
   dialog.value = false
-  handlePost({ action: 'rate' })
+  // handlePost({ action: 'rate' })
 }
 const errors = () => sending.value = false
 </script>

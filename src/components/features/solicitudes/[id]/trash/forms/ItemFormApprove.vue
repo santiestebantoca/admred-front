@@ -1,13 +1,9 @@
 <script setup>
-import useHandleSubmit from '@/use/useHandleSubmit.js'
-import useWebSocketAlt from '@/use/useWebSocketAlt.js'
 import AprobadoRadioSet from '../inputs/ItemAprobadoRadioSet.vue'
 import DesaprobadoTextarea from '../inputs/ItemDesaprobadoTextarea.vue'
 import useItemStore from '@/stores/item'
 import { ref, computed } from 'vue'
 
-const { handlePost } = useWebSocketAlt()
-const process = useHandleSubmit()
 const item = useItemStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -27,11 +23,11 @@ function validate() {
 function submit() {
   if (!validate()) return
   sending.value = true
-  item.put({ id: item.data.id, data: form.value }).then(res => process.PUT(res.data, accepted, errors))
+  // item.put({ id: item.data.id, data: form.value }).then(res => process.PUT(res.data, accepted, errors))
 }
 function accepted() {
   dialog.value = false
-  handlePost({ action: 'approve' })
+  // handlePost({ action: 'approve' })
 }
 const errors = () => sending.value = false
 </script>

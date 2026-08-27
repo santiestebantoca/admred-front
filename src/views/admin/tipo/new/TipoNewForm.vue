@@ -2,14 +2,12 @@
 const props = defineProps({ back: Function })
 
 import useSnackbarStore from '@/stores/snackbar'
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import NombreInput from '../base/inputs/TipoNombreInput.vue'
 import DescripcionInput from '../base/inputs/TipoDescripcionInput.vue'
 import useStore from '@/stores/admin-tipos'
 import { ref, watch } from 'vue'
 
 const snackbar = useSnackbarStore()
-const process = useHandleSubmit()
 const store = useStore()
 const sending = ref(null)
 const result = ref({ errors: {} })
@@ -26,15 +24,15 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  store.tipo.post(form.value)
-    .then((res) => process.POST(res.data,
-      () => {
-        store.tipos.get()
-        snackbar.add('Registro creado.')
-        props.back()
-      },
-      errors => result.value.errors = errors))
-    .finally(() => sending.value = false)
+  // store.tipo.post(form.value)
+  //   .then((res) => process.POST(res.data,
+  //     () => {
+  //       store.tipos.get()
+  //       snackbar.add('Registro creado.')
+  //       props.back()
+  //     },
+  //     errors => result.value.errors = errors))
+  //   .finally(() => sending.value = false)
 }
 </script>
 

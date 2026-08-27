@@ -2,7 +2,6 @@
 <script setup>
 const id = defineModel()
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import FirstNameInput from '../base/inputs/UserFirstNameInput.vue'
 import LastNameInput from '../base/inputs/UserLastNameInput.vue'
 import UsernameInput from '../base/inputs/UserUsernameInput.vue'
@@ -14,7 +13,6 @@ import { useAuthQuery } from '@/stores/auth'
 import useStore from '@/stores/admin-users'
 import { ref, computed } from 'vue'
 
-const process = useHandleSubmit()
 const { authUser } = useAuthQuery()
 const store = useStore().user
 const sending = ref(false)
@@ -42,11 +40,11 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  store.post(form.value)
-    .then(res => process.POST(res.data,
-      id_ => id.value = id_,
-      errors => result.value.errors = errors))
-    .finally(() => sending.value = false)
+  // store.post(form.value)
+  //   .then(res => process.POST(res.data,
+  //     id_ => id.value = id_,
+  //     errors => result.value.errors = errors))
+  //   .finally(() => sending.value = false)
 }
 </script>
 

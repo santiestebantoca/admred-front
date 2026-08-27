@@ -1,7 +1,6 @@
 <script setup>
 const props = defineProps({ id: Number, back: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import { useAuthQuery } from '@/stores/auth'
 import useStore from '@/stores/admin-users'
 import FirstNameInput from '../../base/inputs/UserFirstNameInput.vue'
@@ -13,7 +12,6 @@ import FijoInput from '../../base/inputs/UserFijoInput.vue'
 import AreaSelect from '../../base/inputs/UserAreaSelect.vue'
 import { ref, watch, computed } from 'vue'
 
-const process = useHandleSubmit()
 const { authUser } = useAuthQuery()
 const store = useStore()
 const sending = ref(false)
@@ -52,15 +50,15 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  store.user.put({ id: props.id, data: form.value })
-    .then(res => process.PUT(res.data,
-      () => {
-        store.users.get()
-        store.user.get(props.id)
-        props.back()
-      },
-      errors => result.value.errors = errors))
-    .finally(() => sending.value = false)
+  // store.user.put({ id: props.id, data: form.value })
+  //   .then(res => process.PUT(res.data,
+  //     () => {
+  //       store.users.get()
+  //       store.user.get(props.id)
+  //       props.back()
+  //     },
+  //     errors => result.value.errors = errors))
+  //   .finally(() => sending.value = false)
 }
 </script>
 

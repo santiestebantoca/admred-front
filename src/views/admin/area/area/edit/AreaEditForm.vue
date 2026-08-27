@@ -1,14 +1,12 @@
 <script setup>
 const props = defineProps({ id: Number, back: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import NombreInput from '../../base/inputs/AreaNombreInput.vue'
 import NivelSelect from '../../base/inputs/AreaNivelSelect.vue'
 import PadreSelect from '../../base/inputs/AreaPadreSelect.vue'
 import useStore from '@/stores/admin-areas'
 import { ref, watch } from 'vue'
 
-const process = useHandleSubmit()
 const store = useStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -36,15 +34,15 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  store.area.put({ id: props.id, data: form.value })
-    .then(res => process.PUT(res.data,
-      () => {
-        store.areas.get()
-        store.area.get(props.id)
-        props.back()
-      },
-      errors => result.value.errors = errors))
-    .finally(() => sending.value = false)
+  // store.area.put({ id: props.id, data: form.value })
+  //   .then(res => process.PUT(res.data,
+  //     () => {
+  //       store.areas.get()
+  //       store.area.get(props.id)
+  //       props.back()
+  //     },
+  //     errors => result.value.errors = errors))
+  //   .finally(() => sending.value = false)
 }
 </script>
 

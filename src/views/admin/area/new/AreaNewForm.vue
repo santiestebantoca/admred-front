@@ -2,7 +2,6 @@
 const props = defineProps({ back: Function })
 
 import useSnackbarStore from '@/stores/snackbar'
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import NombreInput from '../base/inputs/AreaNombreInput.vue'
 import NivelSelect from '../base/inputs/AreaNivelSelect.vue'
 import PadreSelect from '../base/inputs/AreaPadreSelect.vue'
@@ -10,7 +9,6 @@ import useStore from '@/stores/admin-areas'
 import { ref, watch } from 'vue'
 
 const snackbar = useSnackbarStore()
-const process = useHandleSubmit()
 const store = useStore()
 const sending = ref(null)
 const result = ref({ errors: {} })
@@ -31,15 +29,15 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  store.area.post(form.value)
-    .then((res) => process.POST(res.data,
-      () => {
-        store.areas.get()
-        snackbar.add('Registro creado.')
-        props.back()
-      },
-      errors => result.value.errors = errors))
-    .finally(() => sending.value = false)
+  // store.area.post(form.value)
+  //   .then((res) => process.POST(res.data,
+  //     () => {
+  //       store.areas.get()
+  //       snackbar.add('Registro creado.')
+  //       props.back()
+  //     },
+  //     errors => result.value.errors = errors))
+  //   .finally(() => sending.value = false)
 }
 </script>
 

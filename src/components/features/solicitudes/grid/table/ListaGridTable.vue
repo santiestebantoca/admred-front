@@ -35,7 +35,7 @@ useResizeObserver(container, entries => {
     </div>
     <template v-else>
       <div v-if="mobile">
-        <!-- <div class="p-2" v-for="d in solicitudes" :key="d.id" :class="d.class"
+        <div class="p-2" v-for="d in solicitudes" :key="d[0]"
           @click="$router.push({ query: { item: d.id } }); itemId = d.id">
           <div class="hstack fw-semibold">
             <div class="text-truncate">
@@ -45,7 +45,7 @@ useResizeObserver(container, entries => {
             <span class="ms-auto text-muted small text-nowrap" v-text="d.presentada" />
           </div>
           <div class="text-truncate text-muted" v-text="d.objetivo" />
-        </div> -->
+        </div>
       </div>
       <div v-else class="h-100 overflow-hidden" ref="container" style="-padding:12px">
         <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0"
@@ -72,56 +72,13 @@ useResizeObserver(container, entries => {
       font-weight: 600;
     }
   }
+
+  tbody {
+    td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 }
-
-/* .wrap {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.height {
-  height: v-bind(height);
-} */
-
-/** tr */
-
-/* .table-custom tbody tr td:first-child {
-  position: relative;
-  padding-left: 10px;
-  --before-bg-color: transparent;
-}
-
-.table-custom tbody tr td:first-child::before {
-  content: '';
-  position: absolute;
-  top: 1px;
-  bottom: 2px;
-  left: 0;
-  width: 3px;
-  background-color: var(--before-bg-color);
-} */
-
-/** tr:hover */
-/* 
-.table-custom tbody tr:not(.tr-active):hover td:first-child {
-  --before-bg-color: var(--bs-gray-400);
-}
-
-.table-custom tbody tr:not(.tr-active):hover td {
-  color: var(--bs-dark) !important;
-  background-color: var(--gg-light-1);
-} */
-
-/** tr.tr-active */
-/* 
-.table-custom tbody tr.tr-active td:first-child {
-  --before-bg-color: rgba(var(--bs-primary-rgb), .9);
-}
-
-.table-custom tbody tr.tr-active td {
-  color: var(--bs-dark) !important;
-  // background-color: var(--bs-primary-bg-subtle); //
-  background-color: aliceblue;
-} */
 </style>

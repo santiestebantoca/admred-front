@@ -2,12 +2,10 @@
 const props = defineProps({ back: Function, cancel: Function })
 
 import useSnackbarStore from '@/stores/snackbar'
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import useStore from '@/stores/admin-areas'
 import { ref, computed, inject } from 'vue'
 
 const loading = inject('app:loading')
-const process = useHandleSubmit()
 const snackbar = useSnackbarStore()
 const model = ref(true)
 const deleted = ref(false)
@@ -15,15 +13,15 @@ const store = useStore()
 const area = computed(() => store.area.data)
 const submit = () => {
   loading.value++
-  store.area.del(area.value.id)
-    .then(res => process.DELETE(res.data,
-      () => store.areas.get().then(() => {
-        snackbar.add('Registro eliminado.')
-        deleted.value = true
-        model.value = false
-        loading.value--
-      }),
-      () => { }))
+  // store.area.del(area.value.id)
+  // .then(res => process.DELETE(res.data,
+  //   () => store.areas.get().then(() => {
+  //     snackbar.add('Registro eliminado.')
+  //     deleted.value = true
+  //     model.value = false
+  //     loading.value--
+  //   }),
+  //   () => { }))
 }
 const backIf = () => {
   if (deleted.value) props.back()

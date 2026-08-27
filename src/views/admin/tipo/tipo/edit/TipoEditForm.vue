@@ -1,13 +1,11 @@
 <script setup>
 const props = defineProps({ id: Number, back: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
 import NombreInput from '../../base/inputs/TipoNombreInput.vue'
 import DescripcionInput from '../../base/inputs/TipoDescripcionInput.vue'
 import useStore from '@/stores/admin-tipos'
 import { ref, watch } from 'vue'
 
-const process = useHandleSubmit()
 const store = useStore()
 const sending = ref(false)
 const result = ref({ errors: {} })
@@ -30,15 +28,15 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  store.tipo.put({ id: props.id, data: form.value })
-    .then(res => process.PUT(res.data,
-      () => {
-        store.tipos.get()
-        store.tipo.get(props.id)
-        props.back()
-      },
-      errors => result.value.errors = errors))
-    .finally(() => sending.value = false)
+  // store.tipo.put({ id: props.id, data: form.value })
+  //   .then(res => process.PUT(res.data,
+  //     () => {
+  //       store.tipos.get()
+  //       store.tipo.get(props.id)
+  //       props.back()
+  //     },
+  //     errors => result.value.errors = errors))
+  //   .finally(() => sending.value = false)
 }
 </script>
 
