@@ -1,41 +1,42 @@
 <script setup>
-import { useAuthQuery } from '@/stores/auth'
-import { ref, computed } from 'vue'
+import { useNavigationApps } from '@/composables/useNavigation'
 
-const { authUser } = useAuthQuery()
-const apps = computed(() => {
-  return [
-    { title: 'Solicitudes', path: '/solicitudes', icon: 'inboxes' },
-    { title: 'Reportes', path: '/report', icon: 'graph-up' },
-    ...authUser.value?.admin
-      ? [{ title: 'Administración', path: '/admin', icon: 'gear' }]
-      : []
-  ]
-})
-const show = ref(null)
+const { options } = useNavigationApps()
 </script>
 
 <template>
-  <div>
-    <bs-btn @click.stop="show = !show" class="w-100 text-start" flat style="color: var(--bs-gray-700);">
-      <i class="bi-grid-fill" style="margin:0 3px" />
-      <span class="small ms-2">APLICACIONES</span>
-      <bs-btn-caret class="float-end" v-model="show" />
-    </bs-btn>
-    <bs-collapse v-model="show">
-      <bs-btn flat v-for="(app, i) in apps" :key="i" :to="app.path" class="btn-li">
-        <i :class="`bi-${app.icon}`" style="margin:0 10px 0 16px" />
-        <span v-text="app.title" />
-      </bs-btn>
-    </bs-collapse>
-  </div>
+  <BListGroup flush class="drawer">
+    <BListGroupItem class="title">
+      Aplicaciones
+    </BListGroupItem>
+    <BListGroupItem v-for="option in options" :to="option.to" class="allow-highlight-in-route">
+      <UIcon :name="option.icon" class="me-2" />
+      {{ option.label }}
+    </BListGroupItem>
+  </BListGroup>
 </template>
 
-<style scoped>
-.btn-li {
-  width: 100%;
-  text-align: start;
-  color: var(--bs-gray-700);
+<style scoped lang="scss">
+.drawer {
+  --bs-list-group-border-width: 0 !important;
+  --bs-list-group-border-color: transparent !important;
+
+  .list-group-item {
+    color: var(--bs-dark);
+
+    &.title {
+      font-size: .875em;
+      color: var(--bs-secondary);
+      font-weight: 600;
+    }
+
+    svg {
+      position: relative;
+      top: -2px;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
 }
 
 .router-link-active {

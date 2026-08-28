@@ -1,16 +1,24 @@
 <script lang="ts" setup>
-import ListaNav from './ListaNav.vue'
-// import AppsMenu from './AppsMenu.vue'
-// import UserMenu from './UserMenu.vue'
+const props = defineProps({ closeDrawer: Function })
+
+import ListaNav from './ListaNavDrawer.vue'
+import AppsMenu from '@/components/features/AppsMenu.vue'
+import UserMenu from '@/components/features/UserMenu.vue'
 </script>
 
 <template>
-  <div class="dropdown-menu show position-relative shadow-none mx-n3 border-0">
-    <ListaNav />
+  <div class="drawer-content">
+    <ListaNav :close="closeDrawer" />
+    <AppsMenu class="mt-auto" />
+    <UserMenu :close="closeDrawer" />
   </div>
-  <!-- <div class="m-auto" />
-  <hr />
-  <AppsMenu />
-  <hr />
-  <UserMenu /> -->
 </template>
+
+<style scoped lang="scss">
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+</style>

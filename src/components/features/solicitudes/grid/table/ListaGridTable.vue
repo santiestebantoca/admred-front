@@ -1,27 +1,32 @@
 <script setup>
+import { shorterTime } from '@/composables/useDates'
 import { useFields } from './fields'
 import { useSolicitudesQuery } from '@/stores/solicitudes'
 import { useResizeObserver } from '@vueuse/core'
-import { ref, inject, useTemplateRef, watchEffect } from 'vue'
+import { ref, computed, inject, useTemplateRef, watchEffect } from 'vue'
 
 const mobile = inject('app:mobile')
 const flows = inject('solicitudes:flows')
+const filaExpandida = inject('solicitudes:filaExpandida')
 const { fields, tray: _tray, state: _state } = useFields()
 const { solicitudes, total, isPending, isLoading, tray, state, isFiltered } = useSolicitudesQuery()
 const active = ref([flows.value.solicitud.active])
+const height = ref(null)
+const container = useTemplateRef('container')
+const rootStyle = computed(() => ({
+  '--td-white-space': filaExpandida.value ? 'unset' : 'nowrap'
+}))
 
 watchEffect(() => {
   _tray.value = tray.value
   _state.value = state.value
 })
+useResizeObserver(container, entries => {
+  const containerHeight = entries[0].contentRect.height
+  height.value = `${containerHeight - containerHeight % 41}px`
+})
 
 const onSelectedItem = (val) => flows.value.solicitud.go(val[0])
-// Layout logic for Table compact & height
-const height = ref(null)
-const container = useTemplateRef('container')
-useResizeObserver(container, entries => {
-  height.value = `${entries[0].contentRect.height - entries[0].contentRect.height % 42}px`
-})
 </script>
 
 <template>
@@ -34,20 +39,21 @@ useResizeObserver(container, entries => {
       <span v-if="isFiltered">(Revise los filtros aplicados)</span>
     </div>
     <template v-else>
-      <div v-if="mobile">
-        <div class="p-2" v-for="d in solicitudes" :key="d[0]"
-          @click="$router.push({ query: { item: d.id } }); itemId = d.id">
-          <div class="hstack fw-semibold">
-            <div class="text-truncate">
-              <span class="text-muted" v-text="d.deParaLabel" />
-              <span class="-fw-semibold" v-text="d.dePara" />
-            </div>
-            <span class="ms-auto text-muted small text-nowrap" v-text="d.presentada" />
-          </div>
-          <div class="text-truncate text-muted" v-text="d.objetivo" />
-        </div>
-      </div>
-      <div v-else class="h-100 overflow-hidden" ref="container" style="-padding:12px">
+      <BContainer v-if="mobile" class="table-mobile-container" :style="rootStyle">
+        <BRow v-for="d in solicitudes" :key="d[0]" @click="onSelectedItem(d)">
+          <BCol class="presentacion-de-para">
+            {{ tray === 'recibidas' ? 'De:' : 'Para:' }}
+            {{ d[6] }}
+          </BCol>
+          <BCol cols="auto" class="presentacion-presentada">
+            {{ shorterTime(d[4]) }}
+          </Bcol>
+          <BCol cols="12" class="presentacion-objetivo">
+            <p>{{ d[2] }}</p>
+          </BCol>
+        </BRow>
+      </BContainer>
+      <div v-else class="table-large-container" ref="container" :style="rootStyle">
         <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0"
           :tbody-tr-class="rowClass" :thClass="['custom-th']" :busy="isLoading" selectable select-mode="single"
           @update:selected-items="onSelectedItem" v-model:selected-items="active">
@@ -65,6 +71,52 @@ useResizeObserver(container, entries => {
 </template>
 
 <style scoped lang="scss">
+.table-mobile-container {
+  overflow: hidden;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  .row {
+    overflow: hidden;
+    border-top: 1px solid var(--bs-border-color);
+
+    >div {
+      min-width: 0;
+      overflow: hidden;
+
+      &.presentacion-de-para {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 600;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
+
+      &.presentacion-presentada {
+        color: var(--bs-gray-600);
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
+
+      &.presentacion-objetivo {
+        color: var(--bs-gray-800);
+
+        p {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: var(--td-white-space);
+        }
+      }
+    }
+  }
+}
+
+.table-large-container {
+  overflow: hidden;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 :deep(.b-table) {
   thead {
     th {
@@ -77,7 +129,7 @@ useResizeObserver(container, entries => {
     td {
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
+      white-space: var(--td-white-space);
     }
   }
 }

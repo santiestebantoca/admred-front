@@ -1,12 +1,12 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { destinosApi as api } from '@/api/destinos'
-import { refDebounced, useStorage } from '@vueuse/core'
+import { /*refDebounced,*/ useStorage } from '@vueuse/core'
 import { ref, computed } from 'vue'
 
 export function useDestinosQuery() {
   const search = ref(undefined)
-  const debouncedSearch = refDebounced(search, 600) // 300ms de debounce
+  // const debouncedSearch = refDebounced(search, 600) // 300ms de debounce
   // const limit = ref(undefined) // '0,2' (al inicio traer dos para singleOption)
   // const params = computed(() => ({
   //   search: debouncedSearch.value,
@@ -27,7 +27,7 @@ export function useDestinosQuery() {
   const singleOption = computed(() => data.value.length === 1 ? data.value[0] : null)
   const search_ = computed(() => search.value?.trim().toLowerCase())
   const historyIds = useStorage('admred_stores_folder_destinos', [])
-  const history = {
+  const historial = {
     add: id => {
       historyIds.value = historyIds.value.filter(d => d !== id)
       historyIds.value.unshift(id) // adds id to the start of array
@@ -68,7 +68,7 @@ export function useDestinosQuery() {
   })
   return {
     destinos,
-    history,
+    historial,
     singleOption,
     isPending,
     search

@@ -12,11 +12,14 @@ import ListaHeader from '@/components/features/solicitudes/ListaHeader.vue'
 import ListaGrid from '@/components/features/solicitudes/grid/ListaGrid.vue'
 import CrearSolicitud from '@/views/solicitudes/_flows/crear.vue'
 import Solicitud from '@/views/solicitudes/_flows/solicitud.vue'
-import { provide, computed } from 'vue'
+import { ref, computed, provide } from 'vue'
+
+const filaExpandida = ref(false)
 
 provide('solicitudes:params', computed(() => props.params))
 provide('solicitudes:query', computed(() => props.query))
 provide('solicitudes:flows', computed(() => props.flows))
+provide('solicitudes:filaExpandida', filaExpandida)
 </script>
 
 <template>

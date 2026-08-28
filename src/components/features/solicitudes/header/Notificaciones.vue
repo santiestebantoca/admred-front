@@ -1,8 +1,9 @@
 <script setup>
 import BButton from '@/components/commons/bootstrap-vue-next/BButton.vue'
 import { useNotificacionesQuery } from '@/stores/notificaciones'
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 
+const mobile = inject('app:mobile')
 const { notificaciones } = useNotificacionesQuery()
 const porAtender = computed(() => notificaciones.value
   ? notificaciones.value.pendientes.recibidas.por_asignar.length
@@ -16,7 +17,8 @@ const model = ref(false)
   <template v-if="porAtender">
     <BButton @click="model = true" variant="navbar" v-tippy="'Notificaciones'" class="position-relative">
       <UIcon name="bi-bell" />
-      <BBadge variant="danger" class="position-absolute top-0 start-100 translate-middle-x">
+      <BBadge variant="danger" class="position-absolute top-0 translate-middle-x"
+        :class="[mobile ? 'start-0' : 'start-100']">
         {{ porAtender }}
       </BBadge>
     </BButton>

@@ -8,7 +8,7 @@ const emit = defineEmits(['input'])
 <template>
   <RootTree style="width: 250px;">
     <TreeNode v-for="data in options" :data="data" :key="data.id">
-      <template #default="{ data, style, toggle, open }">
+      <template #default="{ data, toggle, open }">
         <BDropdownItem v-if="data.to" :to="data.to" @click="emit('input')" :style="style" class="allow-highlight">
           <UIcon :name="data.icon" />
           <span v-text="data.label" />

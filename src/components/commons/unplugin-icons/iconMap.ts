@@ -59,8 +59,10 @@ import BiClockHistory from '~icons/bi/clock-history'
 import BiClock from '~icons/bi/clock'
 import BiPaperclip from '~icons/bi/paperclip'
 import BiTag from '~icons/bi/tag'
+import BiTextWrap from '~icons/bi/text-wrap'
 
 export const iconMap = {
+    'bi-text-wrap': BiTextWrap,
     'bi-tag': BiTag,
     'bi-paperclip': BiPaperclip,
     'bi-clock-history': BiClockHistory,

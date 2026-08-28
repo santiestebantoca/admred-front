@@ -11,7 +11,7 @@ const model = ref(false)
 
 <template>
   <BContainer fluid>
-    <BRow class="justify-content-between">
+    <BRow class="justify-content-between align-items-center">
       <BCol cols="auto">
         <div v-if="mobile" class="text-dark">
           /<span v-text="params.tray" />/<span class="fw-semibold" v-text="params.state" />
@@ -32,20 +32,31 @@ const model = ref(false)
         </template>
       </BCol>
       <BCol cols="auto">
-        <BButton v-if="mobile" :to="to" style="background: var(--gg-light-2);">
+        <BButton v-if="mobile" variant="primary crear" @click="flows.crear.go">
           <UIcon name="bi-pencil-square" />
         </BButton>
-        <template v-else>
-          <BButton variant="primary" icon="plus-lg" @click="flows.crear.go">
-            <UIcon name="bi-plus-lg" /> Nueva solicitud
-          </BButton>
-        </template>
+        <BButton v-else variant="primary" @click="flows.crear.go">
+          <UIcon name="bi-plus-lg" /> Nueva solicitud
+        </BButton>
       </BCol>
     </BRow>
   </BContainer>
 </template>
 
 <style scoped lang="scss">
+.crear {
+  width: 34px;
+  height: 34px;
+  position: relative;
+
+  >svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .w-180 {
   display: inline-block;
   width: 170px;

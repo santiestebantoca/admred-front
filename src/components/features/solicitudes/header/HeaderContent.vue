@@ -15,20 +15,20 @@ const mobile = inject('app:mobile')
 <template>
   <BNavbar>
     <BRow>
-      <BCol cols="auto">
+      <BCol cols="auto" class="d-flex">
         <template v-if="!noLeftButton">
           <BButton v-if="mobile" variant="navbar" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left>
             <UIcon name="bi-list" />
           </BButton>
         </template>
-        <BNavbarBrand to="/home">{{ title }}</BNavbarBrand>
+        <BNavbarBrand to="/home" class="p-0">{{ title }}</BNavbarBrand>
       </BCol>
       <BCol>
       </BCol>
       <BCol cols="auto">
         <Notificaciones />
       </BCol>
-      <BCol cols="auto" v-if="!mobile">
+      <BCol cols="auto" class="pe-2" v-if="!mobile">
         <AppsMenu />
       </BCol>
       <BCol cols="auto" v-if="!mobile">

@@ -45,9 +45,7 @@ function submit(file) {
 }
 const del = async id => await upload
   .del(id)
-  .then(res => process.DELETE(res.data, () =>
-    uploaded.value = uploaded.value.filter(d => d.id !== id)
-  ))
+  .then(() => uploaded.value = uploaded.value.filter(d => d.id !== id))
 
 defineExpose({ select, ids })
 // TODO: del(uploaded files) if not submitted
@@ -65,11 +63,9 @@ defineExpose({ select, ids })
             ({{ fileSize(filesize) }})
           </span>
         </BCol>
-        <BCol cols="2">
+        <BCol cols="2" class="position-relative">
           <BProgress v-if="!id" striped :value="100" />
-          <BButton v-else @click.prevent.stop="del(id)" v-tippy="'Quitar adjunto'" class="btn-eliminar" variant="link">
-            <UIcon name="bi-x" />
-          </BButton>
+          <BButton v-else variant="close" @click.prevent.stop="del(id)" v-tippy="'Quitar adjunto'" />
         </BCol>
       </BRow>
     </li>
@@ -84,26 +80,28 @@ ul {
   padding-left: 0;
 
   li {
-    height: 34px;
+    /* height: 34px; */
     position: relative;
     background-color: var(--bs-primary-100);
     margin-bottom: 2px;
     border-radius: var(--bs-border-radius-lg);
     padding-top: 5px;
+    padding-bottom: 5px;
 
     a {
       text-decoration: none;
     }
 
-    .btn-eliminar {
+    .btn-close {
       margin-left: auto;
       width: 30px;
       height: 30px;
+      padding: 0;
+      --bs-btn-font-size: var(--bs-x-small);
       position: absolute;
-      top: 2px;
+      top: 50%;
+      transform: translateY(-50%);
       right: 4px;
-      --bs-btn-hover-bg: var(--bs-primary-200);
-      --bs-btn-active-bg: var(--bs-primary-200);
 
       &>svg {
         position: absolute;

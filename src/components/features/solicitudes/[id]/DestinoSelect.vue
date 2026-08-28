@@ -12,7 +12,7 @@ import { useDestinosQuery } from '@/stores/destinos'
 import { ref, computed, watch, onMounted } from 'vue'
 
 import { vOnClickOutside, vResizeObserver } from '@vueuse/components'
-const { destinos, history, singleOption, search } = useDestinosQuery()
+const { destinos, historial, singleOption, search } = useDestinosQuery()
 const size = ref(0)
 const focus = ref(null) // input focus
 const dropdown = ref(null)
@@ -47,7 +47,7 @@ onMounted(() => search.value = null)
 const select = (id, nombre) => {
   search.value = nombre
   value.value = id
-  history.add(id)
+  historial.add(id)
   dropdown.value = false
 }
 const input = val => {
@@ -83,10 +83,8 @@ const vInput = {
               :class="{ history }">
               <UIcon :name="history ? 'bi-clock-history' : 'bi-search'" class="small flex-shrink-0" />
               <span class="flex-shrink-1">{{ nombre }}</span>
-              <BButton v-if="history" @click.stop="history.del(id)" v-tippy="'Eliminar del historial'"
-                class="btn-eliminar" variant="link">
-                <UIcon name="bi-x" />
-              </BButton>
+              <BButton v-if="history" @click.stop="historial.del(id)" v-tippy="'Eliminar del historial'"
+                variant="close" />
             </BDropdownItemButton>
             <BDropdownText v-if="!destinos?.length">
               <span class="blockquote-footer">
@@ -150,17 +148,16 @@ const vInput = {
   .dropdown-item {
     position: relative;
 
-    .btn-eliminar {
+    .btn-close {
       display: none;
-      margin-left: auto;
       width: 30px;
       height: 30px;
       position: absolute;
-      top: 2px;
+      top: 50%;
+      transform: translateY(-50%);
       right: 4px;
-      --bs-btn-bg: var(--bs-gray-200);
-      --bs-btn-hover-bg: var(--bs-gray-300) !important;
-      --bs-btn-active-bg: var(--bs-gray-300) !important;
+      padding: 0;
+      font-size: var(--bs-x-small);
 
       &>svg {
         position: absolute;
@@ -171,7 +168,7 @@ const vInput = {
     }
 
     &:hover {
-      .btn-eliminar {
+      .btn-close {
         display: block;
       }
     }

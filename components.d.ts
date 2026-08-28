@@ -11,16 +11,19 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BAccordion: typeof import('bootstrap-vue-next/components/BAccordion')['BAccordion']
     BAccordionItem: typeof import('bootstrap-vue-next/components/BAccordion')['BAccordionItem']
     BAlert: typeof import('bootstrap-vue-next/components/BAlert')['BAlert']
     BApp: typeof import('bootstrap-vue-next/components/BApp')['BApp']
     BBadge: typeof import('bootstrap-vue-next/components/BBadge')['BBadge']
     BButton: typeof import('./src/components/commons/bootstrap-vue-next/BButton.vue')['default']
     BCol: typeof import('bootstrap-vue-next/components/BContainer')['BCol']
+    BCollapse: typeof import('bootstrap-vue-next/components/BCollapse')['BCollapse']
     BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
     BDropdown: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdown']
     BDropdownDivider: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdownDivider']
     BDropdownGroup: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdownGroup']
+    BDropdownHeader: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdownHeader']
     BDropdownItem: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdownItem']
     BDropdownItemButton: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdownItemButton']
     BDropdownItemToggle: typeof import('./src/components/commons/tree/BDropdownItemToggle.vue')['default']

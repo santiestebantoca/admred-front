@@ -54,9 +54,7 @@ const handleReset = () => {
     <BFormInput v-model="inputModel" :debounce="debounceValue" :placeholder="computedPlaceholder"
       @keyup.enter="handleKeyupEnter" v-bind="$attrs" type="search" enterkeyhint="search" />
     <UIcon v-if="searchIcon" name="bi-search" />
-    <BButton v-if="inputModel" variant="flat-dark" class="btn-sm" @click="handleReset">
-      <UIcon name="bi-x-lg" font-size="12px" />
-    </BButton>
+    <BButton v-if="inputModel" variant="close" @click="handleReset" />
   </div>
 </template>
 
@@ -70,14 +68,15 @@ const handleReset = () => {
   position: relative;
   flex-grow: 1;
 
-  .btn {
+  .btn-close {
     position: absolute;
     top: 50%;
+    transform: translateY(-50%);
     right: 4px;
     height: 30px;
     width: 30px;
-    padding: 0 !important;
-    transform: translateY(-50%);
+    padding: 0;
+    --bs-btn-font-size: var(--bs-x-small);
   }
 
   >svg {
