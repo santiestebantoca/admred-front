@@ -8,18 +8,21 @@
    / update uploaded
 -->
 <script setup>
-const uploaded = ref([])
+const uploadedIds = defineModel()  // prueba
 
 import useFileSize from '@/composables/useFileSize.js'
-import useUploadStore from '@/stores/upload'
-import { ref } from 'vue'
+import { useUploadCreate, useUploadDelete } from '@/stores/uploads'
+import { ref, watchEffect, useTemplateRef } from 'vue'
 
 const { fileSize } = useFileSize()
-const upload = useUploadStore()
+const { mutateAsync: crearUpload } = useUploadCreate()
+const { mutateAsync: eliminarUpload } = useUploadDelete()
+const input = useTemplateRef('input')
+const uploaded = ref([])
 
-const input = ref(null)
+watchEffect(() => uploadedIds.value = uploaded.value.map(d => d.id).filter(d => d))
+
 const select = () => input.value.click()
-const ids = () => uploaded.value.map(d => d.id).filter(d => d)
 // Thunderbird, checks file path... allowing files with same name
 const check = name => !uploaded.value.some(v => v.filename === name)
 
@@ -36,36 +39,33 @@ function submit(file) {
   data.append('filesize', file.size)
   data.append('filemodified', file.lastModified)
   const pos = uploaded.value.push({ key: Date.now(), filename: file.name, filesize: file.size }) - 1
-  upload.post(data)
-    .then(res => {
-      if (res.data.id)
-        upload.get(res.data.id).then(res => uploaded.value[pos] = res.data)
-      else delete uploaded.value[pos]
-    })
+  crearUpload(data)
+    .then((res) => uploaded.value[pos] = res)
+    .catch(() => uploaded.value[pos] = { ...uploaded.value[pos], error: true })
 }
-const del = async id => await upload
-  .del(id)
+const del = (id) => eliminarUpload(id)
   .then(() => uploaded.value = uploaded.value.filter(d => d.id !== id))
 
-defineExpose({ select, ids })
+defineExpose({ select })
 // TODO: del(uploaded files) if not submitted
 </script>
 
 <template>
   <ul>
-    <li v-for="{ id, key, filename, file, filesize } in uploaded" :key="id || key">
+    <li v-for="{ id, key, filename, file, filesize, error } in uploaded" :key="id || key" :class="{ error }">
       <BRow class="mx-0">
-        <BCol cols="10">
-          <a :title="filename" :class="{ disabled: !file }" :href="file">
+        <BCol cols="9">
+          <a :title="filename" :class="{ error }" :href="file">
             {{ filename }}
           </a>
           <span class="text-nowrap text-muted">
             ({{ fileSize(filesize) }})
           </span>
         </BCol>
-        <BCol cols="2" class="position-relative">
-          <BProgress v-if="!id" striped :value="100" />
-          <BButton v-else variant="close" @click.prevent.stop="del(id)" v-tippy="'Quitar adjunto'" />
+        <BCol cols="3" class="position-relative text-end">
+          <BButton v-if="id" variant="close" @click.prevent.stop="del(id)" v-tippy="'Quitar adjunto'" />
+          <span v-else-if="error" class="text-danger">Error</span>
+          <BProgress v-else-if="key" striped :value="100" class="mt-1" />
         </BCol>
       </BRow>
     </li>
@@ -80,7 +80,6 @@ ul {
   padding-left: 0;
 
   li {
-    /* height: 34px; */
     position: relative;
     background-color: var(--bs-primary-100);
     margin-bottom: 2px;
@@ -88,27 +87,24 @@ ul {
     padding-top: 5px;
     padding-bottom: 5px;
 
+    &.error {
+      background-color: var(--bs-danger-100);
+    }
+
     a {
       text-decoration: none;
+
+      &.error {
+        color: var(--bs-secondary);
+      }
     }
 
     .btn-close {
-      margin-left: auto;
-      width: 30px;
-      height: 30px;
-      padding: 0;
+      padding: 6px;
       --bs-btn-font-size: var(--bs-x-small);
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 4px;
-
-      &>svg {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
+      top: 0;
+      right: 6px;
     }
   }
 }

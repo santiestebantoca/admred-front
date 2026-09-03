@@ -36,7 +36,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  form.value.adjuntos = adjuntos.value.ids() // adjuntos
+  // form.value.adjuntos = adjuntos.value.ids() // adjuntos (prueba con v-model)
   crearSolicitud(form.value)
     .then(() => {
       toast.create({ body: 'Nueva solicitud creada.', variant: 'success' })
@@ -50,53 +50,36 @@ const submit = async () => {
 </script>
 
 <template>
-  <BModal v-model="model" no-footer title="Crear solicitud" @hidden="back" size="lg" fullscreen="sm"
-    :scrollable="false">
+  <BModal v-model="model" title="Crear solicitud" @hidden="back" size="lg" fullscreen="sm" :scrollable="false"
+    class="crear-solicitud-root">
     <form @submit.prevent>
       <DestinoSelect v-model:error="errors.destino" v-model:value="form.destino" />
       <ObjetivoTextarea v-model:error="errors.objetivo" v-model:value="form.objetivo" class="mx-n2" />
-      <AdjuntosWidget ref="adjuntosRef" />
+      <AdjuntosWidget ref="adjuntosRef" v-model="form.adjuntos" />
     </form>
-    <BRow>
-      <BCol cols="auto">
-        <BButton @click="submit" :loading="loading" loading-fill class="w-90 justify">
-          Crear
-        </BButton>
-      </BCol>
-      <BCol cols="auto">
-        <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
-          <UIcon name="bi-paperclip" />
-        </BButton>
-      </BCol>
-      <BCol cols="auto">
-        <TipoWidget v-model:error="errors.tipo" v-model:value="form.tipo" />
-      </BCol>
-      <BCol cols="auto">
-        <CumplirWidget v-model:error="errors.cumplir_en" v-model:value="form.cumplir_en" />
-      </BCol>
-    </BRow>
+    <template #footer>
+      <BButton @click="submit" :loading="loading" loading-fill class="w-90 me-3" variant="primary">
+        Crear
+      </BButton>
+      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
+        <UIcon name="bi-paperclip" class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
+      </BButton>
+      <TipoWidget v-model:error="errors.tipo" v-model:value="form.tipo" />
+      <CumplirWidget v-model:error="errors.cumplir_en" v-model:value="form.cumplir_en" />
+    </template>
   </BModal>
 </template>
 
 <style scoped lang="scss">
+.btn-footer,
 :deep(.btn-footer) {
-  width: 38px;
-  height: 38px;
-  --bs-btn-padding-x: .5rem;
-  --bs-btn-padding-y: .25rem;
-  --bs-btn-color: var(--bs-gray-700);
-  --bs-btn-bg: var(--bs-gray-100);
+  width: 34px;
+  height: 34px;
+  border-color: transparent !important;
+  // --bs-btn-bg: var(--bs-gray-100);
   --bs-btn-hover-bg: var(--bs-gray-200);
   --bs-btn-active-bg: var(--bs-gray-200);
   --bs-btn-active-border-color: var(--bs-gray-300);
 
-  >svg {
-    position: relative;
-    top: -2px;
-  }
-
-  .badge {
-    padding: 5px !important;
-  }
 }
 </style>

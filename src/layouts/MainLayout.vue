@@ -18,8 +18,8 @@ const mobile = inject('app:mobile')
     <app-footer>
       <div id="app-footer-content" />
     </app-footer>
-    <app-drawer class="border-end" title="" v-slot="{ down, closeDrawer }">
-      <slot name="drawer-content" :down="down" :closeDrawer="closeDrawer" />
+    <app-drawer class="border-end" title="" v-slot="{ down }">
+      <slot name="drawer-content" :down="down" />
     </app-drawer>
     <app-page-container>
       <app-page class="p-2">

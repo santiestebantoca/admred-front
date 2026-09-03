@@ -34,6 +34,9 @@ import BiPlus from '~icons/bi/plus'
 import BiPencil from '~icons/bi/pencil'
 import BiCheck2Square from '~icons/bi/check2-square'
 import BiExclamationCircle from '~icons/bi/exclamation-circle'
+import BiExclamationCircleFill from '~icons/bi/exclamation-circle-fill'
+import BiExclamationTriangle from '~icons/bi/exclamation-triangle'
+import BiExclamation from '~icons/bi/exclamation'
 import BiSearch from '~icons/bi/search'
 import BiArrowReturnRight from '~icons/bi/arrow-return-right'
 import BiArrowReturnLeft from '~icons/bi/arrow-return-left'
@@ -60,8 +63,38 @@ import BiClock from '~icons/bi/clock'
 import BiPaperclip from '~icons/bi/paperclip'
 import BiTag from '~icons/bi/tag'
 import BiTextWrap from '~icons/bi/text-wrap'
+import BiBookmark from '~icons/bi/bookmark'
+import BiTable from '~icons/bi/table'
+import PhSigma from '~icons/ph/sigma'
+import TabSum from '~icons/tabler/sum'
+import TabStatusChange from '~icons/tabler/status-change'
+import BiReply from '~icons/bi/reply'
+import BiPatchCheck from '~icons/bi/patch-check'
+import BiStar from '~icons/bi/star'
+import BiSticky from '~icons/bi/sticky'
+import BiPersonFillGear from '~icons/bi/person-fill-gear'
+import BiPersonFillUp from '~icons/bi/person-fill-up'
+import BiCircle from '~icons/bi/circle'
+import BiCircleFill from '~icons/bi/circle-fill'
+import AppConector from '~icons/app/conector'
+import AppApps from '~icons/app/apps'
 
 export const iconMap = {
+    'app-apps': AppApps,
+    'app-conector': AppConector,
+    'bi-circle': BiCircle,
+    'bi-circle-fill': BiCircleFill,
+    'bi-person-fill-up': BiPersonFillUp,
+    'bi-person-fill-gear': BiPersonFillGear,
+    'bi-reply': BiReply,
+    'bi-patch-check': BiPatchCheck,
+    'bi-star': BiStar,
+    'bi-sticky': BiSticky,
+    'tab-status-change': TabStatusChange,
+    'tab-sum': TabSum,
+    'ph-sigma': PhSigma,
+    'bi-table': BiTable,
+    'bi-bookmark': BiBookmark,
     'bi-text-wrap': BiTextWrap,
     'bi-tag': BiTag,
     'bi-paperclip': BiPaperclip,
@@ -89,6 +122,9 @@ export const iconMap = {
     'bi-arrow-return-right': BiArrowReturnRight,
     'bi-search': BiSearch,
     'bi-exclamation-circle': BiExclamationCircle,
+    'bi-exclamation-circle-fill': BiExclamationCircleFill,
+    'bi-exclamation-triangle': BiExclamationTriangle,
+    'bi-exclamation': BiExclamation,
     'bi-check2-square': BiCheck2Square,
     'bi-pencil': BiPencil,
     'bi-plus': BiPlus,

@@ -79,7 +79,44 @@ const routesSolicitudes = [
             solicitud: {
               active: parseInt(route.query.solicitudId),
               go: (solicitudId) => router.replace({ query: { ...route.query, solicitudId } }),
-              back: () => router.replace({ query: { solicitudId: undefined } })
+              back: () => router.replace({ query: { ...route.query, solicitudId: undefined, accion: undefined } }),
+              acciones: {
+                asignar: {
+                  active: route.query.solicitudId && (route.query.accion === 'asignar'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'asignar' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+                reenviar: {
+                  active: route.query.solicitudId && (route.query.accion === 'reenviar'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'reenviar' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+                responder: {
+                  active: route.query.solicitudId && (route.query.accion === 'responder'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'responder' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+                aprobar: {
+                  active: route.query.solicitudId && (route.query.accion === 'aprobar'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'aprobar' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+                ranquear: {
+                  active: route.query.solicitudId && (route.query.accion === 'ranquear'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'ranquear' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+                registro: {
+                  active: route.query.solicitudId && (route.query.accion === 'registro'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'registro' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+                notas: {
+                  active: route.query.solicitudId && (route.query.accion === 'notas'),
+                  go: () => router.replace({ query: { ...route.query, accion: 'notas' } }),
+                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
+                },
+              }
             },
           }
         })

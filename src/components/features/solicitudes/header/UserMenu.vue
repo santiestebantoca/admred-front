@@ -12,30 +12,23 @@ const tippy = ref({
 <template>
   <BDropdown v-if="authUser" variant="navbar" no-caret strategy="fixed" v-tippy="tippy">
     <template #button-content>
-      <img src="@/assets/images/user.png" width="22" />
+      <img src="@/assets/images/user.png" width="22" class="center" />
     </template>
-    <div class="min-w-340">
-      <p v-if="isImpersonating" class="text-center text-danger fw-bold pe-3">
+    <div class="min-w-340 px-3 py-2 d-flex flex-column gap-3">
+      <p v-if="isImpersonating" class="text-center text-danger fw-bold">
         Personificado
       </p>
-      <p class="m-3 mt-2">
-        <span class="h5 d-block fw-semibold" v-text="authUser.name" />
-        <span class="text-muted" v-text="authUser.username" />
+      <p>
+        <span class="h5 d-block fw-semibold">{{ authUser.name }}</span>
+        <span class="text-muted">{{ authUser.username }}</span>
+        <span class="d-block mt-3">@ {{ authUser.area_nombre }}</span>
       </p>
-      <div class="mx-2">
-        <BButton v-for="action in actions" :key="action.title" :to="action.path" variant="flat-primary">
-          <UIcon :name="action.icon" />
+      <div class="d-flex gap-3">
+        <BButton v-for="action in actions" :key="action.title" :to="action.path" variant="primary">
+          <UIcon :name="action.icon" class="me" />
           {{ action.title }}
         </BButton>
       </div>
     </div>
   </Bdropdown>
 </template>
-
-<style scoped>
-/* :deep(.dropdown-toggle) {
-  --bs-btn-border-color: transparent;
-  display: flex;
-  align-items: center;
-} */
-</style>

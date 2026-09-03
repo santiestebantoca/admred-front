@@ -61,28 +61,27 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 
 <template>
   <BContainer fluid class="py-2">
-    <BRow>
+    <BRow gutter-x="2">
       <BCol cols="auto" class="me-auto">
         <ListaPeriod v-if="params.state === 'terminadas'" />
         <ListaStatus v-else-if="params.state === 'pendientes'" />
       </BCol>
-      <!-- <BCol></BCol> -->
-      <BCol v-if="!mobile" cols="auto">
+      <BCol v-if="!mobile" cols="auto" class="px-3">
         <ListaSearch style="width:400px" />
       </BCol>
-      <BCol v-if="!mobile" cols="auto" class="pe-1">
-        <BButton @click="refresh" variant="list-header" v-tippy="'Actualizar'">
-          <UIcon name="bi-arrow-repeat" />
-        </BButton>
-      </BCol>
-      <BCol cols="auto" class="pe-1">
-        <BButton @click="exportar" variant="list-header" v-tippy="'Exportar (*.csv)'">
-          <UIcon name="bi-filetype-csv" />
+      <BCol v-if="!mobile" cols="auto">
+        <BButton @click="refresh" variant="list-header-icon" v-tippy="'Actualizar'">
+          <UIcon name="bi-arrow-repeat" class="center" />
         </BButton>
       </BCol>
       <BCol cols="auto">
-        <BButton @click="expandir" variant="list-header" v-tippy="'Expandir/Colapsar fila'">
-          <UIcon name="bi-text-wrap" />
+        <BButton @click="exportar" variant="list-header-icon" v-tippy="'Exportar (*.csv)'">
+          <UIcon name="bi-filetype-csv" class="center" />
+        </BButton>
+      </BCol>
+      <BCol cols="auto">
+        <BButton @click="expandir" variant="list-header-icon" v-tippy="'Expandir/Colapsar fila'">
+          <UIcon name="bi-text-wrap" class="center" />
         </BButton>
       </BCol>
     </BRow>
@@ -95,6 +94,16 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
   --bs-btn-padding-y: .25rem;
   --bs-btn-color: var(--bs-gray-700);
   --bs-btn-bg: var(--bs-gray-100);
+  --bs-btn-hover-bg: var(--bs-gray-200);
+  --bs-btn-active-bg: var(--bs-gray-200);
+  --bs-btn-active-border-color: var(--bs-gray-300);
+}
+
+:deep(.btn-list-header-icon) {
+  width: 34px;
+  height: 34px;
+  --bs-btn-color: var(--bs-gray-700);
+  // --bs-btn-bg: var(--bs-gray-100);
   --bs-btn-hover-bg: var(--bs-gray-200);
   --bs-btn-active-bg: var(--bs-gray-200);
   --bs-btn-active-border-color: var(--bs-gray-300);

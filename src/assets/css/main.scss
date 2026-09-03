@@ -1,48 +1,4 @@
-// Temporal
-$dropdown-link-active-bg: var(--bs-dropdown-link-hover-bg);
-$dropdown-link-active-color: var(--bs-dropdown-link-color);
-$tooltip-max-width: auto; // 200px
-$enable-negative-margins: true;
-@import 'bootstrap/scss/bootstrap';
-//
 @import 'vanillajs-datepicker/sass/datepicker';
-// @import 'bootstrap-vue-next';
 @import 'tokens';
 @import 'utilities';
 @import 'overrides';
-
-
-/** lo viejo
-.btn-close {
-  background-size: .9rem;
-}
-
-.dropdown-item {
-  height: 38px;
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-item.router-link-active {
-  font-weight: 600;
-}
-
-.dropdown-menu,
-.modal-content {
-  border: none;
-}
-
-.tooltip {
-  font-weight: 600;
-}
-
-[readonly] {
-  cursor: default;
-}
-
-@import './transitions/fade.css';
-@import './transitions/flash.css';
-@import './transitions/slide-up.css';
-@import './data-box.css';
-
-*/

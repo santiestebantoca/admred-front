@@ -7,12 +7,7 @@ import AppPage from '@/components/layout/Page.vue'
 </script>
 
 <template>
-  <app-layout>
-    <!-- <app-header class="py-md-1 bg-light">
-      <div class="container text-center">
-        <span class="navbar-brand mx-auto">SMS</span>
-      </div>
-    </app-header> -->
+  <app-layout class="surface-1">
     <app-footer>
       <div id="app-footer-content" />
     </app-footer>

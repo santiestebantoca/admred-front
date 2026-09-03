@@ -32,7 +32,8 @@ const props = withDefaults(defineProps<{
 
   >svg {
     position: relative;
-    bottom: 2px;
+    top: unset;
+    bottom: 1px;
   }
 }
 </style>

@@ -7,6 +7,8 @@ const mobile = inject('app:mobile')
 const params = inject('solicitudes:params')
 const flows = inject('solicitudes:flows')
 const model = ref(false)
+
+const closeDropdown = () => model.value = false
 </script>
 
 <template>
@@ -27,7 +29,7 @@ const model = ref(false)
                 {{ params.state }}
               </span>
             </template>
-            <ListaNav @input="model = false" />
+            <ListaNav :closeDropdown="closeDropdown" />
           </BDropdown>
         </template>
       </BCol>
@@ -36,7 +38,7 @@ const model = ref(false)
           <UIcon name="bi-pencil-square" />
         </BButton>
         <BButton v-else variant="primary" @click="flows.crear.go">
-          <UIcon name="bi-plus-lg" /> Nueva solicitud
+          <UIcon name="bi-plus-lg" class="me" /> Nueva solicitud
         </BButton>
       </BCol>
     </BRow>

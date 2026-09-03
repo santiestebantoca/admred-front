@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-const props = defineProps({ closeDrawer: Function })
-
 import ListaNav from './ListaNavDrawer.vue'
 import AppsMenu from '@/components/features/AppsMenu.vue'
 import UserMenu from '@/components/features/UserMenu.vue'
@@ -8,9 +6,9 @@ import UserMenu from '@/components/features/UserMenu.vue'
 
 <template>
   <div class="drawer-content">
-    <ListaNav :close="closeDrawer" />
+    <ListaNav />
     <AppsMenu class="mt-auto" />
-    <UserMenu :close="closeDrawer" />
+    <UserMenu />
   </div>
 </template>
 
@@ -20,5 +18,19 @@ import UserMenu from '@/components/features/UserMenu.vue'
   flex-direction: column;
   gap: 12px;
   height: 100%;
+
+  :deep(.list-group) {
+    .list-group-item {
+      --bs-list-group-border-width: 0 !important;
+      color: var(--bs-dark);
+      border-radius: var(--bs-border-radius-xl);
+
+      &.title {
+        font-size: .875em;
+        color: var(--bs-secondary);
+        font-weight: 600;
+      }
+    }
+  }
 }
 </style>

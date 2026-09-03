@@ -28,13 +28,14 @@ provide('solicitudes:filaExpandida', filaExpandida)
       <HeaderContent />
       <ListaHeader />
     </template>
-    <template #drawer-content="{ down, closeDrawer }">
-      <DrawerContent :down="down" :closeDrawer="closeDrawer" />
+    <template #drawer-content="{ down }">
+      <DrawerContent :down="down" />
     </template>
     <template #page-content>
-      <ListaGrid class="border rounded-4 bg-white" />
+      <ListaGrid />
     </template>
   </MainLayout>
   <CrearSolicitud v-if="flows.crear.active" :back="flows.crear.back" />
-  <Solicitud v-if="flows.solicitud.active" :back="flows.solicitud.back" />
+  <Solicitud v-if="flows.solicitud.active" :active="flows.solicitud.active" :back="flows.solicitud.back"
+    :acciones="flows.solicitud.acciones" :go="flows.solicitud.go" />
 </template>

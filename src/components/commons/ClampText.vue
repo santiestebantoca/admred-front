@@ -28,14 +28,17 @@ const vOverflow = (el) => {
       <slot></slot>
     </div>
     <div v-if="overflow" class="footer">
-      <span class="mark small fw-semibold rounded" type="button" @click="collapsed = false">
+      <!-- <span class="mark small fw-semibold rounded" type="button" @click="collapsed = false">
         MÁS
-      </span>
+      </span> -->
+      <BButton variant="link" @click="collapsed = false">
+        Click para ver más
+      </BButton>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .content {
   white-space: pre-wrap;
   overflow: hidden;
@@ -44,5 +47,13 @@ const vOverflow = (el) => {
 
 .footer {
   display: var(--footer-display);
+
+  .btn-link {
+    --bs-link-color: var(--bs-gray-500);
+    --bs-link-hover-color: var(--bs-gray-600);
+
+    text-decoration: none;
+    font-size: large;
+  }
 }
 </style>

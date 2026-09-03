@@ -13,10 +13,10 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
   <div class="grid">
     <div class="card border-0 pt-md-4">
       <div class="header">
-        <BButton to="/home" class="a" variant="flat-secondary">
-          <UIcon name="bi-arrow-left" />
+        <BButton to="/home" class="a me-2" variant="light">
+          <UIcon name="bi-arrow-left" class="center" />
         </BButton>
-        <h5 class="mb-0 b">Personificar</h5>
+        <h5 class="mb-1 b">Personificar</h5>
         <BSearchInput v-if="canSearch" v-model="search" placeholder="Buscar usuario" class="c" />
       </div>
       <div class="overflow-auto mt-3">
@@ -28,6 +28,15 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
 </template>
 
 <style scoped>
+.card {
+  background-color: transparent;
+}
+
+:deep(.list-group-item) {
+  height: auto !important;
+  padding-bottom: 12px;
+}
+
 .grid {
   max-width: 500px;
   margin: 0 auto;
@@ -48,6 +57,8 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
 .header .a {
   grid-area: a;
   margin-left: -8px;
+  width: 34px;
+  height: 34px;
 }
 
 .header .b {

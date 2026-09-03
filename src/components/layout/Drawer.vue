@@ -67,7 +67,7 @@ watch(above, above => {
       <template #header>
         <slot name="header" />
       </template>
-      <slot v-bind="{ up: above, down: !above, closeDrawer: offcanvas?.hide }" />
+      <slot v-bind="{ up: above, down: !above }" />
     </BOffcanvas>
   </div>
 </template>

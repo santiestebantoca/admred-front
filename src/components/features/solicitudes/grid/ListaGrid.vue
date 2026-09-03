@@ -6,6 +6,7 @@ import { useSolicitudesQuery } from '@/stores/solicitudes'
 import { inject, watchEffect } from 'vue'
 
 const params = inject('solicitudes:params')
+// const mobile = inject('app:mobile')
 const query = inject('solicitudes:query')
 const { params: queryParams } = useSolicitudesQuery()
 
@@ -14,9 +15,11 @@ watchEffect(() => queryParams.value = { ...params.value, ...query.value })
 
 <template>
   <div class="grid">
-    <ListaGridHeader />
-    <ListaGridTable class="overflow-hidden" />
-    <!-- <GridFooter class="d-none d-lg-block" /> -->
+    <div class="header-table">
+      <ListaGridHeader />
+      <ListaGridTable class="overflow-hidden" />
+    </div>
+    <!-- <ListaGridFooter :class="{ 'd-none': mobile }" /> -->
   </div>
 </template>
 
@@ -24,6 +27,16 @@ watchEffect(() => queryParams.value = { ...params.value, ...query.value })
 .grid {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto;
+
+  .header-table {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-xl);
+    background-color: white;
+  }
 }
 </style>

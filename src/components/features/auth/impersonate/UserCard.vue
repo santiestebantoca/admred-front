@@ -38,7 +38,7 @@ const items = computed(() => [
     </template>
 <template v-else> -->
     <div class="mt-4">
-      <BButton @click="impersonate(0)">
+      <BButton @click="impersonate(0)" variant="success">
         <UIcon name="bi-arrow-return-left" />
         <span class="ms-2">Usuario anterior</span>
       </BButton>

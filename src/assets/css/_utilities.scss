@@ -1,4 +1,39 @@
-/* General */
+/* Popover */
+.popover {
+  --bs-popover-max-width: 276px;
+
+  &.no-arrow .popover-arrow {
+    display: none;
+  }
+
+  &.lg {
+    --bs-popover-max-width: 400px;
+  }
+}
+
+/* Button */
+.btn {
+  position: relative;
+
+  >img,
+  >svg {
+    position: relative;
+    top: -2px;
+
+    &.me {
+      margin-right: 4px;
+    }
+
+    &.center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+/* Texto */
 .letter-spacing-1 {
   letter-spacing: .01rem;
 }
@@ -11,6 +46,36 @@
   white-space: pre-wrap;
 }
 
+/* Margen negativo */
+/* ============================================
+   MARGENES NEGATIVOS (Negative Margins)
+   Basado en Bootstrap 5
+   Escala: 1 = 0.25rem, 2 = 0.5rem, 3 = 1rem, 
+           4 = 1.5rem, 5 = 3rem, auto = auto
+   ============================================ */
+
+/* -- Todos los lados (m) -- */
+.m-n1 {
+  margin: -0.25rem !important;
+}
+
+.m-n2 {
+  margin: -0.5rem !important;
+}
+
+.m-n3 {
+  margin: -1rem !important;
+}
+
+.m-n4 {
+  margin: -1.5rem !important;
+}
+
+.m-n5 {
+  margin: -3rem !important;
+}
+
+/* -- Izquierda (ms / start) -- */
 .ms-n1 {
   margin-left: -0.25rem !important;
 }
@@ -31,6 +96,70 @@
   margin-left: -3rem !important;
 }
 
+/* -- Derecha (me / end) -- */
+.me-n1 {
+  margin-right: -0.25rem !important;
+}
+
+.me-n2 {
+  margin-right: -0.5rem !important;
+}
+
+.me-n3 {
+  margin-right: -1rem !important;
+}
+
+.me-n4 {
+  margin-right: -1.5rem !important;
+}
+
+.me-n5 {
+  margin-right: -3rem !important;
+}
+
+/* -- Superior (mt) -- */
+.mt-n1 {
+  margin-top: -0.25rem !important;
+}
+
+.mt-n2 {
+  margin-top: -0.5rem !important;
+}
+
+.mt-n3 {
+  margin-top: -1rem !important;
+}
+
+.mt-n4 {
+  margin-top: -1.5rem !important;
+}
+
+.mt-n5 {
+  margin-top: -3rem !important;
+}
+
+/* -- Inferior (mb) -- */
+.mb-n1 {
+  margin-bottom: -0.25rem !important;
+}
+
+.mb-n2 {
+  margin-bottom: -0.5rem !important;
+}
+
+.mb-n3 {
+  margin-bottom: -1rem !important;
+}
+
+.mb-n4 {
+  margin-bottom: -1.5rem !important;
+}
+
+.mb-n5 {
+  margin-bottom: -3rem !important;
+}
+
+/* -- Eje X (mx: izquierda + derecha) -- */
 .mx-n1 {
   margin-left: -0.25rem !important;
   margin-right: -0.25rem !important;
@@ -56,6 +185,33 @@
   margin-right: -3rem !important;
 }
 
+/* -- Eje Y (my: superior + inferior) -- */
+.my-n1 {
+  margin-top: -0.25rem !important;
+  margin-bottom: -0.25rem !important;
+}
+
+.my-n2 {
+  margin-top: -0.5rem !important;
+  margin-bottom: -0.5rem !important;
+}
+
+.my-n3 {
+  margin-top: -1rem !important;
+  margin-bottom: -1rem !important;
+}
+
+.my-n4 {
+  margin-top: -1.5rem !important;
+  margin-bottom: -1.5rem !important;
+}
+
+.my-n5 {
+  margin-top: -3rem !important;
+  margin-bottom: -3rem !important;
+}
+
+/* Hover */
 *:not(:hover)>.d-hover {
   display: none;
 }
@@ -153,4 +309,61 @@
 
 .surface-4 {
   background-color: var(--bs-surface-4);
+}
+
+.surface-5 {
+  background-color: var(--bs-surface-5);
+}
+
+/* Formulario */
+.label-value {
+  margin-bottom: 16px;
+
+  >label {
+    color: var(--bs-gray-600);
+    font-size: .875em;
+  }
+
+  >div {
+    padding: 2px 0;
+  }
+}
+
+/* Badge de estado de solicitud */
+.estado-badge {
+  --estado-bg: var(--bs-gray-200);
+  --estado-color: var(--bs-gray-800);
+  display: inline-block;
+  padding: 0 .45em;
+  border-radius: .625em;
+  font-size: .875em;
+  font-weight: 600;
+  line-height: 1.7;
+  white-space: nowrap;
+  background-color: var(--estado-bg);
+  color: var(--estado-color);
+
+  &[data-estado='Solicitado'] {
+    --estado-bg: var(--bs-estado-por-asignar-bg);
+    --estado-color: var(--bs-estado-por-asignar-color);
+  }
+
+  &[data-estado='En proceso'] {
+    --estado-bg: var(--bs-estado-por-responder-bg);
+    --estado-color: var(--bs-estado-por-responder-color);
+  }
+
+  &[data-estado='En evaluación'] {
+    --estado-bg: var(--bs-estado-por-aprobar-bg);
+    --estado-color: var(--bs-estado-por-aprobar-color);
+  }
+}
+
+/* Highlight dropdown-item, list-group-item */
+.highlight-active.router-link-active,
+.highlight-active>.router-link-active,
+.highlight-exact-active.router-link-exact-active,
+.highlight-exact-active>.router-link-exact-active {
+  font-weight: 600;
+  background-color: #d3e3fd !important;
 }

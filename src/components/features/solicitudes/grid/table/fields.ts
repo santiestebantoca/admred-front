@@ -24,16 +24,21 @@ type SolicitudEnviada = [
   number | null        // 7 - root
 ]
 
+const codigoformatter = ({ value }) => value.slice(2)
+
 const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
   {
     key: '1',
     label: '#',
     sortable: true,
+    tdClass: 'td-codigo',
+    formatter: codigoformatter
   },
   {
     key: '2',
     label: 'Objetivo',
     sortable: true,
+    tdClass: 'td-objetivo',
   },
   {
     key: '6',
@@ -45,6 +50,7 @@ const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
     label: 'Presentada',
     accessor: (item) => listTime(item[4]),
     sortable: true,
+    tdClass: 'td-fecha',
   },
   {
     key: '3',
@@ -58,11 +64,14 @@ const fieldsRecibidasTerminadas: TableFieldRaw<SolicitudRecibida>[] = [
     key: '1',
     label: '#',
     sortable: true,
+    tdClass: 'td-codigo',
+    formatter: codigoformatter
   },
   {
     key: '2',
     label: 'Objetivo',
     sortable: true,
+    tdClass: 'td-objetivo',
   },
   {
     key: '6',
@@ -74,6 +83,7 @@ const fieldsRecibidasTerminadas: TableFieldRaw<SolicitudRecibida>[] = [
     label: 'Terminada',
     accessor: (item) => listTime(item[5]),
     sortable: true,
+    tdClass: 'td-fecha',
   },
 ]
 
@@ -82,11 +92,14 @@ const fieldsEnviadasPendientes: TableFieldRaw<SolicitudEnviada>[] = [
     key: '1',
     label: '#',
     sortable: true,
+    tdClass: 'td-codigo',
+    formatter: codigoformatter
   },
   {
     key: '2',
     label: 'Objetivo',
     sortable: true,
+    tdClass: 'td-objetivo',
   },
   {
     key: '6',
@@ -98,6 +111,7 @@ const fieldsEnviadasPendientes: TableFieldRaw<SolicitudEnviada>[] = [
     label: 'Presentada',
     accessor: (item) => listTime(item[4]),
     sortable: true,
+    tdClass: 'td-fecha',
   },
   {
     key: '3',
@@ -111,11 +125,14 @@ const fieldsEnviadasTerminadas: TableFieldRaw<SolicitudEnviada>[] = [
     key: '1',
     label: '#',
     sortable: true,
+    tdClass: 'td-codigo',
+    formatter: codigoformatter
   },
   {
     key: '2',
     label: 'Objetivo',
     sortable: true,
+    tdClass: 'td-objetivo',
   },
   {
     key: '6',
@@ -127,6 +144,7 @@ const fieldsEnviadasTerminadas: TableFieldRaw<SolicitudEnviada>[] = [
     label: 'Terminada',
     accessor: (item) => listTime(item[5]),
     sortable: true,
+    tdClass: 'td-fecha',
   },
 ]
 

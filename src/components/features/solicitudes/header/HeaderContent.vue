@@ -14,11 +14,11 @@ const mobile = inject('app:mobile')
 
 <template>
   <BNavbar>
-    <BRow>
+    <BRow gutter-x="3">
       <BCol cols="auto" class="d-flex">
         <template v-if="!noLeftButton">
           <BButton v-if="mobile" variant="navbar" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left>
-            <UIcon name="bi-list" />
+            <UIcon name="bi-list" class="center" />
           </BButton>
         </template>
         <BNavbarBrand to="/home" class="p-0">{{ title }}</BNavbarBrand>
@@ -42,19 +42,10 @@ const mobile = inject('app:mobile')
 :deep(.btn-navbar) {
   height: 34px;
   width: 34px;
-  --bs-btn-padding-x: .25rem;
-  --bs-btn-padding-y: .25rem;
   --bs-btn-color: var(--bs-gray-700);
   --bs-btn-hover-bg: var(--bs-gray-200);
   --bs-btn-active-bg: var(--bs-gray-200);
   --bs-btn-active-border-color: var(--bs-gray-200);
-
-  >img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
 }
 
 :deep(.container-fluid) {

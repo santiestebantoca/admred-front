@@ -49,6 +49,15 @@
   --bs-danger-700: #842029;
   --bs-danger-800: #58151c;
   --bs-danger-900: #2c0b0e;
+  --bs-orange-100: #ffe5d0;
+  --bs-orange-200: #fecba1;
+  --bs-orange-300: #feb272;
+  --bs-orange-400: #fd9843;
+  --bs-orange-500: #fd7e14;
+  --bs-orange-600: #ca6510;
+  --bs-orange-700: #984c0c;
+  --bs-orange-800: #653208;
+  --bs-orange-900: #331904;
 
   /* Superficies y marca */
   --bs-surface-1: #fefefe;
@@ -57,6 +66,14 @@
   --bs-surface-4: #e9eef6;
   --bs-surface-5: #d3e3fd;
   --bs-brand: #00235d;
+
+  /* Estados de solicitudes pendientes */
+  --bs-estado-por-asignar-bg: var(--bs-primary-100);
+  --bs-estado-por-asignar-color: var(--bs-primary-800);
+  --bs-estado-por-responder-bg: var(--bs-orange-100);
+  --bs-estado-por-responder-color: var(--bs-orange-800);
+  --bs-estado-por-aprobar-bg: var(--bs-danger-100);
+  --bs-estado-por-aprobar-color: var(--bs-danger-800);
 
   /* Fonts pequeños */
   --bs-x-small: 0.75rem;

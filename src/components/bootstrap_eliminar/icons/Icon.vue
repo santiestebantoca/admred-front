@@ -14,13 +14,13 @@ import './bootstrap-icons-1.11.3/font/bootstrap-icons.css'
 
 <style scoped>
 i {
-  display: inline-flex;
+  /* display: inline-flex;
   align-items: center;
-  vertical-align: middle;
+  vertical-align: middle; */
 }
 
 i::before {
-  --font-size: v-bind(fs);
-  font-size: var(--font-size);
+  /* --font-size: v-bind(fs);
+  font-size: var(--font-size); */
 }
 </style>

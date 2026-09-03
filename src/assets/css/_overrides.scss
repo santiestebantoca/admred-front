@@ -7,20 +7,17 @@
   font-size: .875em;
 }
 
-.btn-close {
-  background-size: .9rem;
-}
+// .btn-close {
+//   background-size: .9rem;
+// }
 
 .tooltip {
   font-weight: 600;
 }
 
-[readonly] {
-  cursor: default;
-}
-
-// 
-
+// [readonly] {
+//   cursor: default;
+// }
 
 .dropdown-menu {
   box-shadow: var(--bs-dropdown-box-shadow);
@@ -35,66 +32,44 @@
   // }
 }
 
-// badge-outline-white
-.badge {
-  outline: 1px solid white;
-  outline-offset: 0;
-}
-
+// reduce su sombra natural
 .form-control:focus {
   box-shadow: 0 0 0 0.12rem rgba(13, 110, 253, 0.25) !important;
 }
 
-/* BootstrapVueNext */
+.list-group-item,
 .dropdown-item {
-  height: 34px;
-  display: flex !important;
-  gap: 12px;
+  --bs-list-group-item-padding-y: 0.25rem;
+  height: 34px; // su natural es 32, con 34 el texto luce más centrado
 
+  // evita flash azul al pinchar
   &.active,
   &:active {
     color: inherit !important;
     background-color: var(--bs-dropdown-btn-active-bg) !important;
   }
 
-  .highlighted>&,
-  .allow-highlight>&.router-link-exact-active,
-  .allow-highlight-in-route>&.router-link-active {
-    font-weight: 600;
-    background-color: #d3e3fd !important;
-  }
-
+  // iconos svg de bootstrap
   >svg {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 12px;
     position: relative;
-    top: 3px;
+    top: -2px; // lo centra vertical
   }
-
 }
 
-// .highlighted>.dropdown-item {
-//   font-weight: 600;
-//   background-color: #d3e3fd !important;
-// }
-
 .spinner-border {
-  // --bs-spinner-border-width: 0.25em;
-  // border: var(--bs-spinner-border-width) solid currentcolor;
-  // border-right-color: transparent;
   --bs-spinner-border-width: 2px !important;
   border: var(--bs-spinner-border-width) solid var(--bs-gray-300) !important;
   border-right-color: var(--bs-gray-600) !important;
 }
 
-// Custom classes
-.label-value {
-  margin-bottom: 16px;
+.modal-footer {
+  justify-content: flex-start !important;
+  // border-top: unset !important;
+}
 
-  >label {
-    color: var(--bs-gray-600);
-    font-size: .875em;
-  }
-
-  >div {
-    padding: 2px 0;
-  }
+.modal-header {
+  // border-bottom: unset !important;
 }

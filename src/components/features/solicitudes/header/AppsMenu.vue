@@ -7,9 +7,9 @@ const { options } = useNavigationApps()
 <template>
   <BDropdown variant="navbar" no-caret strategy="fixed" v-tippy="'Ir a'">
     <template #button-content>
-      <img src="@/assets/images/apps.svg" />
+      <UIcon name="app-apps" class="center" />
     </template>
-    <BDropdownItem v-for="option in options" :to="option.to" class="allow-highlight-in-route">
+    <BDropdownItem v-for="option in options" :to="option.to" class="highlight-active">
       <UIcon :name="option.icon" />
       {{ option.label }}
     </BDropdownItem>

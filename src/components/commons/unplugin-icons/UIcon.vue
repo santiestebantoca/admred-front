@@ -2,7 +2,6 @@
 const props = defineProps({
   name: {
     type: String || undefined,
-    // required: true,
     validator: (val) => isValidIcon(val) || console.warn(`Icono "${val}" no registrado en UIcon`)
   },
 })

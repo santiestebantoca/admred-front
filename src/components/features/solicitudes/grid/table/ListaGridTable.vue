@@ -23,7 +23,8 @@ watchEffect(() => {
 })
 useResizeObserver(container, entries => {
   const containerHeight = entries[0].contentRect.height
-  height.value = `${containerHeight - containerHeight % 41}px`
+  // height.value = `${containerHeight - containerHeight % 41}px`
+  height.value = `${containerHeight}px`
 })
 
 const onSelectedItem = (val) => flows.value.solicitud.go(val[0])
@@ -55,14 +56,15 @@ const onSelectedItem = (val) => flows.value.solicitud.go(val[0])
       </BContainer>
       <div v-else class="table-large-container" ref="container" :style="rootStyle">
         <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0"
-          :tbody-tr-class="rowClass" :thClass="['custom-th']" :busy="isLoading" selectable select-mode="single"
+          :thClass="['custom-th']" :busy="isLoading" selectable select-mode="single" hover
           @update:selected-items="onSelectedItem" v-model:selected-items="active">
           <template #table-colgroup>
-            <col style="width:110px" />
+            <col style="width:80px" />
             <col style="width:50%" />
-            <col />
-            <col style="width:146px" />
-            <col v-if="state === 'pendientes'" style="width:120px" />
+            <col :style="{ width: state === 'pendientes' ? '20%' : '25%' }" />
+          </template>
+          <template #[`cell(3)`]="{ value }">
+            <span class="estado-badge" :data-estado="value">{{ value }}</span>
           </template>
         </BTable>
       </div>
@@ -118,19 +120,55 @@ const onSelectedItem = (val) => flows.value.solicitud.go(val[0])
 }
 
 :deep(.b-table) {
+  --bs-table-hover-bg: var(--bs-tertiary-bg);
+  --bs-table-th-padding: 8px;
+  --bs-table-td-padding: 6px 8px;
+
   thead {
     th {
       font-size: .875em;
       font-weight: 600;
+      color: var(--bs-brand);
+      padding: var(--bs-table-th-padding);
     }
   }
 
   tbody {
+    tr {
+      cursor: pointer;
+    }
+
     td {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: var(--td-white-space);
+      transition: background-color .15s;
+      padding: var(--bs-table-td-padding);
+    }
+
+    tr.selected td {
+      background-color: #d3e3fd;
+    }
+
+    tr.selected td:first-child {
+      // box-shadow: inset 3px 0 0 var(--bs-primary);
+      color: var(--bs-gray-900);
+      font-weight: 600;
     }
   }
+}
+
+:deep(.td-codigo) {
+  // color: var(--bs-brand);
+  color: var(--bs-gray-600);
+  // font-size: .875em;
+}
+
+:deep(.td-objetivo) {
+  color: var(--bs-gray-800);
+}
+
+:deep(.td-fecha) {
+  color: var(--bs-gray-600);
 }
 </style>
