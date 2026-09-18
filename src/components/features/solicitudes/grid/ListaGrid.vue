@@ -1,41 +1,38 @@
 <script setup>
-import ListaGridHeader from './header/ListaGridHeader.vue'
-import ListaGridTable from './table/ListaGridTable.vue'
-// import ListaGridFooter from './footer/ListaGridFooter.vue'
-import { useSolicitudesQuery } from '@/stores/solicitudes'
-import { inject, watchEffect } from 'vue'
+import ListaGridHeader from './ListaGridHeader.vue'
+import ListaGridTable from './ListaGridTable.vue'
+import ListaHeader from '@/components/features/solicitudes/ListaHeader.vue'
+import ListaGridFooter from './ListaGridFooter.vue'
+import { inject } from 'vue'
 
-const params = inject('solicitudes:params')
-// const mobile = inject('app:mobile')
-const query = inject('solicitudes:query')
-const { params: queryParams } = useSolicitudesQuery()
-
-watchEffect(() => queryParams.value = { ...params.value, ...query.value })
+const mobile = inject('app:mobile')
 </script>
 
 <template>
-  <div class="grid">
-    <div class="header-table">
-      <ListaGridHeader />
-      <ListaGridTable class="overflow-hidden" />
+  <div class="root">
+    <ListaHeader />
+    <div class="grid px-3 py-1">
+      <ListaGridHeader class="py-2" />
+      <ListaGridTable class="overflow-hidden me-n3" />
+      <ListaGridFooter :class="{ 'd-none': mobile }" />
     </div>
-    <!-- <ListaGridFooter :class="{ 'd-none': mobile }" /> -->
   </div>
 </template>
 
-<style scoped>
-.grid {
-  height: 100%;
+<style scoped lang="scss">
+.root {
+  // height: calc(100% - 8px); // en el componente padre
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr;
+  row-gap: 8px;
 
-  .header-table {
+  .grid {
     height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     overflow: hidden;
-    border: 1px solid var(--bs-border-color);
-    border-radius: var(--bs-border-radius-xl);
+    border: 1px solid var(--bs-gray-200);
+    border-radius: var(--bs-border-radius-xl); // lg
     background-color: white;
   }
 }

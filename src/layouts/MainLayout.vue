@@ -22,7 +22,7 @@ const mobile = inject('app:mobile')
       <slot name="drawer-content" :down="down" />
     </app-drawer>
     <app-page-container>
-      <app-page class="p-2">
+      <app-page>
         <slot name="page-content" />
       </app-page>
     </app-page-container>

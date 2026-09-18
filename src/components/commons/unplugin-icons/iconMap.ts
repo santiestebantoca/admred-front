@@ -1,3 +1,7 @@
+// Lucide (lucide:) y Tabler (tabler:) Icons son las bilbiotecas de Iconify
+// que mejor se adaptan visualmente a Bootstrap
+// Phosphor (ph:) tiene buena simpatía
+
 import BiPerson from '~icons/bi/person'
 import BiLock from '~icons/bi/lock'
 import BiEye from '~icons/bi/eye'
@@ -52,7 +56,6 @@ import BiFolder from '~icons/bi/folder'
 import BiDownload from '~icons/bi/download'
 import BiSendFill from '~icons/bi/send-fill'
 import BiMenuApp from '~icons/bi/menu-app'
-import MdiApps from '~icons/mdi/apps'
 import BiPencilSquare from '~icons/bi/pencil-square'
 import BiFolderCheck from '~icons/bi/folder-check'
 import BiForward from '~icons/bi/forward'
@@ -65,9 +68,6 @@ import BiTag from '~icons/bi/tag'
 import BiTextWrap from '~icons/bi/text-wrap'
 import BiBookmark from '~icons/bi/bookmark'
 import BiTable from '~icons/bi/table'
-import PhSigma from '~icons/ph/sigma'
-import TabSum from '~icons/tabler/sum'
-import TabStatusChange from '~icons/tabler/status-change'
 import BiReply from '~icons/bi/reply'
 import BiPatchCheck from '~icons/bi/patch-check'
 import BiStar from '~icons/bi/star'
@@ -76,12 +76,26 @@ import BiPersonFillGear from '~icons/bi/person-fill-gear'
 import BiPersonFillUp from '~icons/bi/person-fill-up'
 import BiCircle from '~icons/bi/circle'
 import BiCircleFill from '~icons/bi/circle-fill'
-import AppConector from '~icons/app/conector'
-import AppApps from '~icons/app/apps'
+import BiExclamationSquare from '~icons/bi/exclamation-square'
+import BiExclamationSquareFill from '~icons/bi/exclamation-square-fill'
+import BiTv from '~icons/bi/tv'
+import BiStarFill from '~icons/bi/star-fill'
+import BiFunnel from '~icons/bi/funnel'
+import BiChevronCompactDown from '~icons/bi/chevron-compact-down'
+import LucideChevronRight from '~icons/lucide/chevron-right'
+import LucideChevronDown from '~icons/lucide/chevron-down'
+import LucidePlus from '~icons/lucide/plus'
 
 export const iconMap = {
-    'app-apps': AppApps,
-    'app-conector': AppConector,
+    'lucide-plus': LucidePlus,
+    'lucide-chevron-down': LucideChevronDown,
+    'lucide-chevron-right': LucideChevronRight,
+    'bi-chevron-compact-down': BiChevronCompactDown,
+    'bi-funnel': BiFunnel,
+    'bi-star-fill': BiStarFill,
+    'bi-tv': BiTv,
+    'bi-exclamation-square-fill': BiExclamationSquareFill,
+    'bi-exclamation-square': BiExclamationSquare,
     'bi-circle': BiCircle,
     'bi-circle-fill': BiCircleFill,
     'bi-person-fill-up': BiPersonFillUp,
@@ -90,9 +104,6 @@ export const iconMap = {
     'bi-patch-check': BiPatchCheck,
     'bi-star': BiStar,
     'bi-sticky': BiSticky,
-    'tab-status-change': TabStatusChange,
-    'tab-sum': TabSum,
-    'ph-sigma': PhSigma,
     'bi-table': BiTable,
     'bi-bookmark': BiBookmark,
     'bi-text-wrap': BiTextWrap,
@@ -105,7 +116,6 @@ export const iconMap = {
     'bi-forward': BiForward,
     'bi-folder-check': BiFolderCheck,
     'bi-pencil-square': BiPencilSquare,
-    'mdi-apps': MdiApps,
     'bi-menu-app': BiMenuApp,
     'bi-send-fill': BiSendFill,
     'bi-download': BiDownload,

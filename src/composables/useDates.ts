@@ -14,7 +14,26 @@ type DateInput = Date | string | number | null | undefined
  */
 const getDate = (val: DateInput): Date | null => {
   if (val instanceof Date) return val
-  if (typeof val === "string" || typeof val === "number") {
+  if (typeof val === "string") {
+    // Caso servidor: "YYYY-MM-DD HH:mm:ss"
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(val)) {
+      const [datePart, timePart] = val.split(" ")
+      const [y, m, d] = datePart.split("-").map(Number)
+      const [hh, mm, ss] = timePart.split(":").map(Number)
+      return new Date(y, m - 1, d, hh, mm, ss)
+    }
+
+    // Caso ISO con T y zona
+    if (/T\d{2}:\d{2}/.test(val)) {
+      const d = new Date(val)
+      return isNaN(d.getTime()) ? null : d
+    }
+
+    // Caso simple del datepicker: "YYYY-MM-DD"
+    const [y, m, d] = val.split("-").map(Number)
+    return new Date(y, m - 1, d)
+  }
+  if (typeof val === "number") {
     const d = new Date(val)
     return isNaN(d.getTime()) ? null : d
   }

@@ -14,8 +14,6 @@ import { ref, computed, onMounted, useTemplateRef } from 'vue'
 
 const model = ref(false)
 const toast = useToast()
-const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
-const loading = computed(() => asyncStatus.value === 'loading')
 const adjuntos = useTemplateRef('adjuntosRef') // DOM
 const form = ref<SolicitudCreate>({
   destino: null,
@@ -25,6 +23,8 @@ const form = ref<SolicitudCreate>({
   cumplir_en: null
 })
 const errors = ref<Record<string, any>>({})
+const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
@@ -36,7 +36,6 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  // form.value.adjuntos = adjuntos.value.ids() // adjuntos (prueba con v-model)
   crearSolicitud(form.value)
     .then(() => {
       toast.create({ body: 'Nueva solicitud creada.', variant: 'success' })
@@ -50,8 +49,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <BModal v-model="model" title="Crear solicitud" @hidden="back" size="lg" fullscreen="sm" :scrollable="false"
-    class="crear-solicitud-root">
+  <BModal v-model="model" title="Crear solicitud" @hidden="back" size="lg" fullscreen="sm" :scrollable="false">
     <form @submit.prevent>
       <DestinoSelect v-model:error="errors.destino" v-model:value="form.destino" />
       <ObjetivoTextarea v-model:error="errors.objetivo" v-model:value="form.objetivo" class="mx-n2" />
@@ -69,17 +67,3 @@ const submit = async () => {
     </template>
   </BModal>
 </template>
-
-<style scoped lang="scss">
-.btn-footer,
-:deep(.btn-footer) {
-  width: 34px;
-  height: 34px;
-  border-color: transparent !important;
-  // --bs-btn-bg: var(--bs-gray-100);
-  --bs-btn-hover-bg: var(--bs-gray-200);
-  --bs-btn-active-bg: var(--bs-gray-200);
-  --bs-btn-active-border-color: var(--bs-gray-300);
-
-}
-</style>

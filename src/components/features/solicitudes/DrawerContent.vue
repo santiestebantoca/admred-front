@@ -27,7 +27,6 @@ import UserMenu from '@/components/features/UserMenu.vue'
 
       &.title {
         font-size: .875em;
-        color: var(--bs-secondary);
         font-weight: 600;
       }
     }

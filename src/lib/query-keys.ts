@@ -39,4 +39,19 @@ export const queryKeys = {
     listas: () => [...queryKeys.tipos.root, 'lista'],
     lista: (filtros) => [...queryKeys.tipos.listas(), { ...filtros }],
   },
+  tramitadores: {
+    root: ['tramitadores'],
+    listas: () => [...queryKeys.tramitadores.root, 'lista'],
+    lista: (filtros) => [...queryKeys.tramitadores.listas(), { ...filtros }],
+  },
+  bitacoras: {
+    root: ['bitacoras'],
+    listas: () => [...queryKeys.bitacoras.root, 'lista'],
+    lista: (filtros) => [...queryKeys.bitacoras.listas(), { ...filtros }],
+  },
+  notas: {
+    root: ['notas'],
+    listas: () => [...queryKeys.notas.root, 'lista'],
+    lista: (filtros) => [...queryKeys.notas.listas(), { ...filtros }],
+  },
 }

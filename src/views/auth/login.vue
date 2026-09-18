@@ -33,8 +33,8 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
 
 <template>
   <div class="grid">
-    <!-- <div></div> -->
-    <div class="mb-3 content p-3 bg-white rounded-4 shadow">
+    <!-- <div class="mb-3 content p-3 bg-white rounded-4 shadow"> -->
+    <div class="mb-3 content">
       <h4 class="text-primary-emphasis mt-1 text-center">ADM Red</h4>
       <h5 class="text-primary-emphasis fw-semibold text-center">Inicio de sesión</h5>
       <div class="text-muted login-hint">
@@ -55,7 +55,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           <BFormInput :type="type" v-model="form.password" name="password" placeholder="Contraseña"
             @input="errors.password = null" />
           <div class="invalid-feedback d-block" v-text="errors.password" />
-          <BButton @click.stop="toggleType" variant="light" class="p-end-button">
+          <BButton @click.stop="toggleType" variant="flat wh-34" class="p-end-button">
             <UIcon :name="type === 'password' ? 'bi-eye' : 'bi-eye-slash'" class="center" />
           </BButton>
         </div>
@@ -65,7 +65,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           </BButton>
         </div>
       </form>
-      <BAlert show variant="light" class="small mt-4 text-secondary-">
+      <BAlert show variant="light" class="small mt-4 text-dark">
         El registro de usuario siempre es realizado por un administrador
       </BAlert>
     </div>
@@ -113,14 +113,5 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   position: absolute;
   top: 2px;
   right: 2px;
-  width: 34px;
-  height: 34px;
-  --bs-btn-color: var(--bs-gray-700);
-  --bs-btn-bg: transparent;
-  --bs-btn-hover-bg: var(--bs-gray-200);
-  --bs-btn-active-bg: var(--bs-gray-200);
-  --bs-btn-border-color: transparent;
-  --bs-btn-hover-border-color: transparent;
-  --bs-btn-active-border-color: var(--bs-gray-300);
 }
 </style>

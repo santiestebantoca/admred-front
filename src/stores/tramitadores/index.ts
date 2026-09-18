@@ -1,0 +1,1 @@
+export { useTramitadoresQuery } from './useTramitadoresQuery'

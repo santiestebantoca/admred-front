@@ -7,7 +7,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "build_admred": "vite build --base=/admred/static/",
     "dev": "vite",
-    "dev_corp": "vite --host 192.168.11.231 --mode corp",
+    "dev_corp": "vite --host 172.17.48.90 --mode corp",
     "format": "prettier --write src/",
     "preview": "vite preview"
   },

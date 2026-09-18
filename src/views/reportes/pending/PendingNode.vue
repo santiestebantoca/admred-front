@@ -37,7 +37,6 @@ const enabled = computed(() => props.root || authUser.value?.AR)
   color: var(--bs-dark);
   border-radius: 3px;
   transition: .2s;
-  text-decoration: none;
   padding: 1px 5px !important;
 }
 

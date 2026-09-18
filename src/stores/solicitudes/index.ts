@@ -1,3 +1,5 @@
 export { useSolicitudesQuery } from './useSolicitudesQuery'
+export { useSolicitudesFiltro } from './useSolicitudesFiltro'
 export { useSolicitudQuery } from './useSolicitudQuery'
 export { useSolicitudCreate } from './useSolicitudCreate'
+export { useSolicitudUpdate } from './useSolicitudUpdate'

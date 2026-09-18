@@ -10,7 +10,7 @@ const tippy = ref({
 </script>
 
 <template>
-  <BDropdown v-if="authUser" variant="navbar" no-caret strategy="fixed" v-tippy="tippy">
+  <BDropdown v-if="authUser" variant="flat wh-34" no-caret strategy="fixed" v-tippy="tippy">
     <template #button-content>
       <img src="@/assets/images/user.png" width="22" class="center" />
     </template>

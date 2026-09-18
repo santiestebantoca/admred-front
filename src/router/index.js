@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAuthQuery, useLogout } from '@/stores/auth'
 import { until } from '@vueuse/core'
 import { useStorage } from '@vueuse/core'
+import path from 'path'
 
 const folderDefault = () => {
   const folders = [
@@ -68,58 +69,98 @@ const routesSolicitudes = [
         component: () => import('@/views/solicitudes/index.vue'),
         meta: { requiresAuth: true, saveFolder: true },
         props: route => ({
-          params: route.params,
-          query: route.query,
+          tray: route.params.tray,
+          state: route.params.state,
           flows: {
             crear: {
               active: route.query.crear === 'true',
               go: () => router.replace({ query: { ...route.query, crear: 'true' } }),
               back: () => router.replace({ query: { crear: undefined } })
             },
-            solicitud: {
-              active: parseInt(route.query.solicitudId),
-              go: (solicitudId) => router.replace({ query: { ...route.query, solicitudId } }),
-              back: () => router.replace({ query: { ...route.query, solicitudId: undefined, accion: undefined } }),
-              acciones: {
-                asignar: {
-                  active: route.query.solicitudId && (route.query.accion === 'asignar'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'asignar' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
-                reenviar: {
-                  active: route.query.solicitudId && (route.query.accion === 'reenviar'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'reenviar' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
-                responder: {
-                  active: route.query.solicitudId && (route.query.accion === 'responder'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'responder' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
-                aprobar: {
-                  active: route.query.solicitudId && (route.query.accion === 'aprobar'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'aprobar' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
-                ranquear: {
-                  active: route.query.solicitudId && (route.query.accion === 'ranquear'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'ranquear' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
-                registro: {
-                  active: route.query.solicitudId && (route.query.accion === 'registro'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'registro' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
-                notas: {
-                  active: route.query.solicitudId && (route.query.accion === 'notas'),
-                  go: () => router.replace({ query: { ...route.query, accion: 'notas' } }),
-                  back: () => router.replace({ query: { ...route.query, accion: undefined } })
-                },
+          },
+          solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+          setSolicitudId: (solicitudId) => solicitudId && router.push({
+            name: 'solicitudes-solicitud',
+            params: { solicitudId }
+          }),
+        }),
+        children: [
+          {
+            path: ':solicitudId',
+            name: 'solicitudes-solicitud',
+            component: () => import('@/views/solicitudes/[id]/index.vue'),
+            props: route => ({
+              solicitudId: parseInt(route.params.solicitudId),
+              setSolicitudId: (solicitudId) => router.push({ params: { solicitudId } }),
+              back: () => router.push({ name: 'solicitudes' })
+            }),
+            children: [
+              {
+                path: 'asignar',
+                name: 'solicitudes-solicitud-asignar',
+                component: () => import('@/views/solicitudes/[id]/asignar.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
+              },
+              {
+                path: 'reenviar',
+                name: 'solicitudes-solicitud-reenviar',
+                component: () => import('@/views/solicitudes/[id]/reenviar.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
+              },
+              {
+                path: 'responder',
+                name: 'solicitudes-solicitud-responder',
+                component: () => import('@/views/solicitudes/[id]/responder.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
+              },
+              {
+                path: 'aprobar',
+                name: 'solicitudes-solicitud-aprobar',
+                component: () => import('@/views/solicitudes/[id]/aprobar.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
+              },
+              {
+                path: 'evaluar',
+                name: 'solicitudes-solicitud-evaluar',
+                component: () => import('@/views/solicitudes/[id]/evaluar.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
+              },
+              {
+                path: 'registro',
+                name: 'solicitudes-solicitud-registro',
+                component: () => import('@/views/solicitudes/[id]/registro.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
+              },
+              {
+                path: 'notas',
+                name: 'solicitudes-solicitud-notas',
+                component: () => import('@/views/solicitudes/[id]/notas.vue'),
+                props: route => ({
+                  solicitudId: parseInt(route.params.solicitudId),
+                  back: () => router.push({ name: 'solicitudes-solicitud' })
+                })
               }
-            },
+            ]
           }
-        })
+        ]
       }
     ]
   }

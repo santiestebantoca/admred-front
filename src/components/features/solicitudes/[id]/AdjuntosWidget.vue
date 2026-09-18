@@ -7,20 +7,29 @@
    / delete uploaded file from backend
    / update uploaded
 -->
+<!-- Para adjuntos heredados del padre (reenvío) o de sí (reedición de respuesta)
+Se recibe la propiedad adjuntosHeredados Array[{id, solicitud_id, upload_id, {...upload}]
+1. Se concatenan sus ids con uploadedIds
+2. Delete
+   / update id de adjuntosHeredados
+-->
 <script setup>
-const uploadedIds = defineModel()  // prueba
+const uploadedIds = defineModel()
+const adjuntosHeredados = defineModel('adjuntosHeredados')
 
 import useFileSize from '@/composables/useFileSize.js'
 import { useUploadCreate, useUploadDelete } from '@/stores/uploads'
-import { ref, watchEffect, useTemplateRef } from 'vue'
+import { ref, computed, watchEffect, useTemplateRef } from 'vue'
 
 const { fileSize } = useFileSize()
 const { mutateAsync: crearUpload } = useUploadCreate()
 const { mutateAsync: eliminarUpload } = useUploadDelete()
 const input = useTemplateRef('input')
 const uploaded = ref([])
+const heredados = computed(() => adjuntosHeredados.value ?? [])
 
-watchEffect(() => uploadedIds.value = uploaded.value.map(d => d.id).filter(d => d))
+watchEffect(() => uploadedIds.value = uploaded.value.map(d => d.id).filter(d => d)
+  .concat(heredados.value.map((adjunto) => adjunto.upload_id)))
 
 const select = () => input.value.click()
 // Thunderbird, checks file path... allowing files with same name
@@ -46,23 +55,42 @@ function submit(file) {
 const del = (id) => eliminarUpload(id)
   .then(() => uploaded.value = uploaded.value.filter(d => d.id !== id))
 
+const delAdjuntoHeredado = (adjuntoId) => {
+  adjuntosHeredados.value = adjuntosHeredados.value.filter(adjunto => adjunto.id !== adjuntoId)
+}
+
 defineExpose({ select })
 // TODO: del(uploaded files) if not submitted
 </script>
 
 <template>
   <ul>
-    <li v-for="{ id, key, filename, file, filesize, error } in uploaded" :key="id || key" :class="{ error }">
+    <li v-for="{ id, filename, file, filesize } in heredados" :key="id">
       <BRow class="mx-0">
-        <BCol cols="9">
-          <a :title="filename" :class="{ error }" :href="file">
+        <BCol cols="10" class="d-flex aligns-items-center text-truncate">
+          <a v-tippy="filename" :href="file" class="text-truncate me-2">
             {{ filename }}
           </a>
           <span class="text-nowrap text-muted">
             ({{ fileSize(filesize) }})
           </span>
         </BCol>
-        <BCol cols="3" class="position-relative text-end">
+        <BCol cols="2" class="position-relative text-end">
+          <BButton v-if="id" variant="close" @click.prevent.stop="delAdjuntoHeredado(id)" v-tippy="'Quitar adjunto'" />
+        </BCol>
+      </BRow>
+    </li>
+    <li v-for="{ id, key, filename, file, filesize, error } in uploaded" :key="id || key" :class="{ error }">
+      <BRow class="mx-0">
+        <BCol cols="10" class="d-flex aligns-items-center text-truncate">
+          <a v-tippy="filename" :class="{ error }" :href="file" class="text-truncate me-2">
+            {{ filename }}
+          </a>
+          <span class="text-nowrap text-muted">
+            ({{ fileSize(filesize) }})
+          </span>
+        </BCol>
+        <BCol cols="2" class="position-relative text-end">
           <BButton v-if="id" variant="close" @click.prevent.stop="del(id)" v-tippy="'Quitar adjunto'" />
           <span v-else-if="error" class="text-danger">Error</span>
           <BProgress v-else-if="key" striped :value="100" class="mt-1" />
@@ -75,7 +103,7 @@ defineExpose({ select })
 
 <style scoped>
 ul {
-  width: 540px;
+  max-width: 540px;
   list-style: none;
   padding-left: 0;
 
@@ -84,8 +112,8 @@ ul {
     background-color: var(--bs-primary-100);
     margin-bottom: 2px;
     border-radius: var(--bs-border-radius-lg);
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 
     &.error {
       background-color: var(--bs-danger-100);
@@ -96,6 +124,15 @@ ul {
 
       &.error {
         color: var(--bs-secondary);
+      }
+
+      &.truncate {
+        display: inline-block;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
       }
     }
 

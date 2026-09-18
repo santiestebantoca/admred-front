@@ -13,7 +13,7 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
   <div class="grid">
     <div class="card border-0 pt-md-4">
       <div class="header">
-        <BButton to="/home" class="a me-2" variant="light">
+        <BButton to="/home" variant="link link-secondary">
           <UIcon name="bi-arrow-left" class="center" />
         </BButton>
         <h5 class="mb-1 b">Personificar</h5>
@@ -54,11 +54,13 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
   row-gap: 1rem;
 }
 
-.header .a {
+.header .btn-link {
   grid-area: a;
   margin-left: -8px;
   width: 34px;
   height: 34px;
+  margin-right: 8px;
+  --bs-btn-hover-bg: var(--bs-gray-200);
 }
 
 .header .b {

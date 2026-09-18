@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 const props = defineProps({
-  params: Object,
-  query: Object,
+  tray: String,
+  state: String,
+  solicitudId: Number,
+  setSolicitudId: Function,
   flows: Object
 })
 
@@ -11,31 +13,46 @@ import HeaderContent from '@/components/features/solicitudes/header/HeaderConten
 import ListaHeader from '@/components/features/solicitudes/ListaHeader.vue'
 import ListaGrid from '@/components/features/solicitudes/grid/ListaGrid.vue'
 import CrearSolicitud from '@/views/solicitudes/_flows/crear.vue'
-import Solicitud from '@/views/solicitudes/_flows/solicitud.vue'
-import { ref, computed, provide } from 'vue'
+import { useSolicitudesFiltro } from '@/stores/solicitudes'
+import { ref, computed, provide, watchEffect } from 'vue'
 
 const filaExpandida = ref(false)
+const { setFiltroBase } = useSolicitudesFiltro()
 
-provide('solicitudes:params', computed(() => props.params))
-provide('solicitudes:query', computed(() => props.query))
+watchEffect(() => setFiltroBase(props.tray, props.state))
+
+provide('solicitudes:tray', computed(() => props.tray))
+provide('solicitudes:state', computed(() => props.state))
+provide('solicitudes:solicitudId', computed(() => props.solicitudId))
+provide('solicitudes:setSolicitudId', computed(() => props.setSolicitudId))
 provide('solicitudes:flows', computed(() => props.flows))
 provide('solicitudes:filaExpandida', filaExpandida)
 </script>
 
 <template>
-  <MainLayout style="background-color: var(--bs-surface-2);">
+  <MainLayout class="main-layout">
     <template #header-content>
       <HeaderContent />
-      <ListaHeader />
+      <!-- <ListaHeader /> -->
     </template>
     <template #drawer-content="{ down }">
       <DrawerContent :down="down" />
     </template>
     <template #page-content>
-      <ListaGrid />
+      <ListaGrid class="lista-grid" />
+      <RouterView />
     </template>
   </MainLayout>
   <CrearSolicitud v-if="flows.crear.active" :back="flows.crear.back" />
-  <Solicitud v-if="flows.solicitud.active" :active="flows.solicitud.active" :back="flows.solicitud.back"
-    :acciones="flows.solicitud.acciones" :go="flows.solicitud.go" />
 </template>
+
+<style scoped lang="scss">
+.main-layout {
+  background: linear-gradient(rgba(var(--bs-surface-5-rgb), .1), rgba(var(--bs-surface-5-rgb), .4));
+
+  .lista-grid {
+    margin: 0 16px;
+    height: calc(100% - 16px);
+  }
+}
+</style>

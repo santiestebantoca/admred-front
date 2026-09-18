@@ -76,7 +76,7 @@ const handleReset = () => {
     height: 30px;
     width: 30px;
     padding: 0;
-    --bs-btn-font-size: var(--bs-x-small);
+    --bs-btn-font-size: small;
   }
 
   >svg {

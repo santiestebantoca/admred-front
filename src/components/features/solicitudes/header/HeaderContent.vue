@@ -13,42 +13,19 @@ const mobile = inject('app:mobile')
 </script>
 
 <template>
-  <BNavbar>
-    <BRow gutter-x="3">
-      <BCol cols="auto" class="d-flex">
-        <template v-if="!noLeftButton">
-          <BButton v-if="mobile" variant="navbar" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left>
-            <UIcon name="bi-list" class="center" />
-          </BButton>
-        </template>
-        <BNavbarBrand to="/home" class="p-0">{{ title }}</BNavbarBrand>
-      </BCol>
-      <BCol>
-      </BCol>
-      <BCol cols="auto">
-        <Notificaciones />
-      </BCol>
-      <BCol cols="auto" class="pe-2" v-if="!mobile">
-        <AppsMenu />
-      </BCol>
-      <BCol cols="auto" v-if="!mobile">
-        <UserMenu />
-      </BCol>
-    </BRow>
+  <BNavbar :class="{ mobile }" class="px-md-3">
+    <template v-if="!noLeftButton && mobile">
+      <BButton variant="flat wh-34 ms-n1 me-1" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left>
+        <UIcon name="bi-list" class="center" />
+      </BButton>
+    </template>
+    <BNavbarBrand to="/home" class="py-0" :class="{ 'fs-6 fw-semibold': mobile }">
+      {{ title }}
+    </BNavbarBrand>
+    <div class="ms-auto d-flex gap-2">
+      <Notificaciones />
+      <AppsMenu v-if="!mobile" />
+      <UserMenu v-if="!mobile" />
+    </div>
   </BNavbar>
 </template>
-
-<style scoped>
-:deep(.btn-navbar) {
-  height: 34px;
-  width: 34px;
-  --bs-btn-color: var(--bs-gray-700);
-  --bs-btn-hover-bg: var(--bs-gray-200);
-  --bs-btn-active-bg: var(--bs-gray-200);
-  --bs-btn-active-border-color: var(--bs-gray-200);
-}
-
-:deep(.container-fluid) {
-  display: block;
-}
-</style>

@@ -1,5 +1,6 @@
 import { useQuery, defineQuery } from '@pinia/colada'
 import { solicitudesApi as api } from '@/api/solicitudes'
+import { SolicitudDetalle } from '@/types/models'
 import { queryKeys } from '@/lib/query-keys'
 import { timeDeltaDH, timeDeltaWDH } from '@/composables/useTimeDelta'
 import { computed, ref } from 'vue'
@@ -7,7 +8,7 @@ import { computed, ref } from 'vue'
 export const useSolicitudQuery = defineQuery((id?: number | string) => {
   const solicitudId = ref(id)
 
-  const { data: _data, isPending, isLoading } = useQuery({
+  const { data: _data, isPending, isLoading } = useQuery<SolicitudDetalle>({
     key: () => queryKeys.solicitudes.detalle(solicitudId.value),
     query: () => api.getById(solicitudId.value),
     enabled: () => !!solicitudId.value,

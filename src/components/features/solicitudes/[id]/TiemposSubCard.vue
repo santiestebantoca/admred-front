@@ -40,27 +40,22 @@ const items = computed(() => [
 </script>
 
 <template>
-  <BTableLite :fields="fields" :items="items" thead-class="d-none" table-class="mb-1" />
-  <BButton v-if="(solicitud.estado.id > 1) && !expandido" @click="expandido = true" variant="mas">
-    MÁS
+  <BTableLite :fields="fields" :items="items" thead-class="d-none" tbody-class="tr-last-bold" table-class="mb-1" />
+  <BButton v-if="(solicitud.estado.id > 1) && !expandido" @click="expandido = true" variant="flat w-30 h-20"
+    v-tippy="'Ver más'">
+    <UIcon name="bi-chevron-compact-down" class="center text-secondary small" />
   </BButton>
 </template>
 
 <style scoped lang="scss">
+:deep(.tr-last-bold) {
+  tr:last-child {
+    font-weight: 600;
+  }
+}
+
 :deep(.td-thin) {
   padding: 3px 0;
   border: none;
-}
-
-.btn-mas {
-  font-size: .875em;
-  font-weight: 600;
-  --bs-btn-padding-x: 0.5rem;
-  --bs-btn-padding-y: 0;
-  --bs-btn-color: var(--bs-dark);
-  --bs-btn-bg: var(--bs-primary-50);
-  --bs-btn-hover-bg: var(--bs-primary-100);
-  --bs-btn-active-bg: var(--bs-primary-100);
-  --bs-btn-active-border-color: var(--bs-gray-300);
 }
 </style>

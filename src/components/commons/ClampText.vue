@@ -51,8 +51,6 @@ const vOverflow = (el) => {
   .btn-link {
     --bs-link-color: var(--bs-gray-500);
     --bs-link-hover-color: var(--bs-gray-600);
-
-    text-decoration: none;
     font-size: large;
   }
 }

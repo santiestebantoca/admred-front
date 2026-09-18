@@ -77,7 +77,7 @@ const vInput = {
         </BCol>
         <BCol class="px-1 hstack">
           <BFormInput v-input v-bind="attrs" :class="{ warning }" debounce="600" />
-          <BDropdown v-model="dropdown" offset="8" :auto-close="false" variant="link" placement="bottom-end"
+          <BDropdown v-model="dropdown" offset="8" :auto-close="false" variant="flat-secondary" placement="bottom-end"
             :style="dropdownStyle">
             <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
               :class="{ history }">
@@ -114,11 +114,6 @@ const vInput = {
 
 :deep(.dropdown) {
   .dropdown-toggle {
-    --bs-btn-color: var(--bs-secondary);
-    --bs-btn-hover-color: var(--bs-secondary);
-    --bs-btn-hover-bg: var(--bs-gray-200);
-    --bs-btn-active-color: var(--bs-secondary);
-    --bs-btn-active-bg: var(--bs-gray-200);
     width: 30px;
     height: 30px;
     position: relative;

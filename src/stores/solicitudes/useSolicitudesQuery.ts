@@ -1,41 +1,33 @@
 import { useQuery, defineQuery, useQueryCache } from '@pinia/colada'
+import { useSolicitudesFiltro } from './useSolicitudesFiltro'
 import { useIntervalFn } from '@vueuse/core'
 import { queryKeys } from '@/lib/query-keys'
 import { solicitudesApi as api } from '@/api/solicitudes'
-import { ref, computed } from 'vue'
+import { ref, computed, toRefs } from 'vue'
 
-export interface SolicitudParams {
-  tray?: string
-  state?: string
-  status?: string
-  period?: string
-  search?: string
-  search_in?: string
-}
+// export interface SolicitudParams {
+//   tray?: string
+//   state?: string
+//   status?: string
+//   period?: string
+//   search?: string
+//   search_in?: string
+// }
 
 const STALE_TIME = 1000 * 60 * 5
 const ESTADOS_PENDIENTES = ['Solicitado', 'En proceso', 'En evaluación'] as const
 
 export const useSolicitudesQuery = defineQuery(() => {
   const queryCache = useQueryCache()
-  const params = ref<SolicitudParams>({})
-  const validParamsNames: (keyof SolicitudParams)[] = ['tray', 'state', 'status', 'period', 'search', 'search_in']
 
-  const validParams = computed(() => {
-    const result: SolicitudParams = {}
-    for (const name of validParamsNames) {
-      const value = params.value[name]
-      if (value !== undefined && value !== null && value !== '') result[name] = value
-    }
-    return result
-  })
+  const { filtro: params } = toRefs(useSolicitudesFiltro())
 
-  const currentKey = computed(() => queryKeys.solicitudes.lista(validParams.value))
+  const currentKey = computed(() => queryKeys.solicitudes.lista(params.value))
 
-  const { data, isPending, isLoading, refresh } = useQuery({
+  const { data, isPending, isLoading, refresh, refetch } = useQuery({
     key: currentKey,
-    query: () => api.getAll(validParams.value),
-    enabled: () => Boolean(params.value?.tray && params.value?.state),
+    query: () => api.getAll(params.value),
+    enabled: () => Boolean(params.value),
     staleTime: STALE_TIME,
   })
 
@@ -47,14 +39,6 @@ export const useSolicitudesQuery = defineQuery(() => {
     if (!entry || entry.state.value.status !== 'success') return false
     return now.value >= entry.when + STALE_TIME
   })
-
-  const isFiltered = computed(() =>
-    validParamsNames.some(name => {
-      if (name === 'tray' || name === 'state') return false
-      const value = params.value[name]
-      return value !== undefined && value !== null && value !== ''
-    })
-  )
 
   const conteoEstados = computed(() => {
     if (params.value.state !== 'pendientes') return []
@@ -69,16 +53,11 @@ export const useSolicitudesQuery = defineQuery(() => {
   return {
     solicitudes: computed(() => data.value?.data),
     total: computed(() => data.value?.total),
-    tray: computed(() => params.value?.tray),
-    state: computed(() => params.value?.state),
-    search: computed(() => params.value?.search),
     isPending,
     isLoading,
     isStale,
     refresh,
-    params,
-    isFiltered,
-    validParams,
+    refetch,
     conteoEstados
   }
 })

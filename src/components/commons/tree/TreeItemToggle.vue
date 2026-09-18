@@ -8,8 +8,8 @@ const props = withDefaults(defineProps<{
 
 <template>
   <div class="btn" type="button">
-    <UIcon v-if="open" name="bi-chevron-down" font-size="12px" />
-    <UIcon v-else name="bi-chevron-right" font-size="12px" />
+    <UIcon v-if="open" name="lucide-chevron-down" class="small" />
+    <UIcon v-else name="lucide-chevron-right" class="small" />
   </div>
 </template>
 
@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<{
   left: calc(var(--li-padding-left) - 28px) !important;
   padding: 0 4px;
   line-height: normal;
+  color: var(--bs-gray-700);
 
   &:hover {
     background-color: transparent !important;

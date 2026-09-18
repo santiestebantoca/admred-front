@@ -11,10 +11,12 @@ export function useSolicitudCreate() {
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.solicitudes.listas() })
+      queryCache.cancelQueries({ key: queryKeys.solicitudes.detalles() })
     },
 
     onSuccess: () => {
       queryCache.invalidateQueries({ key: queryKeys.solicitudes.listas() })
+      queryCache.invalidateQueries({ key: queryKeys.solicitudes.detalles() })
     }
   })
 }

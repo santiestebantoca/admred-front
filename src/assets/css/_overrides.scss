@@ -1,5 +1,9 @@
 .btn {
   --bs-btn-border-radius: var(--bs-border-radius-lg) !important;
+
+  &.btn-link {
+    text-decoration: none;
+  }
 }
 
 .form-label {
@@ -7,20 +11,13 @@
   font-size: .875em;
 }
 
-// .btn-close {
-//   background-size: .9rem;
-// }
-
 .tooltip {
   font-weight: 600;
 }
 
-// [readonly] {
-//   cursor: default;
-// }
-
 .dropdown-menu {
   box-shadow: var(--bs-dropdown-box-shadow);
+  --bs-dropdown-border-radius: var(--bs-border-radius-lg) !important;
 }
 
 @media(max-width: 575.98px) {

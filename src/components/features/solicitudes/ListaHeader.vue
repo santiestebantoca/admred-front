@@ -4,7 +4,8 @@ import ListaNav from './ListaNav.vue'
 import { inject, ref } from 'vue'
 
 const mobile = inject('app:mobile')
-const params = inject('solicitudes:params')
+const tray = inject('solicitudes:tray')
+const state = inject('solicitudes:state')
 const flows = inject('solicitudes:flows')
 const model = ref(false)
 
@@ -13,20 +14,20 @@ const closeDropdown = () => model.value = false
 
 <template>
   <BContainer fluid>
-    <BRow class="justify-content-between align-items-center">
+    <BRow class="justify-content-between align-items-center" gutter-x="3">
       <BCol cols="auto">
-        <div v-if="mobile" class="text-dark">
-          /<span v-text="params.tray" />/<span class="fw-semibold" v-text="params.state" />
+        <div v-if="mobile" class="text-dark ps-2">
+          <span class="letter-spacing-1">
+            / {{ tray }} <span class="fw-semibold">{{ state }}</span>
+          </span>
         </div>
         <template v-else>
-          <BDropdown v-model="model" variant="tab" auto-close="outside">
+          <BDropdown v-model="model" variant="link" auto-close="outside" no-caret :offset="{ alignmentAxis: 50 }">
             <template #button-content>
-              <UIcon name="bi-folder-check" />
+              <UIcon name="bi-folder-check" class="text-orange-800" />
+              <UIcon name="lucide-chevron-right" class="small opacity-50" />
               <span class="letter-spacing-1 w-180">
-                <span class="text-dark text-opacity-75">
-                  {{ params.tray }}
-                </span>
-                {{ params.state }}
+                {{ tray }} <span class="fw--semibold">{{ state }}</span>
               </span>
             </template>
             <ListaNav :closeDropdown="closeDropdown" />
@@ -34,11 +35,12 @@ const closeDropdown = () => model.value = false
         </template>
       </BCol>
       <BCol cols="auto">
-        <BButton v-if="mobile" variant="primary crear" @click="flows.crear.go">
-          <UIcon name="bi-pencil-square" />
+        <BButton v-if="mobile" variant="primary  wh-34" @click="flows.crear.go">
+          <UIcon name="bi-pencil-square" class="center" />
         </BButton>
         <BButton v-else variant="primary" @click="flows.crear.go">
-          <UIcon name="bi-plus-lg" class="me" /> Nueva solicitud
+          <UIcon name="lucide-plus" />
+          Nueva solicitud
         </BButton>
       </BCol>
     </BRow>
@@ -46,30 +48,23 @@ const closeDropdown = () => model.value = false
 </template>
 
 <style scoped lang="scss">
-.crear {
-  width: 34px;
-  height: 34px;
-  position: relative;
+:deep(.btn-link) {
+  --bs-btn-color: var(--bs-info-900);
+  --bs-btn-hover-color: var(--bs-info-900);
+  --bs-btn-active-color: var(--bs-info-900);
+  --bs-btn-bg: rgba(var(--bs-surface-5-rgb), .7);
+  --bs-btn-hover-bg: rgba(var(--bs-surface-5-rgb), 1);
+  --bs-btn-active-bg: rgba(var(--bs-surface-5-rgb), 1);
 
-  >svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .w-180 {
+    display: inline-block;
+    width: 180px;
+    text-align: start;
+    font-weight: 600;
   }
-}
 
-.w-180 {
-  display: inline-block;
-  width: 170px;
-  text-align: center;
-}
-
-:deep(.btn-tab) {
-  --bs-btn-color: inherit;
-  --bs-btn-bg: var(--bs-gray-200);
-  --bs-btn-hover-bg: var(--bs-gray-300);
-  --bs-btn-active-bg: var(--bs-gray-300);
-  --bs-btn-active-border-color: var(--bs-gray-500);
+  svg.small {
+    top: unset;
+  }
 }
 </style>

@@ -6,18 +6,18 @@ const props = defineProps({
 
 <template>
   <BListGroup>
-    <BListGroupItem id="remitente-popover">
-      <span class="rol teal">Rem</span>
-      <span class="data">
+    <BListGroupItem>
+      <span class="fw-semibold text-gray-800" v-tippy="'Remitente'">Rem:</span>
+      <span class="data" id="remitente-popover">
         <UIcon v-if="solicitud.remitente.blocked" name="bi-exclamation-circle-fill" />
         {{ solicitud.remitente.name }}
       </span>
     </BListGroupItem>
     <template v-if="(solicitud.estado.id > 1)">
       <template v-if="solicitud.supervisor.id === solicitud.tramitador.id">
-        <BListGroupItem id="supervisor-popover">
-          <span class="rol warning">Sup/Tram</span>
-          <span class="data">
+        <BListGroupItem>
+          <span class="fw-semibold text-gray-800" v-tippy="'Supervisor/Tramitador'">S/Tram:</span>
+          <span class="data" id="supervisor-popover">
             <UIcon v-if="solicitud.supervisor.blocked" name="bi-exclamation-circle-fill" />
             {{ solicitud.supervisor.name }}
           </span>
@@ -25,18 +25,18 @@ const props = defineProps({
       </template>
       <template v-else>
         <template v-if="solicitud.supervisor">
-          <BListGroupItem id="supervisor-popover">
-            <span class="rol warning">Sup</span>
-            <span class="data">
+          <BListGroupItem>
+            <span class="fw-semibold text-gray-800" v-tippy="'Supervisor'">Sup:</span>
+            <span class="data" id="supervisor-popover">
               <UIcon v-if="solicitud.supervisor.blocked" name="bi-exclamation-circle-fill" />
               {{ solicitud.supervisor.name }}
             </span>
           </BListGroupItem>
         </template>
         <template v-if="solicitud.tramitador">
-          <BListGroupItem id="tramitador-popover">
-            <span class="rol warning">Tram</span>
-            <span class="data">
+          <BListGroupItem>
+            <span class="fw-semibold text-gray-800" v-tippy="'Tramitador'">Tram:</span>
+            <span class="data" id="tramitador-popover">
               <UIcon v-if="solicitud.tramitador.blocked" name="bi-exclamation-circle-fill" />
               {{ solicitud.tramitador.name }}
             </span>
@@ -123,32 +123,16 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
-.popover-width {
-  width: 300px;
-}
-
 .list-group-item {
   --bs-list-group-item-padding-x: 0;
   --bs-list-group-border-width: 0;
   display: flex;
   gap: 12px;
   cursor: default;
+  height: 30px;
 
-  .rol {
-    font-size: small;
-    padding: 2px 8px;
-    font-weight: 600;
-    border: 1px solid var(--bs-rol-border-color);
-    border-radius: var(--bs-border-radius-xl);
-    white-space: nowrap;
-
-    &.teal {
-      --bs-rol-border-color: var(--bs-teal);
-    }
-
-    &.warning {
-      --bs-rol-border-color: var(--bs-warning);
-    }
+  .text-gray-800 {
+    color: var(--bs-gray-800);
   }
 
   .data {
@@ -157,11 +141,6 @@ const props = defineProps({
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    svg {
-      color: var(--bs-danger);
-    }
   }
-
 }
 </style>
