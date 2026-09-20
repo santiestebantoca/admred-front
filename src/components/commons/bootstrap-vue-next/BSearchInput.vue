@@ -53,7 +53,7 @@ const handleReset = () => {
   <div class="search-group" :style="rootStyle">
     <BFormInput v-model="inputModel" :debounce="debounceValue" :placeholder="computedPlaceholder"
       @keyup.enter="handleKeyupEnter" v-bind="$attrs" type="search" enterkeyhint="search" />
-    <UIcon v-if="searchIcon" name="bi-search" />
+    <IBiSearch v-if="searchIcon" />
     <BButton v-if="inputModel" variant="close" @click="handleReset" />
   </div>
 </template>

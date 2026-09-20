@@ -8,8 +8,8 @@ const props = withDefaults(defineProps<{
 
 <template>
   <div class="btn" type="button">
-    <UIcon v-if="open" name="lucide-chevron-down" class="small" />
-    <UIcon v-else name="lucide-chevron-right" class="small" />
+    <ILucideChevronDown v-if="open" class="small" />
+    <ILucideChevronRight v-else class="small" />
   </div>
 </template>
 

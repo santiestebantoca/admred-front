@@ -81,7 +81,8 @@ const vInput = {
             :style="dropdownStyle">
             <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
               :class="{ history }">
-              <UIcon :name="history ? 'bi-clock-history' : 'bi-search'" />
+              <IBiClockHistory v-if="history" />
+              <IBiSearch v-else />
               {{ nombre }}
               <BButton v-if="history" @click.stop="historial.del(id)" v-tippy="'Eliminar del historial'"
                 variant="close" />

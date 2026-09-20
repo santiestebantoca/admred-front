@@ -45,18 +45,19 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       </BAlert>
       <form @submit.prevent>
         <div class="position-relative mb-3">
-          <UIcon name="bi-person" class="p-icon" />
+          <IBiPerson class="p-icon" />
           <BFormInput v-model="form.username" name="username" placeholder="Nombre de usuario"
             @input="errors.username = null" />
           <div class="invalid-feedback d-block" v-text="errors.username" />
         </div>
         <div class="position-relative mb-3">
-          <UIcon name="bi-lock" class="p-icon" />
+          <IBiLock class="p-icon" />
           <BFormInput :type="type" v-model="form.password" name="password" placeholder="Contraseña"
             @input="errors.password = null" />
           <div class="invalid-feedback d-block" v-text="errors.password" />
           <BButton @click.stop="toggleType" variant="flat wh-34" class="p-end-button">
-            <UIcon :name="type === 'password' ? 'bi-eye' : 'bi-eye-slash'" class="center" />
+            <IBiEye v-if="type === 'password'" class="center" />
+            <IBiEyeSlash v-else class="center" />
           </BButton>
         </div>
         <div class="mt-4">

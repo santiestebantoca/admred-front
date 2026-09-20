@@ -34,7 +34,7 @@ const change = () => value.value = datepicker.value.getDate(options.value.format
   <BDropdown auto-close="outside" no-caret v-tippy="'Fecha de cumplimiento'" variant="footer" :placement="placement"
     @hidden="view = 0">
     <template #button-content>
-      <UIcon name="bi-clock" class="center" :class="{ 'text-primary': value }" />
+      <IBiClock class="center" :class="{ 'text-primary': value }" />
     </template>
     <template v-if="!view">
       <BDropdownText>

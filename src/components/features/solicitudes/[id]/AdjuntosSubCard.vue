@@ -14,7 +14,8 @@ const collapseId = useId()
 
 <template>
   <BButton v-b-toggle:[collapseId] variant="link label">
-    <UIcon :name="model ? 'lucide-chevron-down' : 'lucide-chevron-right'" />
+    <ILucideChevronDown v-if="model" />
+    <ILucideChevronRight v-else />
     Adjuntos ({{ adjuntos.length }})
   </BButton>
   <BCollapse :id="collapseId" v-model="model">

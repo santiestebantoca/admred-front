@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
   <div class="root" v-tippy="'Evaluación del remitente'">
-    <UIcon v-for="i in 5" :key="i" name="bi-star-fill" :class="{ on: solicitud.evaluacion >= i }" />
+    <IBiStarFill v-for="i in 5" :key="i" :class="{ on: solicitud.evaluacion >= i }" />
   </div>
 </template>
 

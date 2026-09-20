@@ -18,7 +18,7 @@ const mobile = inject('app:mobile')
         <span v-if="username" class="text-muted -small" v-text="username" />
       </p>
       <BButton @click="impersonate(id)" :disabled="actual" variant="success">
-        <UIcon name="bi-arrow-return-right" />
+        <IBiArrowReturnRight />
         <span v-if="!mobile" class="ms-2">Personificar</span>
       </BButton>
     </BAccordionItem>

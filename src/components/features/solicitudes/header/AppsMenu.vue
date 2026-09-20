@@ -7,7 +7,7 @@ const { options } = useNavigationApps()
 <template>
   <BDropdown variant="flat wh-34" no-caret strategy="fixed" v-tippy="'Aplicaciones'">
     <template #button-content>
-      <UIcon name="bi-three-dots" class="center" />
+      <IBiThreeDots class="center" />
     </template>
     <BDropdownItem v-for="option in options" :to="option.to" class="highlight-active">
       <UIcon :name="option.icon" />

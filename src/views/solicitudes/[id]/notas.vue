@@ -77,7 +77,7 @@ const submit = async () => {
         <div class="hstack gap-2">
           <BFormTextarea placeholder="Escribe una nota" no-resize rows="1" v-model="form.texto" />
           <BButton v-if="form.texto" variant="link link-primary" @click="submit" class="fs-4 wh-50">
-            <UIcon name="bi-send-fill" class="center" />
+            <IBiSendFill class="center" />
           </BButton>
         </div>
       </form>

@@ -49,7 +49,8 @@ const submit = async () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Responder solicitud" size="lg" fullscreen="sm" :scrollable="false">
+  <BModalPlus v-model="model" @hidden="back" title="Responder solicitud" capsule-title="Responder solicitud" size="lg"
+    fullscreen="sm" :scrollable="false">
     <div v-if="solicitudPendiente" class="py-5 my-5 text-center">
       <BSpinner />
     </div>
@@ -64,9 +65,8 @@ const submit = async () => {
         Responder
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
-        <UIcon name="bi-paperclip" class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
+        <IBiPaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
     </template>
-    <!-- <bs-dialog-capsule label="Responder solicitud" /> -->
-  </BModal>
+  </BModalPlus>
 </template>

@@ -12,5 +12,5 @@
     "allowJs": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "src/components/commons/unplugin-icons/appIcons.ts"]
+  "include": ["vite.config.js"]
 }

@@ -40,7 +40,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
     body-class="position-static" lazy @shown="shown = true">
     <template #header>
       <BButton @click="model = false" class="rounded-5">
-        <UIcon name="bi-arrow-left" class="center" />
+        <IBiArrowLeft class="center" />
       </BButton>
       <span class="mx-auto">
         {{ solicitud?.codigo || '#' }}
@@ -48,7 +48,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
       </span>
       <BDropdown v-if="xlDown" no-caret>
         <template #button-content>
-          <UIcon name="bi-list" class="center" />
+          <IBiList class="center" />
         </template>
         <AccionesMenu :user="authUser" :solicitud="solicitud" />
       </BDropdown>
@@ -123,7 +123,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
           </div>
           <div v-else class="title-sin-respuesta">
             <span>Sin respuesta del área consultada.</span>
-            <UIcon name="bi-exclamation-square-fill" class="float-end" />
+            <IBiExclamationSquareFill class="float-end" />
           </div>
         </div>
         <div v-if="solicitud.observaciones">

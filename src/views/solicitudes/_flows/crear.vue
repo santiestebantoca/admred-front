@@ -49,7 +49,8 @@ const submit = async () => {
 </script>
 
 <template>
-  <BModal v-model="model" title="Crear solicitud" @hidden="back" size="lg" fullscreen="sm" :scrollable="false">
+  <BModalPlus v-model="model" title="Crear solicitud" capsule-title="Crear solicitud" @hidden="back" size="lg"
+    fullscreen="sm" :scrollable="false">
     <form @submit.prevent>
       <DestinoSelect v-model:error="errors.destino" v-model:value="form.destino" />
       <ObjetivoTextarea v-model:error="errors.objetivo" v-model:value="form.objetivo" class="mx-n2" />
@@ -60,10 +61,10 @@ const submit = async () => {
         Crear
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
-        <UIcon name="bi-paperclip" class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
+        <IBiPaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
       <TipoWidget v-model:error="errors.tipo" v-model:value="form.tipo" />
       <CumplirWidget v-model:error="errors.cumplir_en" v-model:value="form.cumplir_en" />
     </template>
-  </BModal>
+  </BModalPlus>
 </template>

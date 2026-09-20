@@ -43,7 +43,7 @@ const items = computed(() => [
   <BTableLite :fields="fields" :items="items" thead-class="d-none" tbody-class="tr-last-bold" table-class="mb-1" />
   <BButton v-if="(solicitud.estado.id > 1) && !expandido" @click="expandido = true" variant="flat w-30 h-20"
     v-tippy="'Ver más'">
-    <UIcon name="bi-chevron-compact-down" class="center text-secondary small" />
+    <IBiChevronCompactDown class="center text-secondary small" />
   </BButton>
 </template>
 

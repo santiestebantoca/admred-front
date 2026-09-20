@@ -5,7 +5,6 @@ const props = defineProps({
   placement: { type: String, default: 'top-start' }
 })
 
-import BSearchInput from '@/components/commons/bootstrap-vue-next/BSearchInput.vue'
 import { useTiposQuery } from '@/stores/tipos'
 import { ref, computed, watch } from 'vue'
 
@@ -29,7 +28,7 @@ const input = (id) => {
   <BDropdown auto-close="outside" no-caret v-tippy="'Tipo de solicitud'" variant="footer" :placement="placement"
     :style="rootStyle" @hidden="view = 0">
     <template #button-content>
-      <UIcon name="bi-tag" class="center" :class="{ 'text-primary': sel }" />
+      <IBiTag class="center" :class="{ 'text-primary': sel }" />
     </template>
     <template v-if="!view">
       <BDropdownText>

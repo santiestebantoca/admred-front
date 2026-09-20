@@ -9,7 +9,7 @@ const props = defineProps({
     <BListGroupItem>
       <span class="fw-semibold text-gray-800" v-tippy="'Remitente'">Rem:</span>
       <span class="data" id="remitente-popover">
-        <UIcon v-if="solicitud.remitente.blocked" name="bi-exclamation-circle-fill" />
+        <IBiExclamationCircleFill v-if="solicitud.remitente.blocked" />
         {{ solicitud.remitente.name }}
       </span>
     </BListGroupItem>
@@ -18,7 +18,7 @@ const props = defineProps({
         <BListGroupItem>
           <span class="fw-semibold text-gray-800" v-tippy="'Supervisor/Tramitador'">S/Tram:</span>
           <span class="data" id="supervisor-popover">
-            <UIcon v-if="solicitud.supervisor.blocked" name="bi-exclamation-circle-fill" />
+            <IBiExclamationCircleFill v-if="solicitud.supervisor.blocked" />
             {{ solicitud.supervisor.name }}
           </span>
         </BListGroupItem>
@@ -28,7 +28,7 @@ const props = defineProps({
           <BListGroupItem>
             <span class="fw-semibold text-gray-800" v-tippy="'Supervisor'">Sup:</span>
             <span class="data" id="supervisor-popover">
-              <UIcon v-if="solicitud.supervisor.blocked" name="bi-exclamation-circle-fill" />
+              <IBiExclamationCircleFill v-if="solicitud.supervisor.blocked" />
               {{ solicitud.supervisor.name }}
             </span>
           </BListGroupItem>
@@ -37,7 +37,7 @@ const props = defineProps({
           <BListGroupItem>
             <span class="fw-semibold text-gray-800" v-tippy="'Tramitador'">Tram:</span>
             <span class="data" id="tramitador-popover">
-              <UIcon v-if="solicitud.tramitador.blocked" name="bi-exclamation-circle-fill" />
+              <IBiExclamationCircleFill v-if="solicitud.tramitador.blocked" />
               {{ solicitud.tramitador.name }}
             </span>
           </BListGroupItem>

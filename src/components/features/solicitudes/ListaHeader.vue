@@ -24,8 +24,8 @@ const closeDropdown = () => model.value = false
         <template v-else>
           <BDropdown v-model="model" variant="link" auto-close="outside" no-caret :offset="{ alignmentAxis: 50 }">
             <template #button-content>
-              <UIcon name="bi-folder-check" class="text-orange-800" />
-              <UIcon name="lucide-chevron-right" class="small opacity-50" />
+              <IBiFolderCheck class="text-orange-800" />
+              <ILucideChevronRight class="small opacity-50" />
               <span class="letter-spacing-1 w-180">
                 {{ tray }} <span class="fw--semibold">{{ state }}</span>
               </span>
@@ -36,10 +36,10 @@ const closeDropdown = () => model.value = false
       </BCol>
       <BCol cols="auto">
         <BButton v-if="mobile" variant="primary  wh-34" @click="flows.crear.go">
-          <UIcon name="bi-pencil-square" class="center" />
+          <IBiPencilSquare class="center" />
         </BButton>
         <BButton v-else variant="primary" @click="flows.crear.go">
-          <UIcon name="lucide-plus" />
+          <ILucidePlus />
           Nueva solicitud
         </BButton>
       </BCol>

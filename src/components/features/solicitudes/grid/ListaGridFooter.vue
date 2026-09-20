@@ -19,7 +19,7 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
         {{ total }} {{ total === 1 ? 'elemento' : 'elementos' }}
       </BCol>
       <BCol v-if="isFiltered" cols="auto">
-        <UIcon name="bi-funnel" class="small" />
+        <IBiFunnel class="small" />
       </BCol>
       <BCol v-if="filtro.status" cols="auto" class="ps-0">
         {{PENDIENTE_STATUS.find(d => d.value === filtro.status).text}}
@@ -28,7 +28,7 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
         terminadas en {{PERIODOS.find(d => d.value === filtro.period).text}}
       </BCol>
       <BCol v-if="search" cols="auto">
-        <UIcon name="bi-search" class="small" />
+        <IBiSearch class="small" />
       </BCol>
       <BCol v-if="search" cols="auto" class="ps-0 text-truncate" style="width:120px">
         {{ search }}
@@ -36,7 +36,7 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
       <!--  -->
       <BCol cols="auto" class="text-danger" v-if="isStale">
         <BButton variant="flat py-1 text-danger" @click="refresh" v-tippy="'Los datos pueden estar desactualizados'">
-          <UIcon name="bi-arrow-repeat" class="small" />
+          <IBiArrowRepeat class="small" />
           Actualizar
         </BButton>
       </BCol>

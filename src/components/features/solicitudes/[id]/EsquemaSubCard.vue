@@ -8,26 +8,26 @@ const props = defineProps({
 <template>
   <BListGroup :class="{ inicial: !solicitud.padre }">
     <BListGroupItem v-if="solicitud.padre" class="padre">
-      <UIcon name="bi-circle-fill" />
+      <IBiCircleFill />
       <div type="button" @click="setSolicitudId(solicitud.padre.id)"
         v-tippy="`De: ${solicitud.padre.origen} / Para: ${solicitud.origen.nombre}`">
         {{ solicitud.padre.codigo }}
       </div>
     </BListGroupItem>
     <BListGroupItem class="actual">
-      <UIcon name="bi-arrow-return-right" />
-      <UIcon name="bi-circle-fill" />
+      <IBiArrowReturnRight />
+      <IBiCircleFill />
       <span class="text-secondary">{{ solicitud.codigo }}</span>
       <span class="fw-semibold">(Actual)</span>
     </BListGroupItem>
     <BListGroupItem v-for="hijo in solicitud.hijos" class="hijo">
-      <UIcon name="bi-arrow-return-right" />
-      <UIcon name="bi-circle-fill" />
+      <IBiArrowReturnRight />
+      <IBiCircleFill />
       <div type="button" @click="setSolicitudId(hijo.id)" v-tippy="`Para: ${hijo.destino}`">
         {{ hijo.codigo }}
       </div>
       <span v-if="hijo.estado !== 'Terminado'" class="text-dark text-opacity-25">Pendiente</span>
-      <UIcon v-else name="bi-check2" class="text-success top-50 translate-middle-y" />
+      <IBiCheck2 v-else class="text-success top-50 translate-middle-y" />
     </BListGroupItem>
   </BListGroup>
 </template>
