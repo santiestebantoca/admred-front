@@ -15,7 +15,10 @@ const form = ref({
 const data = computed(() => report.consultadas.data)
 const loading = computed(() => report.consultadas.loading)
 const noData = computed(() => report.consultadas.noData)
-function submit() {
+
+title.value = 'Áreas consultadas'
+
+const submit = () => {
   report.consultadas.reset()
   report.consultadas.get(form.value)
 }
@@ -30,8 +33,6 @@ const exp = () => {
   ].join(',')
   exportCSV(fields, data.value)
 }
-title.value = 'Áreas consultadas'
-onBeforeUnmount(() => report.consultadas.reset())
 </script>
 
 <template>

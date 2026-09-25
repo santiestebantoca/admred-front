@@ -77,7 +77,7 @@ const vInput = {
         </BCol>
         <BCol class="px-1 hstack">
           <BFormInput v-input v-bind="attrs" :class="{ warning }" debounce="600" />
-          <BDropdown v-model="dropdown" offset="8" :auto-close="false" variant="flat-secondary" placement="bottom-end"
+          <BDropdown v-model="dropdown" offset="8" :auto-close="false" variant="emphasis" placement="bottom-end"
             :style="dropdownStyle">
             <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
               :class="{ history }">

@@ -3,6 +3,10 @@
  -->
 
 <script lang="ts" setup>
+const props = defineProps({
+  required: Boolean
+})
+
 const start = defineModel<Date | null>('start')
 const end = defineModel<Date | null>('end')
 const error = defineModel<string | null>('error')
@@ -40,29 +44,25 @@ watch([start, end], () => error.value = null)
 </script>
 
 <template>
-  <div class="hstack gap-1">
-    <BDropdown>
+  <div class="hstack gap-2">
+    <BDropdown no-caret variant="emphasis wh-38">
       <template #button-content>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-          class="bi bi-three-dots-vertical mb-1" viewBox="0 0 16 16">
-          <path
-            d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-        </svg>
+        <IBiThreeDotsVertical class="center" />
       </template>
       <BDropdownItem @click="setRange(1)">Este mes</BDropdownItem>
       <BDropdownItem @click="setRange(2)">Mes pasado</BDropdownItem>
       <BDropdownItem @click="setRange(3)">Este año</BDropdownItem>
       <BDropdownItem @click="setRange(4)">Año pasado</BDropdownItem>
     </BDropdown>
-    <div class="hstack gap-3" v-picker @changeDate="change">
-      <input class="form-control" placeholder="Fecha de inicio" />
-      <input class="form-control" placeholder="Fecha final" />
+    <div class="hstack gap-2" v-picker @changeDate="change">
+      <BFormInput placeholder="Fecha inicial" :required="props.required" />
+      <BFormInput placeholder="Fecha final" :required="props.required" />
     </div>
   </div>
 </template>
 
 <style scoped>
 .form-control {
-  max-width: 132px;
+  max-width: 140px;
 }
 </style>

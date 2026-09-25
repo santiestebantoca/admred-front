@@ -55,7 +55,7 @@ export function useNavigationSolicitudes() {
 export function useNavigationApps() {
   const { authUser } = useAuthQuery()
   const options = computed(() => [
-    { label: 'Solicitudes', to: '/solicitudes', icon: 'bi-inboxes' },
+    { label: 'Solicitudes', to: '/solicitudes', icon: 'bi-folder-check' },
     { label: 'Reportes', to: '/reportes', icon: 'bi-graph-up' },
     ...authUser.value?.admin
       ? [{ label: 'Administración', to: '/admin', icon: 'bi-gear' }]
@@ -65,27 +65,51 @@ export function useNavigationApps() {
   return { options }
 }
 
-export function useNavigationMensaje() {
-  // const { notificaciones } = useNotificacionesQuery()
-  // const options = computed(() => [
-  //   {
-  //     to: { name: 'sms-componer' },
-  //     icon: 'bi-envelope-plus',
-  //     label: 'Componer',
-  //     name: 'componer',
-  //     id: 'nav-options-componer-sms-componer'
-  //   },
-  //   {
-  //     to: { name: 'sms-coleccion' },
-  //     icon: 'bi-collection',
-  //     label: 'Colección',
-  //     name: 'coleccion',
-  //     id: 'nav-options-componer-sms-coleccion',
-  //     count: notificaciones.value?.pendientes
-  //   },
-  // ])
+export function useNavigationReportes() {
+  const { authUser } = useAuthQuery()
+  const options = computed(() => {
+    return [
+      {
+        label: 'Mis pendientes',
+        to: { name: 'reportes-pendientes' },
+        icon: 'bi-exclamation-diamond'
+      },
+      {
+        label: 'Desempeño personal',
+        to: { name: 'reportes-personas' },
+        icon: 'bi-people'
+      },
+      ...authUser.value?.AR ? [
+        // {
+        //   label: 'Solicitudes externas',
+        //   to: { name: 'reportes-externas' },
+        //   icon: 'bi-box-arrow-in-right'
+        // },
+        // {
+        //   label: 'Solicitudes internas',
+        //   to: { name: 'reportes-internas' },
+        //   icon: 'bi-arrow-right-square'
+        // },
+        // {
+        //   label: 'Áreas consultadas',
+        //   to: { name: 'reportes-consultadas' },
+        //   icon: 'bi-shuffle'
+        // },
+        {
+          label: 'Buscar código',
+          to: { name: 'reportes-buscar' },
+          icon: 'bi-search'
+        },
+        {
+          label: 'Solicitudes',
+          to: { name: 'reportes-solicitudes' },
+          icon: 'bi-play-circle'
+        }
+      ] : []
+    ]
+  })
 
-  // return { options }
+  return { options }
 }
 
 export function useNavigationConfigurar() {

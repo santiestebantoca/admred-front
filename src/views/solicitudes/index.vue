@@ -10,7 +10,6 @@ const props = defineProps({
 import MainLayout from '@/layouts/MainLayout.vue'
 import DrawerContent from '@/components/features/solicitudes/DrawerContent.vue'
 import HeaderContent from '@/components/features/solicitudes/header/HeaderContent.vue'
-import ListaHeader from '@/components/features/solicitudes/ListaHeader.vue'
 import ListaGrid from '@/components/features/solicitudes/grid/ListaGrid.vue'
 import CrearSolicitud from '@/views/solicitudes/_flows/crear.vue'
 import { useSolicitudesFiltro } from '@/stores/solicitudes'
@@ -33,10 +32,9 @@ provide('solicitudes:filaExpandida', filaExpandida)
   <MainLayout class="main-layout">
     <template #header-content>
       <HeaderContent />
-      <!-- <ListaHeader /> -->
     </template>
-    <template #drawer-content="{ down }">
-      <DrawerContent :down="down" />
+    <template #drawer-content>
+      <DrawerContent />
     </template>
     <template #page-content>
       <ListaGrid class="lista-grid" />

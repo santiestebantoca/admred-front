@@ -60,9 +60,8 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
         </BRow>
       </BContainer>
       <div v-else class="table-large-container" ref="container" :style="rootStyle" v-bind="$attrs">
-        <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0"
-          :thClass="['custom-th']" :busy="isLoading" selectable select-mode="single" hover
-          @update:selected-items="onSelectedItem" v-model:selected-items="active">
+        <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0" :busy="isLoading"
+          selectable select-mode="single" hover @update:selected-items="onSelectedItem" v-model:selected-items="active">
           <template #table-colgroup>
             <col style="width:80px" />
             <col style="width:50%" />

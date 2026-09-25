@@ -176,42 +176,57 @@ const routesReportes = [
       {
         path: '',
         name: 'reportes-home',
-        component: () => import('@/views/reportes/home/ReportHome.vue'),
+        component: () => import('@/views/reportes/home.vue'),
       },
       {
-        path: 'pending',
-        name: 'reportes-pending',
-        component: () => import('@/views/reportes/pending/ReportPending.vue'),
+        path: 'pendientes',
+        name: 'reportes-pendientes',
+        component: () => import('@/views/reportes/pendientes/index.vue'),
       },
       {
-        path: 'outer',
-        name: 'reportes-outer',
-        component: () => import('@/views/reportes/outer/ReportOuter.vue'),
+        path: 'externas',
+        name: 'reportes-externas',
+        component: () => import('@/views/reportes/externas/index.vue'),
       },
       {
-        path: 'inner',
-        name: 'reportes-inner',
-        component: () => import('@/views/reportes/inner/ReportInner.vue'),
+        path: 'internas',
+        name: 'reportes-internas',
+        component: () => import('@/views/reportes/internas/index.vue'),
       },
       {
         path: 'consultadas',
         name: 'reportes-consultadas',
-        component: () => import('@/views/reportes/consultadas/ReportConsultadas.vue'),
+        component: () => import('@/views/reportes/consultadas/index.vue'),
       },
       {
-        path: 'find',
-        name: 'reportes-find',
-        component: () => import('@/views/reportes/find/ReportFind.vue'),
+        path: 'buscar',
+        name: 'reportes-buscar',
+        component: () => import('@/views/reportes/buscar/index.vue'),
       },
       {
-        path: 'person',
-        name: 'reportes-person',
-        component: () => import('@/views/reportes/person/ReportPerson.vue'),
+        path: 'personas',
+        name: 'reportes-personas',
+        component: () => import('@/views/reportes/personas/index.vue'),
+        props: (route) => ({
+          personaId: route.params.personaId && parseInt(route.params.personaId),
+          setPersonaId: (personaId) => router.push({ name: 'reportes-persona', params: { personaId } }),
+        }),
+        children: [
+          {
+            path: ':personaId',
+            name: 'reportes-persona',
+            component: () => import('@/views/reportes/personas/[id]/index.vue'),
+            props: (route) => ({
+              personaId: route.params.personaId && parseInt(route.params.personaId),
+              back: () => router.push({ name: 'reportes-personas' })
+            }),
+          }
+        ]
       },
       {
-        path: 'provision',
-        name: 'reportes-provision',
-        component: () => import('@/views/reportes/provision/index.vue'),
+        path: 'solicitudes',
+        name: 'reportes-solicitudes',
+        component: () => import('@/views/reportes/solicitudes/index.vue'),
       }
     ]
   }

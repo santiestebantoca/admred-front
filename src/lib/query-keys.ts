@@ -54,4 +54,25 @@ export const queryKeys = {
     listas: () => [...queryKeys.notas.root, 'lista'],
     lista: (filtros) => [...queryKeys.notas.listas(), { ...filtros }],
   },
+  reportes: {
+    pendientes: {
+      root: ['reportes', 'pendientes'],
+      listas: () => [...queryKeys.reportes.pendientes.root, 'lista'],
+    },
+    personas: {
+      root: ['reportes', 'personas'],
+      listas: () => [...queryKeys.reportes.personas.root, 'lista'],
+      lista: (filtros) => [...queryKeys.reportes.personas.listas(), { ...filtros }],
+    },
+    codigos: {
+      root: ['reportes', 'codigos'],
+      listas: () => [...queryKeys.reportes.codigos.root, 'lista'],
+      lista: (filtros) => [...queryKeys.reportes.codigos.listas(), { ...filtros }],
+    },
+    solicitudes: {
+      root: ['reportes', 'solicitudes'],
+      listas: () => [...queryKeys.reportes.solicitudes.root, 'lista'],
+      lista: (filtros) => [...queryKeys.reportes.solicitudes.listas(), { ...filtros }],
+    }
+  },
 }

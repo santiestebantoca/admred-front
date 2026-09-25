@@ -17,7 +17,7 @@
 import type { Component } from 'vue'
 import { computed } from 'vue'
 import IBiFolder from '~icons/bi/folder'
-import IBiInboxes from '~icons/bi/inboxes'
+import IBiFolderCheck from '~icons/bi/folderCheck'
 import IBiGraphUp from '~icons/bi/graph-up'
 import IBiGear from '~icons/bi/gear'
 import IBiBoxArrowRight from '~icons/bi/box-arrow-right'
@@ -29,10 +29,16 @@ import IBiPatchCheck from '~icons/bi/patch-check'
 import IBiStar from '~icons/bi/star'
 import IBiClockHistory from '~icons/bi/clock-history'
 import IBiSticky from '~icons/bi/sticky'
+import IBiExclamationDiamond from '~icons/bi/exclamation-diamond'
+import IBiBoxArrowInRight from '~icons/bi/box-arrow-in-right'
+import IBiRightSquare from '~icons/bi/arrow-right-square'
+import IBiShuffle from '~icons/bi/shuffle'
+import IBiSearch from '~icons/bi/search'
+import IBiPlayCircle from '~icons/bi/play-circle'
 
 const iconMap: Record<string, Component> = {
   'bi-folder': IBiFolder,
-  'bi-inboxes': IBiInboxes,
+  'bi-folder-check': IBiFolderCheck,
   'bi-graph-up': IBiGraphUp,
   'bi-gear': IBiGear,
   'bi-box-arrow-right': IBiBoxArrowRight,
@@ -44,6 +50,12 @@ const iconMap: Record<string, Component> = {
   'bi-star': IBiStar,
   'bi-clock-history': IBiClockHistory,
   'bi-sticky': IBiSticky,
+  'bi-exclamation-diamond': IBiExclamationDiamond,
+  'bi-box-arrow-in-right': IBiBoxArrowInRight,
+  'bi-arrow-right-square': IBiRightSquare,
+  'bi-shuffle': IBiShuffle,
+  'bi-search': IBiSearch,
+  'bi-play-circle': IBiPlayCircle,
 }
 
 const props = defineProps<{ name?: string }>()

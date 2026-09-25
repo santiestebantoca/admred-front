@@ -6,7 +6,7 @@ const props = defineProps({
 })
 
 import { breakpointsBootstrapV5, useBreakpoints, useResizeObserver } from "@vueuse/core"
-import { ref, inject, computed, watch } from 'vue'
+import { ref, inject, computed, watch, useTemplateRef } from 'vue'
 
 const drawerId = ref(`drawer-${props.side}`)
 const view = inject<import('vue').ComputedRef<string>>('layout:view', computed(() => ''))
@@ -16,8 +16,8 @@ const left = inject<import('vue').Ref<{ width: number; top: number; bottom: numb
 const right = inject<import('vue').Ref<{ width: number; top: number; bottom: number }>>('layout:right', ref({ width: 0, top: 0, bottom: 0 }))
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
 const above = breakpoints.greaterOrEqual(props.breakpoint as keyof typeof breakpointsBootstrapV5)
-const offcanvas = ref(null)
-const offcanvasWrapper = ref(null)
+const offcanvas = useTemplateRef('offcanvas')
+const offcanvasWrapper = useTemplateRef('offcanvasWrapper')
 const model = ref(undefined)
 const rootClass = ref([])
 const placement = computed(() => props.side === 'left' ? 'start' : 'end')

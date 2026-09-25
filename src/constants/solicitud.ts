@@ -11,3 +11,9 @@ export const PERIODOS = [
   { text: '6 meses', value: 3 },
   { text: '1 año', value: 4 }
 ]
+
+export const AREAS_AR = [
+  { text: 'Dirección Administración de la Red', value: 2 },
+  { text: 'Departamento Administración', value: 46 },
+  { text: 'Departamento Planificación y Provisión', value: 47 }
+]

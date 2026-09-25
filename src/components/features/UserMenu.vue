@@ -42,3 +42,9 @@ const handleClick = () => {
     </div>
   </BModal>
 </template>
+
+<style scoped>
+.drawer .list-group-item {
+  width: 242px;
+}
+</style>

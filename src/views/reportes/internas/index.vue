@@ -21,8 +21,11 @@ const data = computed(() => report.internas.data)
 const loading = computed(() => report.internas.loading)
 const noData = computed(() => report.internas.noData)
 const areaItems = computed(() => report.internas.areas.data)
+
+title.value = 'Solicitudes internas'
 report.internas.areas.get()
-function submit() {
+
+const submit = () => {
   report.internas.reset()
   report.internas.get(form.value)
 }
@@ -44,8 +47,6 @@ const exp = () => {
   }))
   exportCSV(fields, data_)
 }
-title.value = 'Solicitudes internas'
-onBeforeUnmount(() => report.internas.reset())
 </script>
 
 <template>

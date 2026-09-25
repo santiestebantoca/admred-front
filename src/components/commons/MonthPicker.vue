@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const value = defineModel()
+
 import { Datepicker } from 'vanillajs-datepicker'
 import { ref } from 'vue'
 
@@ -16,7 +18,7 @@ const es = {
     format: "dd/mm/yyyy"
   }
 }
-const dropdown = ref(null)
+const model = ref(null)
 const display = ref(null)
 const emit = defineEmits(['change'])
 const change = ev => {
@@ -24,16 +26,17 @@ const change = ev => {
   const month = ev.detail.date.getMonth() + 1
   const year = ev.detail.date.getFullYear()
   emit('change', { month, year })
-  dropdown.value = false
+  value.value = { month, year }
+  model.value = false
 }
 Object.assign(Datepicker.locales, es)
 const vPicker = {
-  mounted: el => new Datepicker(el, { pickLevel: 1, language: 'es' })
+  mounted: (el) => new Datepicker(el, { pickLevel: 1, language: 'es' })
 }
 </script>
 
 <template>
-  <BPopover v-model="dropdown" focus>
+  <BPopover v-model="model" focus click>
     <template #target>
       <input v-model="display" class="form-control w-256" readonly />
     </template>

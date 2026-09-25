@@ -79,7 +79,7 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
             <IBiThreeDots class="center" />
           </template>
           <BDropdownItemButton @click="exportar">
-            <IBiFiletypeCsv />
+            <IBiSave />
             Guardar como (*.csv)
           </BDropdownItemButton>
           <BDropdownItemButton @click="expandir">

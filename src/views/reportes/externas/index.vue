@@ -20,8 +20,11 @@ const data = computed(() => report.externas.data)
 const loading = computed(() => report.externas.loading)
 const noData = computed(() => report.externas.noData)
 const areaItems = computed(() => report.externas.areas.data)
+
+title.value = 'Solicitudes externas'
 report.externas.areas.get()
-function submit() {
+
+const submit = () => {
   report.externas.reset()
   report.externas.get(form.value)
 }
@@ -43,8 +46,6 @@ const exp = () => {
   }))
   exportCSV(fields, data_)
 }
-title.value = 'Solicitudes externas'
-onBeforeUnmount(() => report.externas.reset())
 </script>
 
 <template>

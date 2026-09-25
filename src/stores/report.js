@@ -5,25 +5,6 @@ import { tidy, mutate, groupBy, summarize, mean } from '@tidyjs/tidy'
 import { sortAlphabetical } from '../composables/useSort'
 import { timeDeltaW, timeDeltaWToDH } from '@/composables/useTimeDelta'
 
-const usePending = defineStore('report-pending', () => {
-  const data = ref(null)
-  const count = ref(null)
-  const loading = ref(false)
-  function get() {
-    loading.value = true
-    axios
-      .get('/report/pendientes')
-      .then(res => setData(res.data))
-      .catch(() => { })
-      .finally(() => loading.value = false)
-  }
-  function setData(data_) {
-    data.value = data_
-    count.value = data_?.length
-  }
-  const noData = computed(() => !loading.value && !count.value)
-  return { data, get, loading, noData }
-})
 const useExternasAreas = defineStore('report-externas-areas', () => {
   const data = ref(null)
   function get() {
@@ -142,144 +123,10 @@ const useConsultadas = defineStore('report-consultadas', () => {
   const noData = computed(() => !loading.value && !count.value)
   return { data, noData, summary, get, reset, loading }
 })
-const useAsSupervisor = defineStore('report-person-solicitudes-supervisor', () => {
-  const data_ = ref([])
-  const data = computed({
-    set(value) { return data_.value = value },
-    get() {
-      return tidy(
-        data_.value || [],
-        mutate({
-          demoraAsignacion: d => timeDeltaW(d.solicitado_en, d.tramitador_en),
-          demoraEvaluacion: d => timeDeltaW(d.respuesta_en, d.terminado_en),
-          demoraSupervisor: d => d.demoraAsignacion + d.demoraEvaluacion,
-          demoraAsignacionDH: d => timeDeltaWToDH(d.demoraAsignacion),
-          demoraEvaluacionDH: d => timeDeltaWToDH(d.demoraEvaluacion),
-          demoraSupervisorDH: d => timeDeltaWToDH(d.demoraSupervisor),
-        }))
-    }
-  })
-  const resume = computed(() =>
-    tidy(
-      data.value,
-      summarize({
-        supervisadas: items => items.length,
-        terminadas: items => items.filter(item => item.terminado_en).length,
-        demora: mean('demoraSupervisor'),
-      }),
-      mutate({ demoraDH: d => timeDeltaWToDH(Math.trunc(d.demora)) })
-    )[0])
-  return { data, resume }
-})
-const useAsTramitador = defineStore('report-person-solicitudes-tramitador', () => {
-  const data_ = ref([])
-  const data = computed({
-    set(value) { return data_.value = value },
-    get() {
-      // [Aldo, 2021-12-21] Si no tiene reenvio, Tiempo de Reenvio = 0
-      // Luego,
-      // Tiempo de Respuesta = hijo_terminado
-      // ? de hijo_terminado a respuesta
-      // : si no tiene hijos, de asignado a respuesta
-      return tidy(
-        data_.value || [],
-        mutate({
-          demoraReenvio: d => timeDeltaW(d.hijo_en && d.tramitador_en, d.hijo_en),
-          demoraRespuesta: d => d.hijo_terminado_en
-            ? timeDeltaW(d.hijo_terminado_en, d.respuesta_en)
-            : timeDeltaW(!d.hijo_en && d.tramitador_en, d.respuesta_en),
-          demoraTramitador: d => d.demoraReenvio + d.demoraRespuesta,
-          demoraReenvioDH: d => timeDeltaWToDH(d.demoraReenvio),
-          demoraRespuestaDH: d => timeDeltaWToDH(d.demoraRespuesta),
-          demoraTramitadorDH: d => timeDeltaWToDH(d.demoraTramitador),
-        })
-      )
-    }
-  })
-  const resume = computed(() =>
-    tidy(
-      data.value,
-      summarize({
-        asignadas: items => items.length,
-        terminadas: items => items.filter(item => item.terminado_en).length,
-        demora: mean('demoraTramitador'),
-      }),
-      mutate({ demoraDH: d => timeDeltaWToDH(Math.trunc(d.demora)) })
-    )[0])
-  return { data, resume }
-})
-const usePersonSolicitudes = defineStore('report-person-solicitudes', () => {
-  const asSupervisor = useAsSupervisor()
-  const asTramitador = useAsTramitador()
-  const count = ref(null)
-  const loading = ref(false)
-  function setData(_data) {
-    count.value = _data?.length
-    asSupervisor.data = _data?.filter(d => d.supervisor)
-    asTramitador.data = _data?.filter(d => d.tramitador)
-  }
-  function get(params) {
-    loading.value = true
-    axios
-      .get(`/report/solicitudes`, { params })
-      .then(res => setData(res.data))
-      .catch(() => { })
-      .finally(() => loading.value = false)
-  }
-  const reset = () => setData([])
-  const noData = computed(() => !loading.value && !count.value)
-  return { noData, count, asSupervisor, asTramitador, get, reset, loading }
-})
-const usePerson = defineStore('report-person', () => {
-  const solicitudes = usePersonSolicitudes()
-  const data = ref(null)
-  function get() {
-    axios
-      .get('/report/person')
-      .then(res => data.value = res.data)
-      .catch(() => { })
-  }
-  return { solicitudes, data, get }
-})
-const useBuscar = defineStore('report-buscar', () => {
-  const data = ref(null)
-  function get(codigo) {
-    axios
-      .get('/report/buscar?codigo=' + codigo)
-      .then(res => data.value = sortAlphabetical(res.data))
-      .catch(() => { })
-  }
-  const reset = () => data.value = null
-  return { data, get, reset }
-})
-const useProvision = defineStore('report-provision', () => {
-  const data = ref(null)
-  const count = ref(null)
-  const loading = ref(false)
-  function setData(_data) {
-    count.value = _data?.length
-    data.value = _data
-  }
-  function get(params) {
-    loading.value = true
-    axios
-      .get('/report/provision', { params })
-      .then(res => setData(res.data))
-      .catch(() => { })
-      .finally(() => loading.value = false)
-  }
-  const reset = () => setData([])
-  const noData = computed(() => !loading.value && !count.value)
-  return { data, noData, get, reset, loading }
-})
 
 export default defineStore('http-client', () => {
-  const pending = usePending()
   const externas = useExternas()
   const internas = useInternas()
   const consultadas = useConsultadas()
-  const person = usePerson()
-  const buscar = useBuscar()
-  const provision = useProvision()
-  return { pending, externas, internas, consultadas, person, buscar, provision }
+  return { externas, internas, consultadas }
 })

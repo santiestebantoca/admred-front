@@ -8,7 +8,7 @@ const props = defineProps({ next: Function })
       <p>Tiempo de sesión expirado.</p>
       <br>
       <div class="text-end">
-        <BButton @click="next" color="primary">
+        <BButton @click="next" variant="primary">
           Continuar trabajando
         </BButton>
       </div>

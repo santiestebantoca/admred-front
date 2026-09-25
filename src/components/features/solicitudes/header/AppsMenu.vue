@@ -15,3 +15,9 @@ const { options } = useNavigationApps()
     </BDropdownItem>
   </BDropdown>
 </template>
+
+<style scoped>
+:deep(.router-link-active) {
+  display: none;
+}
+</style>
