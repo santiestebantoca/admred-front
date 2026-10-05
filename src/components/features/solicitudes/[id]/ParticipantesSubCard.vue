@@ -7,7 +7,7 @@ const props = defineProps({
 <template>
   <BListGroup>
     <BListGroupItem>
-      <span class="fw-semibold text-gray-800" v-tippy="'Remitente'">Rem:</span>
+      <span class="text-gray-800 fw-semibold" v-tippy="'Remitente'">Rem.</span>
       <span class="data" id="remitente-popover">
         <IBiExclamationCircleFill v-if="solicitud.remitente.blocked" />
         {{ solicitud.remitente.name }}
@@ -16,7 +16,7 @@ const props = defineProps({
     <template v-if="(solicitud.estado.id > 1)">
       <template v-if="solicitud.supervisor.id === solicitud.tramitador.id">
         <BListGroupItem>
-          <span class="fw-semibold text-gray-800" v-tippy="'Supervisor/Tramitador'">S/Tram:</span>
+          <span class="text-gray-800 fw-semibold" v-tippy="'Supervisor/Tramitador'">Tram.</span>
           <span class="data" id="supervisor-popover">
             <IBiExclamationCircleFill v-if="solicitud.supervisor.blocked" />
             {{ solicitud.supervisor.name }}
@@ -26,7 +26,7 @@ const props = defineProps({
       <template v-else>
         <template v-if="solicitud.supervisor">
           <BListGroupItem>
-            <span class="fw-semibold text-gray-800" v-tippy="'Supervisor'">Sup:</span>
+            <span class="text-gray-800 fw-semibold" v-tippy="'Supervisor'">Sup.</span>
             <span class="data" id="supervisor-popover">
               <IBiExclamationCircleFill v-if="solicitud.supervisor.blocked" />
               {{ solicitud.supervisor.name }}
@@ -35,7 +35,7 @@ const props = defineProps({
         </template>
         <template v-if="solicitud.tramitador">
           <BListGroupItem>
-            <span class="fw-semibold text-gray-800" v-tippy="'Tramitador'">Tram:</span>
+            <span class="text-gray-800 fw-semibold" v-tippy="'Tramitador'">Tram.</span>
             <span class="data" id="tramitador-popover">
               <IBiExclamationCircleFill v-if="solicitud.tramitador.blocked" />
               {{ solicitud.tramitador.name }}

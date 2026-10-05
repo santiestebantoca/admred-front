@@ -5,10 +5,13 @@ const props = defineProps({
   placement: { type: String, default: 'top-start' }
 })
 
-import { useTiposQuery } from '@/stores/tipos'
+import { useTiposFiltro, useTiposQuery } from '@/stores/tipos'
 import { ref, computed, watch } from 'vue'
 
-const { tipos, isPending, search } = useTiposQuery()
+// Filtro propio del widget (estado local): no comparte búsqueda ni página con
+// la lista del admin.
+const { search, filtro } = useTiposFiltro()
+const { tipos, isPending } = useTiposQuery(filtro)
 const sel = computed(() => tipos.value?.find(d => d.id === value.value))
 const view = ref(0)
 const rootStyle = computed(() => ({

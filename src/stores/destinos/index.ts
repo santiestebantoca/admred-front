@@ -1,1 +1,1 @@
-export { useDestinosQuery } from './useDestinosQuery'
+export { useDestinosSelectQuery } from './useDestinosSelectQuery'

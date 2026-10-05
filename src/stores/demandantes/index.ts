@@ -1,0 +1,1 @@
+export { useDemandantesQuery } from './useDemandantesQuery'

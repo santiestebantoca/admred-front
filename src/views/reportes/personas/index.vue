@@ -8,7 +8,7 @@ import { useTramitadoresQuery } from '@/stores/tramitadores'
 import { inject } from 'vue'
 
 const { tramitadores, isPending } = useTramitadoresQuery()
-const title = inject('page:title')
+const title = inject('reportes:title')
 
 title.value = 'Desempeño personal'
 </script>

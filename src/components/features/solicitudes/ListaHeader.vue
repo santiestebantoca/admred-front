@@ -1,12 +1,11 @@
 <script setup>
-
 import ListaNav from './ListaNav.vue'
 import { inject, ref } from 'vue'
 
 const mobile = inject('app:mobile')
 const tray = inject('solicitudes:tray')
 const state = inject('solicitudes:state')
-const flows = inject('solicitudes:flows')
+const linkCrear = inject('solicitudes:linkCrear')
 const model = ref(false)
 
 const closeDropdown = () => model.value = false
@@ -35,10 +34,10 @@ const closeDropdown = () => model.value = false
         </template>
       </BCol>
       <BCol cols="auto">
-        <BButton v-if="mobile" variant="primary  wh-34" @click="flows.crear.go">
+        <BButton v-if="mobile" variant="primary  wh-34" :to="linkCrear">
           <IBiPencilSquare class="center" />
         </BButton>
-        <BButton v-else variant="primary" @click="flows.crear.go">
+        <BButton v-else variant="primary" :to="linkCrear">
           <ILucidePlus />
           Nueva solicitud
         </BButton>

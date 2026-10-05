@@ -11,7 +11,7 @@ const mobile = inject('app:mobile')
 <template>
   <div class="root">
     <ListaHeader />
-    <div class="grid px-3 py-1">
+    <div class="grid px-3 py-1 py-md-2">
       <ListaGridHeader class="py-2" />
       <ListaGridTable class="overflow-hidden me-n3" />
       <ListaGridFooter :class="{ 'd-none': mobile }" />
@@ -31,7 +31,7 @@ const mobile = inject('app:mobile')
     display: grid;
     grid-template-rows: auto 1fr auto;
     overflow: hidden;
-    border: 1px solid var(--bs-gray-200);
+    border: 1px solid var(--bs-gray-300);
     border-radius: var(--bs-border-radius-xl); // lg
     background-color: white;
   }

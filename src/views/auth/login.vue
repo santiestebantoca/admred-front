@@ -43,7 +43,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       <BAlert v-model="alert" variant="danger" class="mb-3 small">
         Credenciales no válidas
       </BAlert>
-      <form @submit.prevent>
+      <BForm @submit.prevent="submit">
         <div class="position-relative mb-3">
           <IBiPerson class="p-icon" />
           <BFormInput v-model="form.username" name="username" placeholder="Nombre de usuario"
@@ -65,7 +65,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
             {{ loading ? 'Autenticando' : 'Iniciar sesión' }}
           </BButton>
         </div>
-      </form>
+      </BForm>
       <BAlert show variant="light" class="small mt-4 text-dark">
         El registro de usuario siempre es realizado por un administrador
       </BAlert>

@@ -15,7 +15,6 @@ const { fields, tray: _tray, state: _state } = useFields()
 const { solicitudes, total, isPending, isLoading } = useSolicitudesQuery()
 const height = ref(null)
 const container = useTemplateRef('container')
-// const active = computed(() => [solicitudId.value])
 const active = ref(undefined) // Mantener marcada la fila
 const rootStyle = computed(() => ({
   '--td-white-space': filaExpandida.value ? 'unset' : 'nowrap'
@@ -29,7 +28,6 @@ watchEffect(() => solicitudId.value && (active.value = [solicitudId.value]))
 useResizeObserver(container, entries => {
   const containerHeight = entries[0].contentRect.height
   height.value = `${containerHeight - containerHeight % 41.9}px`
-  // height.value = `${containerHeight}px`
 })
 
 const onSelectedItem = (val) => setSolicitudId.value(val[0])

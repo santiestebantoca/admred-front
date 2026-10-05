@@ -3,15 +3,15 @@ const props = defineProps({
   tray: String,
   state: String,
   solicitudId: Number,
+  linkSolicitud: Function,
   setSolicitudId: Function,
-  flows: Object
+  linkCrear: Object
 })
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import DrawerContent from '@/components/features/solicitudes/DrawerContent.vue'
 import HeaderContent from '@/components/features/solicitudes/header/HeaderContent.vue'
 import ListaGrid from '@/components/features/solicitudes/grid/ListaGrid.vue'
-import CrearSolicitud from '@/views/solicitudes/_flows/crear.vue'
 import { useSolicitudesFiltro } from '@/stores/solicitudes'
 import { ref, computed, provide, watchEffect } from 'vue'
 
@@ -23,8 +23,9 @@ watchEffect(() => setFiltroBase(props.tray, props.state))
 provide('solicitudes:tray', computed(() => props.tray))
 provide('solicitudes:state', computed(() => props.state))
 provide('solicitudes:solicitudId', computed(() => props.solicitudId))
+provide('solicitudes:linkSolicitud', computed(() => props.linkSolicitud))
 provide('solicitudes:setSolicitudId', computed(() => props.setSolicitudId))
-provide('solicitudes:flows', computed(() => props.flows))
+provide('solicitudes:linkCrear', computed(() => props.linkCrear))
 provide('solicitudes:filaExpandida', filaExpandida)
 </script>
 
@@ -41,7 +42,6 @@ provide('solicitudes:filaExpandida', filaExpandida)
       <RouterView />
     </template>
   </MainLayout>
-  <CrearSolicitud v-if="flows.crear.active" :back="flows.crear.back" />
 </template>
 
 <style scoped lang="scss">

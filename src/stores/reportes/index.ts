@@ -1,4 +1,7 @@
 export { usePendientesQuery } from './pendientes/usePendientesQuery'
 export { usePersonasQuery } from './personas/usePersonasQuery'
 export { useCodigosQuery } from './buscar/useCodigosQuery'
-export { useSolicitudesQuery } from './solicitudes/useSolicitudesQuery'
+export { useSolicitudesRawQuery } from './solicitudes/useSolicitudesRawQuery'
+export { useSolicitudesExternasQuery } from './solicitudes/useSolicitudesExternasQuery'
+export { useSolicitudesInternasQuery } from './solicitudes/useSolicitudesInternasQuery'
+export { useAreasConsultadasQuery } from './consultadas/useAreasConsultadasQuery'

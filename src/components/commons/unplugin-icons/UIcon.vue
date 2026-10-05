@@ -35,8 +35,12 @@ import IBiRightSquare from '~icons/bi/arrow-right-square'
 import IBiShuffle from '~icons/bi/shuffle'
 import IBiSearch from '~icons/bi/search'
 import IBiPlayCircle from '~icons/bi/play-circle'
+import IBiTag from '~icons/bi/tag'
+import IBiDiagram2 from '~icons/bi/diagram-2'
 
 const iconMap: Record<string, Component> = {
+  'bi-diagram-2': IBiDiagram2,
+  'bi-tag': IBiTag,
   'bi-folder': IBiFolder,
   'bi-folder-check': IBiFolderCheck,
   'bi-graph-up': IBiGraphUp,

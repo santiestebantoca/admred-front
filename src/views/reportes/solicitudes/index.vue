@@ -1,14 +1,13 @@
 <script setup>
 import { AREAS_AR } from '@/constants/solicitud'
 import { formatTime } from '@/composables/useDates'
-import DateRangePicker from '@/components/commons/DateRangePicker.vue'
 import useExportCSV from '@/composables/useExportCSV'
-import { useSolicitudesQuery } from '@/stores/reportes'
+import { useSolicitudesRawQuery } from '@/stores/reportes'
 import { ref, computed, inject } from 'vue'
 
-const title = inject('page:title')
-const { solicitudes, isPending, isLoading, refresh, params } = useSolicitudesQuery()
-const { exportCSV } = useExportCSV()
+const title = inject('reportes:title')
+const { solicitudes, isPending, isLoading, refresh, params } = useSolicitudesRawQuery()
+const { exportCSV } = useExportCSV({ excelReady: true })
 const form = ref({
   desde: undefined,
   hasta: undefined,
@@ -24,7 +23,7 @@ const fields = ref([
   { key: 'h_terminado_en', label: 'H_Terminada', formatter: fechaformatter },
 ])
 
-title.value = 'Solicitudes'
+title.value = 'Solicitudes en bruto'
 
 function fechaformatter({ value }) { return formatTime(value) || '-' }
 const submit = () => params.value = { ...form.value }
@@ -95,7 +94,7 @@ const exportar = () => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 :deep(.b-table th) {
   font-size: .875em;
   font-weight: 600;

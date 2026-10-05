@@ -1,23 +1,22 @@
 <script setup>
 const props = defineProps({
   solicitudId: Number,
-  setSolicitudId: Function,
-  back: Function
+  linkSolicitud: Function,
+  back: Function,
+  rutaBase: String
 })
 
 import AccionesMenu from '@/components/features/solicitudes/[id]/AccionesMenu.vue'
 import TiemposSubCard from '@/components/features/solicitudes/[id]/TiemposSubCard.vue'
 import ParticipantesSubCard from '@/components/features/solicitudes/[id]/ParticipantesSubCard.vue'
-import GenialogiaSubCard from '@/components/features/solicitudes/[id]/EsquemaSubCard.vue'
+import EsquemaSubCard from '@/components/features/solicitudes/[id]/EsquemaSubCard.vue'
 import AdjuntosSubCard from '@/components/features/solicitudes/[id]/AdjuntosSubCard.vue'
 import EvaluacionWidget from '@/components/features/solicitudes/[id]/EvaluacionWidget.vue'
 import { useSolicitudQuery } from '@/stores/solicitudes'
 import { useAuthQuery } from '@/stores/auth'
 import { formatDate } from '@/composables/useDates'
 import { ref, computed, inject, onMounted, watchEffect } from 'vue'
-import UIcon from '@/components/commons/unplugin-icons/UIcon.vue'
 
-const mobile = inject('app:mobile')
 const xlDown = inject('app:xlDown')
 const model = ref(false)
 const shown = ref(false)
@@ -50,7 +49,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
         <template #button-content>
           <IBiList class="center" />
         </template>
-        <AccionesMenu :user="authUser" :solicitud="solicitud" />
+        <AccionesMenu :user="authUser" :solicitud="solicitud" :rutaBase="rutaBase" />
       </BDropdown>
     </template>
     <BOverlay :show="isLoading" no-wrap :variant="white" :opacity=".3" :blur="5" />
@@ -59,7 +58,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
       <div class="grid-header hstack gap-3">
         <h5>Solicitud</h5>
         <EvaluacionWidget v-if="solicitud.evaluacion" :solicitud="solicitud" class="my-auto" />
-        <AccionesMenu horizontal class="ms-auto" :user="authUser" :solicitud="solicitud" />
+        <AccionesMenu horizontal class="ms-auto" :user="authUser" :solicitud="solicitud" :rutaBase="rutaBase" />
       </div>
       <!-- Col A -->
       <div class="grid-A">
@@ -85,7 +84,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
         </div>
         <div>
           <div class="label">Esquema</div>
-          <GenialogiaSubCard :solicitud="solicitud" :setSolicitudId="setSolicitudId" />
+          <EsquemaSubCard :solicitud="solicitud" :linkSolicitud="linkSolicitud" />
         </div>
       </div>
       <!-- Col B -->

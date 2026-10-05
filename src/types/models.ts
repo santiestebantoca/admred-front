@@ -1,3 +1,10 @@
+// Tipos
+export interface TipoUpdate {
+  id: number | string,
+  nombre: string,
+  descripcion: string,
+}
+
 // Usuarios
 export interface UsuarioCreate {
   first_name: string

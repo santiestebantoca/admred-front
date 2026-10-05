@@ -1,7 +1,8 @@
 <script setup>
 const props = defineProps({
   personaId: Number,
-  back: Function
+  back: Function,
+  linkSolicitud: Function
 })
 
 import ComoSupervisor from '@/components/features/reportes/personas/ComoSupervisor.vue'
@@ -37,11 +38,18 @@ const { comoTramitador, comoSupervisor, isPending, periodo, enabled, total } = u
       <BSpinner />
     </div>
     <template v-else-if="total">
-      <ComoSupervisor :data="comoSupervisor" />
-      <ComoTramitador :data="comoTramitador" />
+      <BTabs>
+        <BTab title="Como supervisor">
+          <ComoSupervisor :data="comoSupervisor" :linkSolicitud="linkSolicitud" />
+        </BTab>
+        <BTab title="Como tramitador">
+          <ComoTramitador :data="comoTramitador" :linkSolicitud="linkSolicitud" />
+        </BTab>
+      </BTabs>
     </template>
     <p v-else class="text-center mt-3">
       El reporte solicitado no devolvió datos.
     </p>
   </div>
+  <RouterView />
 </template>

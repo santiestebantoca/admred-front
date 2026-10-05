@@ -21,7 +21,7 @@ export const usePersonasQuery = (_personaId: number) => {
     key: () => queryKeys.reportes.personas.lista(params.value),
     query: () => api.personas.getAll(params.value),
     enabled: () => enabled.value,
-    staleTime: Infinity
+    // staleTime: Infinity
   })
 
   watchEffect(() => {

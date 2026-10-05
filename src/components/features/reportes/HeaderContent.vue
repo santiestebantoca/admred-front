@@ -2,7 +2,7 @@
 import { inject } from 'vue'
 
 const mobile = inject('app:mobile')
-const title = inject('page:title')
+const title = inject('reportes:title')
 </script>
 
 <template>

@@ -1,10 +1,15 @@
 <script setup>
+const props = defineProps({
+  linkSolicitud: Function,
+})
+
 import Nodo from '@/components/features/reportes/pendientes/Nodo.vue'
 import { usePendientesQuery } from '@/stores/reportes'
 import { useAuthQuery } from '@/stores/auth'
-import { computed, inject } from 'vue'
+import { computed, inject, provide } from 'vue'
 
-const title = inject('page:title')
+const title = inject('reportes:title')
+provide('reportes:linkSolicitud', props.linkSolicitud) // para Nodo
 const { pendientes, isPending } = usePendientesQuery()
 const { authUser } = useAuthQuery()
 const editable = computed(() => !!authUser.value?.AR)
@@ -34,6 +39,7 @@ title.value = 'Mis pendientes'
         <Nodo :me="arbol.root" :indice="arbol.indice" :editable="editable" root />
       </div>
     </div>
+    <RouterView />
   </div>
 </template>
 

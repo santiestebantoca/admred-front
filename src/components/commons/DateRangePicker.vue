@@ -44,8 +44,8 @@ watch([start, end], () => error.value = null)
 </script>
 
 <template>
-  <div class="hstack gap-2">
-    <BDropdown no-caret variant="emphasis wh-38">
+  <div class="hstack gap-1">
+    <BDropdown no-caret variant="flat h-38">
       <template #button-content>
         <IBiThreeDotsVertical class="center" />
       </template>

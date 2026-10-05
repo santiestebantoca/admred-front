@@ -8,12 +8,11 @@
 const error = defineModel('error')
 const value = defineModel('value')
 
-import { useDestinosQuery } from '@/stores/destinos'
+import { useDestinosSelectQuery } from '@/stores/destinos'
+import { vOnClickOutside } from '@vueuse/components'
 import { ref, computed, watch, onMounted } from 'vue'
 
-import { vOnClickOutside, vResizeObserver } from '@vueuse/components'
-const { destinos, historial, singleOption, search } = useDestinosQuery()
-const size = ref(0)
+const { destinos, historial, singleOption, search } = useDestinosSelectQuery()
 const focus = ref(null) // input focus
 const dropdown = ref(null)
 const attrs = computed(() => ({
@@ -24,9 +23,6 @@ const attrs = computed(() => ({
 const active = computed(() => focus.value || dropdown.value)
 const para = computed(() => active.value || search.value)
 const warning = computed(() => !active.value && !value.value)
-const dropdownStyle = computed(() => ({
-  '--bs-dropdown-menu-width': `${size.value}px`,
-}))
 
 watch(singleOption, d => d && select(d.id, d.nombre), { immediate: true })
 watch(active, active => {
@@ -37,11 +33,6 @@ watch(active, active => {
   }
 })
 watch(value, () => error.value = null)
-function onResizeObserver(entries) {
-  const [entry] = entries
-  const { width } = entry.contentRect
-  size.value = width
-}
 onMounted(() => search.value = null)
 
 const select = (id, nombre) => {
@@ -69,35 +60,32 @@ const vInput = {
 </script>
 
 <template>
-  <div v-on-click-outside="() => dropdown = false" v-resize-observer="onResizeObserver" class="mb-3">
-    <BContainer>
-      <BRow class="border-bottom" @click.stop>
-        <BCol v-if="para" cols="auto" class="para-label">
-          Para
-        </BCol>
-        <BCol class="px-1 hstack">
-          <BFormInput v-input v-bind="attrs" :class="{ warning }" debounce="600" />
-          <BDropdown v-model="dropdown" offset="8" :auto-close="false" variant="emphasis" placement="bottom-end"
-            :style="dropdownStyle">
-            <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
-              :class="{ history }">
-              <IBiClockHistory v-if="history" />
-              <IBiSearch v-else />
-              {{ nombre }}
-              <BButton v-if="history" @click.stop="historial.del(id)" v-tippy="'Eliminar del historial'"
-                variant="close" />
-            </BDropdownItemButton>
-            <BDropdownText v-if="!destinos?.length">
-              <span class="blockquote-footer">
-                <em>Resultados de la busqueda y entradas recientes</em>
-              </span>
-            </BDropdownText>
-          </BDropdown>
-        </BCol>
-      </BRow>
-    </BContainer>
+  <BContainer v-on-click-outside="() => dropdown = false" class="mb-3">
+    <BRow class="border-bottom position-relative" @click.stop>
+      <BCol v-if="para" cols="auto" class="para-label">
+        Para
+      </BCol>
+      <BCol class="px-1 hstack">
+        <BFormInput v-input v-bind="attrs" :class="{ warning }" debounce="600" />
+        <BDropdown v-model="dropdown" :auto-close="false" variant="emphasis">
+          <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
+            :class="{ history }">
+            <IBiClockHistory v-if="history" />
+            <IBiSearch v-else />
+            {{ nombre }}
+            <BButton v-if="history" @click.stop="historial.del(id)" v-tippy="'Eliminar del historial'"
+              variant="close" />
+          </BDropdownItemButton>
+          <BDropdownText v-if="!destinos?.length">
+            <span class="blockquote-footer">
+              <em>Resultados de la busqueda y entradas recientes</em>
+            </span>
+          </BDropdownText>
+        </BDropdown>
+      </BCol>
+    </BRow>
     <div class="small text-danger" v-text="error"></div>
-  </div>
+  </BContainer>
 </template>
 
 <style scoped lang="scss">
@@ -114,6 +102,8 @@ const vInput = {
 }
 
 :deep(.dropdown) {
+  position: static;
+
   .dropdown-toggle {
     width: 30px;
     height: 30px;
@@ -129,10 +119,11 @@ const vInput = {
   }
 
   .dropdown-menu {
-    width: var(--bs-dropdown-menu-width);
     max-height: 318px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    // overflow-x: hidden;
+    width: 100% !important;
+    transform: none !important;
+    top: 100% !important;
 
     &:empty {
       height: 0;

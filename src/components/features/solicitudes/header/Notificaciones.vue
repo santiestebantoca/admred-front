@@ -3,7 +3,7 @@ import { useNotificacionesQuery } from '@/stores/notificaciones'
 import { ref, computed, inject } from 'vue'
 
 const mobile = inject('app:mobile')
-const setSolicitudId = inject('solicitudes:setSolicitudId')
+const linkSolicitud = inject('solicitudes:linkSolicitud')
 const { notificaciones } = useNotificacionesQuery()
 const porAtender = computed(() => notificaciones.value
   ? notificaciones.value.pendientes.recibidas.por_asignar.length
@@ -35,7 +35,7 @@ const model = ref(false)
           </p>
         </BCol>
         <BCol sm="auto" v-for="solicitud in notificaciones.pendientes.recibidas.por_asignar" class="pb-2">
-          <BButton @click="setSolicitudId(solicitud.id)" variant="link">
+          <BButton :to="linkSolicitud(solicitud.id)" variant="link">
             {{ solicitud.codigo }}
           </BButton>
         </BCol>
@@ -49,7 +49,7 @@ const model = ref(false)
           </p>
         </BCol>
         <BCol sm="auto" v-for="solicitud in notificaciones.pendientes.recibidas.por_responder" class="pb-2">
-          <BButton @click="setSolicitudId(solicitud.id)" variant="link">
+          <BButton :to="linkSolicitud(solicitud.id)" variant="link">
             {{ solicitud.codigo }}
           </BButton>
         </BCol>
@@ -63,7 +63,7 @@ const model = ref(false)
           </p>
         </BCol>
         <BCol sm="auto" v-for="solicitud in notificaciones.pendientes.recibidas.por_aprobar" class="pb-2">
-          <BButton @click="setSolicitudId(solicitud.id)" variant="link">
+          <BButton :to="linkSolicitud(solicitud.id)" variant="link">
             {{ solicitud.codigo }}
           </BButton>
         </BCol>

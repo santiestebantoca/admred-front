@@ -38,6 +38,8 @@ export const queryKeys = {
     root: ['tipos'],
     listas: () => [...queryKeys.tipos.root, 'lista'],
     lista: (filtros) => [...queryKeys.tipos.listas(), { ...filtros }],
+    detalles: () => [...queryKeys.usuarios.root, 'detalle'],
+    detalle: (id) => [...queryKeys.usuarios.detalles(), id],
   },
   tramitadores: {
     root: ['tramitadores'],
@@ -54,6 +56,16 @@ export const queryKeys = {
     listas: () => [...queryKeys.notas.root, 'lista'],
     lista: (filtros) => [...queryKeys.notas.listas(), { ...filtros }],
   },
+  demandantes: {
+    root: ['demandantes'],
+    listas: () => [...queryKeys.demandantes.root, 'lista'],
+    lista: (filtros) => [...queryKeys.demandantes.listas(), { ...filtros }],
+  },
+  consultadas: {
+    root: ['consultadas'],
+    listas: () => [...queryKeys.consultadas.root, 'lista'],
+    lista: (filtros) => [...queryKeys.consultadas.listas(), { ...filtros }],
+  },
   reportes: {
     pendientes: {
       root: ['reportes', 'pendientes'],
@@ -69,10 +81,27 @@ export const queryKeys = {
       listas: () => [...queryKeys.reportes.codigos.root, 'lista'],
       lista: (filtros) => [...queryKeys.reportes.codigos.listas(), { ...filtros }],
     },
+    consultadas: {
+      root: ['reportes', 'consultadas'],
+      listas: () => [...queryKeys.reportes.consultadas.root, 'lista'],
+      lista: (filtros) => [...queryKeys.reportes.consultadas.listas(), { ...filtros }],
+    },
     solicitudes: {
-      root: ['reportes', 'solicitudes'],
-      listas: () => [...queryKeys.reportes.solicitudes.root, 'lista'],
-      lista: (filtros) => [...queryKeys.reportes.solicitudes.listas(), { ...filtros }],
+      raw: {
+        root: ['reportes', 'solicitudes', 'raw'],
+        listas: () => [...queryKeys.reportes.solicitudes.raw.root, 'lista'],
+        lista: (filtros) => [...queryKeys.reportes.solicitudes.raw.listas(), { ...filtros }],
+      },
+      externas: {
+        root: ['reportes', 'solicitudes', 'externas'],
+        listas: () => [...queryKeys.reportes.solicitudes.externas.root, 'lista'],
+        lista: (filtros) => [...queryKeys.reportes.solicitudes.externas.listas(), { ...filtros }],
+      },
+      internas: {
+        root: ['reportes', 'solicitudes', 'internas'],
+        listas: () => [...queryKeys.reportes.solicitudes.internas.root, 'lista'],
+        lista: (filtros) => [...queryKeys.reportes.solicitudes.internas.listas(), { ...filtros }],
+      }
     }
   },
 }

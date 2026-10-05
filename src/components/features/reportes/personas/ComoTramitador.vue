@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
-  data: Object
+  data: Object,
+  linkSolicitud: Function
 })
 
 import { formatTime } from '@/composables/useDates'
@@ -26,8 +27,8 @@ function fechaformatter({ value }) { return formatTime(value) || '-' }
 </script>
 
 <template>
-  <p class="fw-semibold">Como tramitador</p>
-  <BListGroup>
+  <!-- <p class="fw-semibold">Como tramitador</p> -->
+  <BListGroup class="mt-4">
     <BListGroupItem v-for="{ text, value } in resumen">
       {{ text }}
       <span class="float-end ps-5">{{ value }}</span>
@@ -35,7 +36,7 @@ function fechaformatter({ value }) { return formatTime(value) || '-' }
   </BListGroup>
   <BTable :fields="fields" :items="props.data.data.value" responsive table-class="my-3">
     <template #cell(codigo)="{ item }">
-      <BButton :to="{ query: { item: item.id } }" variant="link">
+      <BButton :to="linkSolicitud(item.id)" variant="link">
         <IBiCheck2 v-if="item.terminado_en" class="text-bg-info mark rounded-2" v-tippy="'Terminada'" />
         <IBiClock v-else class="text-bg-warning mark rounded-2" v-tippy="'Pendiente'" />
         {{ item.codigo }}

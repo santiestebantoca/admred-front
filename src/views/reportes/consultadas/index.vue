@@ -1,28 +1,31 @@
 <script setup>
-import useReportStore from '@/stores/report'
-import DateRangePicker from '@/components/commons/DateRangePicker.vue'
+import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, CURSO_SOLICITUD } from '@/constants/solicitud'
 import useExportCSV from '@/composables/useExportCSV'
-import { ref, computed, inject, onBeforeUnmount } from 'vue'
+import { useAreasConsultadasQuery } from '@/stores/reportes'
+import { ref, inject } from 'vue'
 
-const title = inject('page:title')
-const report = useReportStore()
-const { exportCSV } = useExportCSV()
+const title = inject('reportes:title')
+const { areas, isLoading, isPending, params } = useAreasConsultadasQuery()
+const { exportCSV } = useExportCSV({ excelReady: true })
 const form = ref({
-  origin: 'dir_adm',
   desde: null,
-  hasta: null
+  hasta: null,
+  origen: DIRECCION_ADMINISTRACION_ID, // áreas AR u otras de la VPOR
+  curso: 1
 })
-const data = computed(() => report.consultadas.data)
-const loading = computed(() => report.consultadas.loading)
-const noData = computed(() => report.consultadas.noData)
+const fields = ref([
+  { key: 'destino', label: 'Área consultada' },
+  { key: 'presentadas', label: 'Presentadas' },
+  { key: 'terminadas', label: 'Terminadas' },
+  { key: 'efectividad', label: 'Eficacia (%)' },
+  { key: 'demoraH', label: 'Demora promedio HL' },
+  { key: 'demoraDH', label: 'Demora promedio DL' },
+])
 
 title.value = 'Áreas consultadas'
 
-const submit = () => {
-  report.consultadas.reset()
-  report.consultadas.get(form.value)
-}
-const exp = () => {
+const submit = () => params.value = { ...form.value }
+const exportar = () => {
   const fields = [
     'destino as Area_consultada',
     'presentadas as Presentadas',
@@ -31,66 +34,106 @@ const exp = () => {
     'demoraH as Demora_promedio_HL',
     'demoraDH as Demora_promedio_DL'
   ].join(',')
-  exportCSV(fields, data.value)
+  exportCSV(fields, areas.value)
 }
 </script>
 
 <template>
   <div class="pt-3">
-    <p>Resumen de efectividad de las áreas consultadas. Solicitudes originadas en la VPOR.</p>
-    <div class="my-3 py-3 border-top border-bottom">
-      <form @submit.prevent>
-        <div class="bg-light p-1 text-center mb-3">
-          <div class="d-inline-block mx-auto">
-            <label class="form-label">Origen de la solicitud</label>
-            <select class="form-select" v-model="form.origin">
-              <option value="dir_adm">Dirección de Administración de la Red</option>
-              <option value="dep_adm">Departamento de Administración</option>
-              <option value="dep_pro">Departamento de Planificación y Provisión</option>
-              <option value="comb">Las tres anteriores combinadas</option>
-            </select>
-          </div>
+    <p>Resumen de efectividad de las áreas consultadas.</p>
+    <div class="p-3 mb-3 border rounded-3 surface-1">
+      <BForm @submit.prevent="submit" class="d-flex flex-wrap gap-3">
+        <div>
+          <label class="form-label">Origen de la solicitud</label>
+          <BFormSelect v-model="form.origen" :options="AREAS_AR" class="w-auto">
+            <BFormSelectOption :value="null">Los tres origenes anteriores combinados</BFormSelectOption>
+          </BFormSelect>
         </div>
-        <div class="d-flex flex-wrap gap-3">
-          <div>
-            <label class="form-label">Presentada</label>
-            <DateRangePicker v-model:start="form.desde" v-model:end="form.hasta" />
-          </div>
-          <div class="hstack align-items-end pt-2">
-            <bs-btn @click="submit" color="primary" label="Generar reporte" />
-          </div>
+        <div>
+          <label class="form-label">Curso de origen</label>
+          <BFormSelect v-model="form.curso" :options="CURSO_SOLICITUD" class="w-auto">
+            <BFormSelectOption :value="null">Cualquiera</BFormSelectOption>
+          </BFormSelect>
         </div>
-      </form>
+        <div class="w-100" />
+        <div>
+          <label class="form-label">Presentadas en</label>
+          <DateRangePicker v-model:start="form.desde" v-model:end="form.hasta" required />
+        </div>
+        <div>
+          <label class="form-label invisible">Generar reporte</label>
+          <BButton type="submit" variant="primary d-block" :loading="isLoading">
+            Generar reporte
+          </BButton>
+        </div>
+      </BForm>
     </div>
-    <em v-if="loading" class="text-muted">Cargando...</em>
-    <em v-else-if="noData" class="text-muted"></em>
-    <template v-else>
-      <div class="p-1 hstack justify-content-end">
-        <bs-btn-icon flat @click="exp" title="Exportar CSV" icon="filetype-csv" />
+    <div v-if="!isLoading && !isPending" class="mb-4 p-3 border rounded-3">
+      <p class="fw-semibold resultados">
+        Resultados
+        <span class="text-secondary">
+          ({{ areas?.length }})
+        </span>
+        <BButton variant="link" @click="exportar" v-tippy="'Guardar todo como (*.csv)'">
+          <IBiSave /> *CSV
+        </BButton>
+      </p>
+      <template v-if="areas?.length">
+        <BTable :fields="fields" :items="areas" responsive table-class="my-3 tr-last-bold" />
+      </template>
+      <div v-else class="py-3 text-center">
+        El reporte no devolvió resultados.
       </div>
-      <bs-table>
-        <template #thead>
-          <tr class="">
-            <th>Área consultada</th>
-            <th>Presentadas</th>
-            <th>Terminadas</th>
-            <th>Eficacia (%)</th>
-            <th>Demora promedio HL</th>
-            <th>Demora promedio DL</th>
-          </tr>
-        </template>
-
-        <template #tbody>
-          <tr v-for="_, index in data" :key="index">
-            <td v-text="_.destino" />
-            <td v-text="_.presentadas" />
-            <td v-text="_.terminadas" />
-            <td v-text="_.efectividad" />
-            <td v-text="_.demoraH" />
-            <td v-text="_.demoraDH" />
-          </tr>
-        </template>
-      </bs-table>
-    </template>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.maxw-500 {
+  max-width: 500px;
+}
+
+.w-130 {
+  width: 130px;
+}
+
+.mw-300 {
+  min-width: 300px;
+}
+
+:deep(.b-table th) {
+  font-size: .875em;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+:deep(.tr-last-bold) {
+  tr:last-child {
+    font-weight: 600;
+  }
+}
+
+.resultados .btn-link {
+  margin: -7px 0;
+  float: right;
+  position: relative;
+  top: -1px;
+  --bs-btn-hover-bg: var(--bs-primary-50);
+}
+
+:deep(.td-codigo) {
+  padding: 0;
+
+  .btn {
+    white-space: nowrap;
+    position: relative;
+    top: 1px;
+  }
+}
+
+.with-info {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+</style>

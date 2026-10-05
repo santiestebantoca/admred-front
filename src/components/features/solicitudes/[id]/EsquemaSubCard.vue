@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
   solicitud: Object,
-  setSolicitudId: Function
+  linkSolicitud: Function
 })
 </script>
 
@@ -9,23 +9,25 @@ const props = defineProps({
   <BListGroup :class="{ inicial: !solicitud.padre }">
     <BListGroupItem v-if="solicitud.padre" class="padre">
       <IBiCircleFill />
-      <div type="button" @click="setSolicitudId(solicitud.padre.id)"
+      <BButton :to="linkSolicitud(solicitud.padre.id)" variant="link"
         v-tippy="`De: ${solicitud.padre.origen} / Para: ${solicitud.origen.nombre}`">
         {{ solicitud.padre.codigo }}
-      </div>
+      </BButton>
     </BListGroupItem>
     <BListGroupItem class="actual">
       <IBiArrowReturnRight />
       <IBiCircleFill />
-      <span class="text-secondary">{{ solicitud.codigo }}</span>
+      <BButton variant="link">
+        {{ solicitud.codigo }}
+      </BButton>
       <span class="fw-semibold">(Actual)</span>
     </BListGroupItem>
     <BListGroupItem v-for="hijo in solicitud.hijos" class="hijo">
       <IBiArrowReturnRight />
       <IBiCircleFill />
-      <div type="button" @click="setSolicitudId(hijo.id)" v-tippy="`Para: ${hijo.destino}`">
+      <BButton :to="linkSolicitud(hijo.id)" variant="link" v-tippy="`Para: ${hijo.destino}`">
         {{ hijo.codigo }}
-      </div>
+      </BButton>
       <span v-if="hijo.estado !== 'Terminado'" class="text-dark text-opacity-25">Pendiente</span>
       <IBiCheck2 v-else class="text-success top-50 translate-middle-y" />
     </BListGroupItem>
@@ -51,7 +53,8 @@ const props = defineProps({
     gap: 12px;
     cursor: default;
 
-    [type="button"] {
+    .btn-link {
+      padding: 0;
       color: var(--bs-gray-700);
 
       &:hover {
@@ -86,7 +89,7 @@ const props = defineProps({
           top: 9px;
           width: 10px;
           height: 10px;
-          color: var(--bs-primary-300);
+          color: var(--bs-primary);
         }
       }
     }

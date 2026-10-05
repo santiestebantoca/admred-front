@@ -7,7 +7,7 @@ export function useAuthQuery() {
   const { data, state, isPending, isLoading, refetch } = useQuery({
     key: () => queryKeys.auth.user(),
     query: api.getCurrentUser,
-    staleTime: Infinity,
+    // staleTime: Infinity,
   })
 
   return {

@@ -1,6 +1,7 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
+const linkSolicitud = inject('reportes:linkSolicitud')
 const props = defineProps({
   me: { type: Object, required: true },
   indice: { type: Map, default: () => new Map() },
@@ -21,7 +22,7 @@ const hijas = computed(() =>
 
 <template>
   <div class="nodo" :class="{ 'nodo--root': esRoot }">
-    <BButton variant="link" class="nodo__codigo" :class="{ terminada }" :to="{ query: { item: me.id } }"
+    <BButton variant="link" class="nodo__codigo" :class="{ terminada }" :to="linkSolicitud(me.id)"
       :disabled="!habilitada" v-text="me.codigo" />
     <div v-if="hijas.length" class="nodo__hijas">
       <Nodo v-for="hija in hijas" :key="hija.id" :me="hija" :indice="indice" :editable="editable" />

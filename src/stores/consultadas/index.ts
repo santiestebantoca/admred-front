@@ -1,0 +1,1 @@
+export { useConsultadasQuery } from './useConsultadasQuery'

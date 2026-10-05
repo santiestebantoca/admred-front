@@ -1,1 +1,7 @@
+export { useTipoCreate } from './useTipoCreate'
+export { useTipoDelete } from './useTipoDelete'
+export { useTipoQuery } from './useTipoQuery'
 export { useTiposQuery } from './useTiposQuery'
+export { useTipoUpdate } from './useTipoUpdate'
+export { useTiposFiltro } from './useTiposFiltro'
+export { useTiposLista } from './useTiposLista'

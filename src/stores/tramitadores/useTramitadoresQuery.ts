@@ -9,7 +9,7 @@ export function useTramitadoresQuery() {
   const { data, isPending } = useQuery({
     key: () => queryKeys.tramitadores.lista({ search: search.value }),
     query: () => api.getAll({ search: search.value }),
-    staleTime: Infinity
+    // staleTime: Infinity
   })
 
   return {

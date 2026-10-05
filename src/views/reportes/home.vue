@@ -7,6 +7,7 @@ import { inject } from 'vue'
 
 const mobile = inject('app:mobile')
 </script>
+
 <template>
   <div class="grid">
     <BListGroup v-if="mobile" flush>

@@ -12,31 +12,7 @@ const tray = inject('solicitudes:tray')
 const state = inject('solicitudes:state')
 const filaExpandida = inject('solicitudes:filaExpandida')
 const { solicitudes, refetch } = useSolicitudesQuery()
-const { exportCSV, exportCSVTuplas } = useExportCSV()
-
-/**
- * Exporta a CSV usando `exportCSV` (lista de objetos Record<string, any>).
- *
- * Este es el formato de exportación ANTERIOR, cuando las solicitudes llegaban
- * como lista de objetos con propiedades nombradas (codigo, objetivo, origen/
- * destino, solicitado_en, estado/terminado_en). Se conserva documentada por si
- * en el futuro se vuelve a trabajar con ese formato; actualmente los datos son
- * tuplas fijas y se usa `exportar` (con `exportCSVTuplas`).
- */
-const exportarObjetos = () => {
-  const fields = [
-    'codigo as Codigo',
-    'objetivo as Objetivo',
-    tray.value === 'recibidas'
-      ? 'origen as Demandante'
-      : 'destino as Area_consultada',
-    'solicitado_en as Presentada',
-    state.value === 'pendientes'
-      ? 'estado as Estado'
-      : 'terminado_en as Terminada',
-  ].join(',')
-  exportCSV(fields, solicitudes.value)
-}
+const { exportCSVTuplas } = useExportCSV({ excelReady: true })
 
 const exportar = () => {
   const dePara = tray.value === 'recibidas' ? 'De' : 'A'

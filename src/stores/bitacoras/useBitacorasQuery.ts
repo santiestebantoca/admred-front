@@ -10,7 +10,7 @@ export function useBitacorasQuery(_solicitudId?: number | string) {
     key: () => queryKeys.bitacoras.lista({ solicitudId: solicitudId.value }),
     query: () => api.getAll({ solicitudId: solicitudId.value }),
     enabled: () => !!solicitudId.value,
-    staleTime: Infinity
+    // staleTime: Infinity
   })
 
   return {

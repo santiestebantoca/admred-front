@@ -10,7 +10,18 @@ export const reportesApi = {
   codigos: {
     getAll: (params = {}) => api.get('/reportes/buscar_codigo', { params }).then(res => res.data),
   },
+  consultadas: {
+    getAll: (params = {}) => api.get('/reportes/areas_consultadas', { params }).then(res => res.data),
+  },
   solicitudes: {
-    getAll: (params = {}) => api.get('/reportes/solicitudes', { params }).then(res => res.data),
+    raw: {
+      getAll: (params = {}) => api.get('/reportes/solicitudes_raw', { params }).then(res => res.data),
+    },
+    externas: {
+      getAll: (params = {}) => api.get('/reportes/solicitudes_externas', { params }).then(res => res.data),
+    },
+    internas: {
+      getAll: (params = {}) => api.get('/reportes/solicitudes_internas', { params }).then(res => res.data),
+    }
   },
 }

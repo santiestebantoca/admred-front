@@ -6,7 +6,7 @@ export const usePendientesQuery = () => {
   const { data, isPending, refresh } = useQuery({
     key: () => queryKeys.reportes.pendientes.listas(),
     query: () => api.pendientes.getAll(),
-    staleTime: Infinity
+    // staleTime: Infinity
   })
 
   return {

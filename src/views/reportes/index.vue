@@ -5,7 +5,7 @@ import HeaderContent from '@/components/features/reportes/HeaderContent.vue'
 import { ref, provide } from 'vue'
 
 const title = ref('Reportes')
-provide('page:title', title)
+provide('reportes:title', title)
 </script>
 
 <template>

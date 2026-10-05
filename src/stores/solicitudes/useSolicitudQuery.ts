@@ -12,7 +12,7 @@ export const useSolicitudQuery = defineQuery((id?: number | string) => {
     key: () => queryKeys.solicitudes.detalle(solicitudId.value),
     query: () => api.getById(solicitudId.value),
     enabled: () => !!solicitudId.value,
-    staleTime: Infinity
+    // staleTime: Infinity
   })
 
   const data = computed(() => {

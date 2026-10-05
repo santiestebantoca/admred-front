@@ -3,30 +3,60 @@ const props = defineProps({
   horizontal: Boolean,
   user: Object,
   solicitud: Object,
+  rutaBase: String
 })
 
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
 const opciones = computed(() => {
   return [
     ...props.solicitud.permisos.asignar
-      ? [{ title: 'Asignar', to: { name: 'solicitudes-solicitud-asignar' }, icon: 'bi-person' }]
+      ? [{
+        title: 'Asignar',
+        to: { name: props.rutaBase + '-asignar' },
+        icon: 'bi-person'
+      }]
       : [],
     ...props.solicitud.permisos.reenviar
-      ? [{ title: 'Reenviar', to: { name: 'solicitudes-solicitud-reenviar' }, icon: 'bi-forward' }]
+      ? [{
+        title: 'Reenviar',
+        to: { name: props.rutaBase + '-reenviar' },
+        icon: 'bi-forward'
+      }]
       : [],
     ...props.solicitud.permisos.responder
-      ? [{ title: 'Responder', to: { name: 'solicitudes-solicitud-responder' }, icon: 'bi-reply' }]
+      ? [{
+        title: 'Responder',
+        to: { name: props.rutaBase + '-responder' },
+        icon: 'bi-reply'
+      }]
       : [],
     ...props.solicitud.permisos.aprobar
-      ? [{ title: 'Aprobar', to: { name: 'solicitudes-solicitud-aprobar' }, icon: 'bi-patch-check' }]
+      ? [{
+        title: 'Aprobar',
+        to: { name: props.rutaBase + '-aprobar' },
+        icon: 'bi-patch-check'
+      }]
       : [],
     ...props.solicitud.permisos.evaluar
-      ? [{ title: 'Evaluar', to: { name: 'solicitudes-solicitud-evaluar' }, icon: 'bi-star' }]
+      ? [{
+        title: 'Evaluar',
+        to: { name: props.rutaBase + '-evaluar' },
+        icon: 'bi-star'
+      }]
       : [],
     { divider: true },
-    { title: 'Registro', to: { name: 'solicitudes-solicitud-registro' }, icon: 'bi-clock-history' },
-    { title: 'Notas', to: { name: 'solicitudes-solicitud-notas' }, icon: 'bi-sticky', badge: props.solicitud.cant_nota },
+    {
+      title: 'Registro',
+      to: { name: props.rutaBase + '-registro' },
+      icon: 'bi-clock-history'
+    },
+    {
+      title: 'Notas',
+      to: { name: props.rutaBase + '-notas' },
+      icon: 'bi-sticky',
+      badge: props.solicitud.cant_nota
+    },
   ]
 })
 </script>

@@ -1,11 +1,15 @@
 <script setup>
+const props = defineProps({
+  linkSolicitud: Function
+})
+
 import { formatTime } from '@/composables/useDates'
 import { useCodigosQuery } from '@/stores/reportes'
 import { ref, inject } from 'vue'
 
 const value = ref(undefined)
 const { solicitudes, isPending, isLoading, codigo } = useCodigosQuery()
-const title = inject('page:title')
+const title = inject('reportes:title')
 const fields = ref([
   { key: 'codigo', label: 'Código', tdClass: 'td-codigo' },
   { key: 'solicitado_en', label: 'Presentada', formatter: fechaformatter },
@@ -44,7 +48,7 @@ function fechaformatter({ value }) { return formatTime(value) || '-' }
       <template v-if="solicitudes.length">
         <BTable :fields="fields" :items="solicitudes" responsive table-class="my-3">
           <template #cell(codigo)="{ item }">
-            <BButton :to="{ query: { item: item.id } }" variant="link">
+            <BButton :to="linkSolicitud(item.id)" variant="link">
               <IBiCheck2 v-if="item.terminado_en" class="text-bg-info mark rounded-2" v-tippy="'Terminada'" />
               <IBiClock v-else class="text-bg-warning mark rounded-2" v-tippy="'Pendiente'" />
               {{ item.codigo }}
@@ -57,6 +61,7 @@ function fechaformatter({ value }) { return formatTime(value) || '-' }
       </div>
     </div>
   </div>
+  <RouterView />
 </template>
 
 <style scoped lang="scss">

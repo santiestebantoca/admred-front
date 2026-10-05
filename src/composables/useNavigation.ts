@@ -80,28 +80,28 @@ export function useNavigationReportes() {
         icon: 'bi-people'
       },
       ...authUser.value?.AR ? [
-        // {
-        //   label: 'Solicitudes externas',
-        //   to: { name: 'reportes-externas' },
-        //   icon: 'bi-box-arrow-in-right'
-        // },
-        // {
-        //   label: 'Solicitudes internas',
-        //   to: { name: 'reportes-internas' },
-        //   icon: 'bi-arrow-right-square'
-        // },
-        // {
-        //   label: 'Áreas consultadas',
-        //   to: { name: 'reportes-consultadas' },
-        //   icon: 'bi-shuffle'
-        // },
+        {
+          label: 'Solicitudes a la VPOR',
+          to: { name: 'reportes-externas' },
+          icon: 'bi-box-arrow-in-right'
+        },
+        {
+          label: 'Solicitudes de la VPOR',
+          to: { name: 'reportes-internas' },
+          icon: 'bi-arrow-right-square'
+        },
+        {
+          label: 'Áreas consultadas',
+          to: { name: 'reportes-consultadas' },
+          icon: 'bi-shuffle'
+        },
         {
           label: 'Buscar código',
           to: { name: 'reportes-buscar' },
           icon: 'bi-search'
         },
         {
-          label: 'Solicitudes',
+          label: 'Solicitudes en bruto',
           to: { name: 'reportes-solicitudes' },
           icon: 'bi-play-circle'
         }
@@ -112,38 +112,50 @@ export function useNavigationReportes() {
   return { options }
 }
 
-export function useNavigationConfigurar() {
-  // const { authUser } = useAuthQuery()
-  // const options = computed(() => [
-  //   {
-  //     to: { name: 'configurar-grupos' },
-  //     icon: 'bi-subtract',
-  //     label: 'Grupos',
-  //     name: 'grupos',
-  //     id: 'nav-options-configurar-grupos'
-  //   },
-  //   {
-  //     to: { name: 'configurar-suscriptores' },
-  //     icon: 'bi-people-fill',
-  //     label: 'Suscriptores',
-  //     name: 'suscriptores',
-  //     id: 'nav-options-configurar-suscriptores'
-  //   },
-  //   {
-  //     to: { name: 'configurar-plantillas' },
-  //     icon: 'bi-card-text',
-  //     label: 'Plantillas',
-  //     name: 'plantillas',
-  //     id: 'nav-options-configurar-plantillas'
-  //   },
-  //   ...authUser.value?.admin ? [{
-  //     to: { name: 'configurar-usuarios' },
-  //     icon: 'bi-person-workspace',
-  //     label: 'Usuarios',
-  //     name: 'users',
-  //     id: 'nav-options-configurar-usuarios'
-  //   }] : [],
-  // ])
+export function useNavigationAdmin() {
+  const { authUser } = useAuthQuery()
+  const AR = authUser.value?.AR
+  const options = computed(() => [
+    {
+      to: { name: 'admin-usuarios' },
+      icon: 'bi-people',
+      label: 'Usuarios',
+    },
+    ...AR ? [
+      {
+        label: 'Áreas',
+        to: { name: 'admin-areas' },
+        icon: 'bi-diagram-2'
+      },
+      {
+        label: 'Tipos de solicitud',
+        to: { name: 'admin-tipos' },
+        icon: 'bi-tag'
+      }] : []
+  ])
 
-  // return { options }
+  return { options }
 }
+
+/*
+export default function useNavOptions() {
+  const { authUser } = useAuthQuery()
+  const AR = authUser.value?.AR
+  const options = computed(() => {
+    return [
+      ...AR ? [
+        {
+          label: 'Áreas',
+          to: { name: 'admin-areas' },
+          icon: 'puzzle'
+        },
+        {
+          label: 'Tipos de solicitud',
+          to: { name: 'admin-tipos' },
+          icon: 'tag'
+        }] : []
+    ]
+  })
+  return { options }
+}
+*/
