@@ -25,7 +25,7 @@ const { comoTramitador, comoSupervisor, isPending, periodo, enabled, total } = u
       <BSpinner />
     </div>
     <template v-else>
-      <IBiPersonCircle class="fs-3 text-success" />
+      <ILucideUserSearch class="fs-3 text-success" />
       <h5 class="fw-semibold text-truncate lh-lg">
         {{ persona?.name }}
       </h5>

@@ -16,50 +16,44 @@
  */
 import type { Component } from 'vue'
 import { computed } from 'vue'
-import IBiFolder from '~icons/bi/folder'
-import IBiFolderCheck from '~icons/bi/folderCheck'
-import IBiGraphUp from '~icons/bi/graph-up'
-import IBiGear from '~icons/bi/gear'
-import IBiBoxArrowRight from '~icons/bi/box-arrow-right'
-import IBiPeople from '~icons/bi/people'
-import IBiPerson from '~icons/bi/person'
-import IBiForward from '~icons/bi/forward'
-import IBiReply from '~icons/bi/reply'
-import IBiPatchCheck from '~icons/bi/patch-check'
-import IBiStar from '~icons/bi/star'
-import IBiClockHistory from '~icons/bi/clock-history'
-import IBiSticky from '~icons/bi/sticky'
-import IBiExclamationDiamond from '~icons/bi/exclamation-diamond'
-import IBiBoxArrowInRight from '~icons/bi/box-arrow-in-right'
-import IBiRightSquare from '~icons/bi/arrow-right-square'
-import IBiShuffle from '~icons/bi/shuffle'
-import IBiSearch from '~icons/bi/search'
-import IBiPlayCircle from '~icons/bi/play-circle'
-import IBiTag from '~icons/bi/tag'
-import IBiDiagram2 from '~icons/bi/diagram-2'
+import ILucideLandPlot from '~icons/lucide/land-plot'
+import ILucideTag from '~icons/lucide/tag'
+import ILucideUsers from '~icons/lucide/users'
+import ILucideFolder from '~icons/lucide/folder'
+import ILucideChartLine from '~icons/lucide/chart-line'
+import ILucideSettings from '~icons/lucide/settings'
+import ILucideOctagonAlert from '~icons/lucide/octagon-alert'
+import ILucideSquareArrowRightEnter from '~icons/lucide/square-arrow-right-enter'
+import ILucideSquareArrowRight from '~icons/lucide/square-arrow-right'
+import ILucideShuffle from '~icons/lucide/shuffle'
+import ILucideSearch from '~icons/lucide/search'
+import ILucideDatabase from '~icons/lucide/database'
+import ILucideCheckCheck from '~icons/lucide/check-check'
+import ILucideStar from '~icons/lucide/star'
+import ILucideClockFading from '~icons/lucide/clock-fading'
+import ILucideStickyNote from '~icons/lucide/sticky-note'
+import ILucideForward from '~icons/lucide/forward'
+import ILucideReply from '~icons/lucide/reply'
 
 const iconMap: Record<string, Component> = {
-  'bi-diagram-2': IBiDiagram2,
-  'bi-tag': IBiTag,
-  'bi-folder': IBiFolder,
-  'bi-folder-check': IBiFolderCheck,
-  'bi-graph-up': IBiGraphUp,
-  'bi-gear': IBiGear,
-  'bi-box-arrow-right': IBiBoxArrowRight,
-  'bi-people': IBiPeople,
-  'bi-person': IBiPerson,
-  'bi-forward': IBiForward,
-  'bi-reply': IBiReply,
-  'bi-patch-check': IBiPatchCheck,
-  'bi-star': IBiStar,
-  'bi-clock-history': IBiClockHistory,
-  'bi-sticky': IBiSticky,
-  'bi-exclamation-diamond': IBiExclamationDiamond,
-  'bi-box-arrow-in-right': IBiBoxArrowInRight,
-  'bi-arrow-right-square': IBiRightSquare,
-  'bi-shuffle': IBiShuffle,
-  'bi-search': IBiSearch,
-  'bi-play-circle': IBiPlayCircle,
+  'lucide-users': ILucideUsers,
+  'lucide-tag': ILucideTag,
+  'lucide-land-plot': ILucideLandPlot,
+  'lucide-folder': ILucideFolder,
+  'lucide-chart-line': ILucideChartLine,
+  'lucide-settings': ILucideSettings,
+  'lucide-octagon-alert': ILucideOctagonAlert,
+  'lucide-square-arrow-right-enter': ILucideSquareArrowRightEnter,
+  'lucide-square-arrow-right': ILucideSquareArrowRight,
+  'lucide-shuffle': ILucideShuffle,
+  'lucide-search': ILucideSearch,
+  'lucide-database': ILucideDatabase,
+  'lucide-check-check': ILucideCheckCheck,
+  'lucide-star': ILucideStar,
+  'lucide-clock-fading': ILucideClockFading,
+  'lucide-sticky-note': ILucideStickyNote,
+  'lucide-forward': ILucideForward,
+  'lucide-reply': ILucideReply,
 }
 
 const props = defineProps<{ name?: string }>()

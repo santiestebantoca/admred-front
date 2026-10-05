@@ -31,7 +31,7 @@ const items = computed(() => [
         <div class="bg-light hstack justify-content-center">
           <BButton variant="flat" @click="impersonate">
             Usuario anterior
-            <IBiArrowReturnLeft />
+            <ILucideCornerDownLeft />
           </BButton>
         </div>
       </Teleport>
@@ -39,7 +39,7 @@ const items = computed(() => [
 <template v-else> -->
     <div class="mt-4">
       <BButton @click="impersonate(0)" variant="success">
-        <IBiArrowReturnLeft />
+        <ILucideCornerDownLeft />
         <span class="ms-2">Usuario anterior</span>
       </BButton>
     </div>

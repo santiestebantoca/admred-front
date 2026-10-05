@@ -37,8 +37,8 @@ function fechaformatter({ value }) { return formatTime(value) || '-' }
   <BTable :fields="fields" :items="props.data.data.value" responsive table-class="my-3">
     <template #cell(codigo)="{ item }">
       <BButton :to="linkSolicitud(item.id)" variant="link">
-        <IBiCheck2 v-if="item.terminado_en" class="text-bg-info mark rounded-2" v-tippy="'Terminada'" />
-        <IBiClock v-else class="text-bg-warning mark rounded-2" v-tippy="'Pendiente'" />
+        <ILucideCheck v-if="item.terminado_en" class="text-bg-info mark rounded-2" v-tippy="'Terminada'" />
+        <ILucideClock v-else class="text-bg-warning mark rounded-2" v-tippy="'Pendiente'" />
         {{ item.codigo }}
       </BButton>
     </template>

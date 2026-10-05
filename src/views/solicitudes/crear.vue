@@ -61,7 +61,7 @@ const submit = async () => {
         Crear
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
-        <IBiPaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
+        <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
       <TipoWidget v-model:error="errors.tipo" v-model:value="form.tipo" />
       <CumplirWidget v-model:error="errors.cumplir_en" v-model:value="form.cumplir_en" />

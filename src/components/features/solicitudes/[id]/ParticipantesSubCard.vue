@@ -8,8 +8,7 @@ const props = defineProps({
   <BListGroup>
     <BListGroupItem>
       <span class="text-gray-800 fw-semibold" v-tippy="'Remitente'">Rem.</span>
-      <span class="data" id="remitente-popover">
-        <IBiExclamationCircleFill v-if="solicitud.remitente.blocked" />
+      <span id="remitente-popover" class="data" :class="{ blocked: solicitud.remitente.blocked }">
         {{ solicitud.remitente.name }}
       </span>
     </BListGroupItem>
@@ -17,9 +16,8 @@ const props = defineProps({
       <template v-if="solicitud.supervisor.id === solicitud.tramitador.id">
         <BListGroupItem>
           <span class="text-gray-800 fw-semibold" v-tippy="'Supervisor/Tramitador'">Tram.</span>
-          <span class="data" id="supervisor-popover">
-            <IBiExclamationCircleFill v-if="solicitud.supervisor.blocked" />
-            {{ solicitud.supervisor.name }}
+          <span id="tramitador-popover" class="data" :class="{ blocked: solicitud.tramitador.blocked }">
+            {{ solicitud.tramitador.name }}
           </span>
         </BListGroupItem>
       </template>
@@ -27,8 +25,7 @@ const props = defineProps({
         <template v-if="solicitud.supervisor">
           <BListGroupItem>
             <span class="text-gray-800 fw-semibold" v-tippy="'Supervisor'">Sup.</span>
-            <span class="data" id="supervisor-popover">
-              <IBiExclamationCircleFill v-if="solicitud.supervisor.blocked" />
+            <span id="supervisor-popover" class="data" :class="{ blocked: solicitud.supervisor.blocked }">
               {{ solicitud.supervisor.name }}
             </span>
           </BListGroupItem>
@@ -36,8 +33,7 @@ const props = defineProps({
         <template v-if="solicitud.tramitador">
           <BListGroupItem>
             <span class="text-gray-800 fw-semibold" v-tippy="'Tramitador'">Tram.</span>
-            <span class="data" id="tramitador-popover">
-              <IBiExclamationCircleFill v-if="solicitud.tramitador.blocked" />
+            <span id="tramitador-popover" class="data" :class="{ blocked: solicitud.tramitador.blocked }">
               {{ solicitud.tramitador.name }}
             </span>
           </BListGroupItem>
@@ -129,7 +125,8 @@ const props = defineProps({
   display: flex;
   gap: 12px;
   cursor: default;
-  height: 30px;
+  padding-bottom: 0;
+  height: 32px;
 
   .text-gray-800 {
     color: var(--bs-gray-800);
@@ -141,6 +138,10 @@ const props = defineProps({
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.blocked {
+      color: var(--bs-danger);
+    }
   }
 }
 </style>

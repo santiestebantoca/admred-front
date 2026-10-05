@@ -15,7 +15,7 @@ const props = defineProps({
       </BButton>
     </BListGroupItem>
     <BListGroupItem class="actual">
-      <IBiArrowReturnRight />
+      <ILucideCornerDownRight />
       <IBiCircleFill />
       <BButton variant="link">
         {{ solicitud.codigo }}
@@ -23,13 +23,13 @@ const props = defineProps({
       <span class="fw-semibold">(Actual)</span>
     </BListGroupItem>
     <BListGroupItem v-for="hijo in solicitud.hijos" class="hijo">
-      <IBiArrowReturnRight />
+      <ILucideCornerDownRight />
       <IBiCircleFill />
       <BButton :to="linkSolicitud(hijo.id)" variant="link" v-tippy="`Para: ${hijo.destino}`">
         {{ hijo.codigo }}
       </BButton>
       <span v-if="hijo.estado !== 'Terminado'" class="text-dark text-opacity-25">Pendiente</span>
-      <IBiCheck2 v-else class="text-success top-50 translate-middle-y" />
+      <ILucideCheck v-else class="text-success top-50 translate-middle-y" />
     </BListGroupItem>
   </BListGroup>
 </template>

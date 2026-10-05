@@ -13,8 +13,6 @@ title.value = 'Tipos de solicitud'
 </script>
 
 <template>
-  <!-- <template v-show="showLista"> -->
-  <ListaGrid :linkCrear="linkCrear" />
-  <!-- </template> -->
+  <ListaGrid v-show="showLista" :linkCrear="linkCrear" />
   <router-view />
 </template>

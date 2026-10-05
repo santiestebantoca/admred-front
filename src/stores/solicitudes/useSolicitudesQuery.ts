@@ -20,7 +20,7 @@ const ESTADOS_PENDIENTES = ['Solicitado', 'En proceso', 'En evaluación'] as con
 export const useSolicitudesQuery = defineQuery(() => {
   const queryCache = useQueryCache()
 
-  const { filtro: params } = toRefs(useSolicitudesFiltro())
+  const { filtro: params, isFiltered } = toRefs(useSolicitudesFiltro())
 
   const currentKey = computed(() => queryKeys.solicitudes.lista(params.value))
 
@@ -29,6 +29,7 @@ export const useSolicitudesQuery = defineQuery(() => {
     query: () => api.getAll(params.value),
     enabled: () => Boolean(params.value),
     staleTime: STALE_TIME,
+    placeholderData: (previousData) => previousData,
   })
 
   const now = ref(Date.now())
@@ -56,6 +57,7 @@ export const useSolicitudesQuery = defineQuery(() => {
     isPending,
     isLoading,
     isStale,
+    isFiltered,
     refresh,
     refetch,
     conteoEstados

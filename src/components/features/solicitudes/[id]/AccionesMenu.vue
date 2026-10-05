@@ -6,7 +6,7 @@ const props = defineProps({
   rutaBase: String
 })
 
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 
 const opciones = computed(() => {
   return [
@@ -14,47 +14,47 @@ const opciones = computed(() => {
       ? [{
         title: 'Asignar',
         to: { name: props.rutaBase + '-asignar' },
-        icon: 'bi-person'
+        icon: 'lucide-users'
       }]
       : [],
     ...props.solicitud.permisos.reenviar
       ? [{
         title: 'Reenviar',
         to: { name: props.rutaBase + '-reenviar' },
-        icon: 'bi-forward'
+        icon: 'lucide-forward'
       }]
       : [],
     ...props.solicitud.permisos.responder
       ? [{
         title: 'Responder',
         to: { name: props.rutaBase + '-responder' },
-        icon: 'bi-reply'
+        icon: 'lucide-reply'
       }]
       : [],
     ...props.solicitud.permisos.aprobar
       ? [{
         title: 'Aprobar',
         to: { name: props.rutaBase + '-aprobar' },
-        icon: 'bi-patch-check'
+        icon: 'lucide-check-check'
       }]
       : [],
     ...props.solicitud.permisos.evaluar
       ? [{
         title: 'Evaluar',
         to: { name: props.rutaBase + '-evaluar' },
-        icon: 'bi-star'
+        icon: 'lucide-star'
       }]
       : [],
     { divider: true },
     {
       title: 'Registro',
       to: { name: props.rutaBase + '-registro' },
-      icon: 'bi-clock-history'
+      icon: 'lucide-clock-fading'
     },
     {
       title: 'Notas',
       to: { name: props.rutaBase + '-notas' },
-      icon: 'bi-sticky',
+      icon: 'lucide-sticky-note',
       badge: props.solicitud.cant_nota
     },
   ]

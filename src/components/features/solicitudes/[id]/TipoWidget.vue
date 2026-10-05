@@ -31,7 +31,7 @@ const input = (id) => {
   <BDropdown auto-close="outside" no-caret v-tippy="'Tipo de solicitud'" variant="footer" :placement="placement"
     :style="rootStyle" @hidden="view = 0">
     <template #button-content>
-      <IBiTag class="center" :class="{ 'text-primary': sel }" />
+      <ILucideTag class="center" :class="{ 'text-primary': sel }" />
     </template>
     <template v-if="!view">
       <BDropdownText>

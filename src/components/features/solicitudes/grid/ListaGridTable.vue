@@ -12,7 +12,7 @@ const solicitudId = inject('solicitudes:solicitudId')
 const setSolicitudId = inject('solicitudes:setSolicitudId')
 const filaExpandida = inject('solicitudes:filaExpandida')
 const { fields, tray: _tray, state: _state } = useFields()
-const { solicitudes, total, isPending, isLoading } = useSolicitudesQuery()
+const { solicitudes, total, isPending, isLoading, isFiltered } = useSolicitudesQuery()
 const height = ref(null)
 const container = useTemplateRef('container')
 const active = ref(undefined) // Mantener marcada la fila
@@ -34,11 +34,11 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
 </script>
 
 <template>
-  <div class="text-center p-5 mt-5" v-if="isPending">
+  <div v-if="isPending" class="text-center py-5">
     <BSpinner />
   </div>
   <template v-else>
-    <div v-if="!total" class="text-center p-5">
+    <div v-if="!total" class="text-center py-5">
       No hay elementos que mostrar.<br>
       <span v-if="isFiltered">(Revise los filtros aplicados)</span>
     </div>

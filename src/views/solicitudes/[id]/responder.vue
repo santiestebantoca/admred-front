@@ -65,7 +65,7 @@ const submit = async () => {
         Responder
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
-        <IBiPaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
+        <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
     </template>
   </BModalPlus>

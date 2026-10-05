@@ -114,8 +114,7 @@ const layout = computed(() => ({
         <slot name="capsule" :minimized="minimized" :restore="restore" :hide="hide" :label="capsuleTitle">
           <div class="modal-capsule__inner shadow">
             <div class="modal-capsule__title" v-text="capsuleTitle" />
-            <IBiArrowUpRightSquare class="text-light" />
-            <!-- <BCloseButton aria-label="Cerrar" @click.stop="hide()" /> -->
+            <ILucideSquareArrowOutUpRight class="text-light" />
           </div>
         </slot>
       </div>

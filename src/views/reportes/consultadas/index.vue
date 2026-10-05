@@ -75,7 +75,7 @@ const exportar = () => {
           ({{ areas?.length }})
         </span>
         <BButton variant="link" @click="exportar" v-tippy="'Guardar todo como (*.csv)'">
-          <IBiSave /> *CSV
+          <ILucideDownload /> *CSV
         </BButton>
       </p>
       <template v-if="areas?.length">

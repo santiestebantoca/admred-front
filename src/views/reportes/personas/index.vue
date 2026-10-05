@@ -24,7 +24,7 @@ title.value = 'Desempeño personal'
     <template v-else-if="!personaId">
       <BListGroup class="custom">
         <BListGroupItem v-for="{ id, name } in tramitadores" :key="id" button @click="setPersonaId(id)">
-          <IBiPersonCircle class="text-success" />
+          <ILucideUserSearch class="text-success" />
           {{ name }}
         </BListGroupItem>
       </BListGroup>

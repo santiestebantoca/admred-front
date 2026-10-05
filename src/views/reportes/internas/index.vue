@@ -131,7 +131,7 @@ const exportar = () => {
           ({{ solicitudes.length }})
         </span>
         <BButton variant="link" @click="exportar" v-tippy="'Guardar todo como (*.csv)'">
-          <IBiSave /> *CSV
+          <ILucideDownload /> *CSV
         </BButton>
       </p>
       <template v-if="solicitudes.length">

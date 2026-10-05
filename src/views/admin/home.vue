@@ -16,7 +16,7 @@ const mobile = inject('app:mobile')
         {{ label }}
       </BListGroupItem>
     </BListGroup>
-    <IBiGear v-else class="icon" />
+    <ILucideSettings v-else class="icon" />
   </div>
 </template>
 

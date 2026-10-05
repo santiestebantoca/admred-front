@@ -66,18 +66,18 @@ const reset = () => {
 <template>
   <div class="root" v-resize-observer="onResizeObserver">
     <BButton variant="link link-dark wh-34 ms-1" @click="submit">
-      <IBiSearch class="center" />
+      <ILucideSearch class="center" />
     </BButton>
     <BForm @submit.prevent="submit" class="flex-fill">
       <BInput v-model="inputValue" class="input" />
     </BForm>
     <BButton variant="link link-dark wh-34" v-if="inputValue" @click="reset">
-      <IBiXLg class="center" />
+      <ILucideX class="center" />
     </BButton>
-    <BDropdown v-model="dropdown" auto-close="outside" variant="link link-dark wh-34 me-1" no-caret
+    <BDropdown v-model="dropdown" auto-close="outside" variant="link link-dark wh-34 me-2" no-caret
       @show="updateFormFromInput">
       <template #button-content>
-        <IBiThreeDotsVertical class="center" />
+        <ILucideSlidersHorizontal class="center" />
       </template>
       <BForm @submit.prevent>
         <BRow class="align-items-baseline mb-3">

@@ -54,8 +54,8 @@ const emptyText = computed(() => isFiltered.value
         <col style="width:50%" />
       </template>
       <template #table-busy>
-        <div class="py-4 text-center text-muted">
-          <BSpinner small /> Cargando tipos...
+        <div class="py-5 text-center text-muted">
+          <BSpinner /> Cargando tipos...
         </div>
       </template>
     </BTable>

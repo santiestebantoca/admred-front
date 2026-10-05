@@ -47,7 +47,7 @@ watch([start, end], () => error.value = null)
   <div class="hstack gap-1">
     <BDropdown no-caret variant="flat h-38">
       <template #button-content>
-        <IBiThreeDotsVertical class="center" />
+        <ILucideEllipsisVertical class="center" />
       </template>
       <BDropdownItem @click="setRange(1)">Este mes</BDropdownItem>
       <BDropdownItem @click="setRange(2)">Mes pasado</BDropdownItem>

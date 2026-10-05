@@ -46,20 +46,20 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
       </BCol>
       <BCol v-if="!mobile" cols="auto">
         <BButton @click="refetch" variant="flat wh-34" v-tippy="'Actualizar'">
-          <IBiArrowRepeat class="center" />
+          <ILucideRefreshCcw class="center" />
         </BButton>
       </BCol>
       <BCol cols="auto">
         <BDropdown variant="flat wh-34" no-caret v-tippy="'Menu de la tabla'">
           <template #button-content>
-            <IBiThreeDots class="center" />
+            <ILucideEllipsis class="center" />
           </template>
           <BDropdownItemButton @click="exportar">
-            <IBiSave />
+            <ILucideDownload />
             Guardar como (*.csv)
           </BDropdownItemButton>
           <BDropdownItemButton @click="expandir">
-            <IBiTextWrap />
+            <ILucideTextWrap />
             Ajuste del texto
           </BDropdownItemButton>
         </BDropdown>

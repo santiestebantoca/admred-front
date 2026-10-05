@@ -39,7 +39,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
     body-class="position-static" lazy @shown="shown = true">
     <template #header>
       <BButton @click="model = false" class="rounded-5">
-        <IBiArrowLeft class="center" />
+        <ILucideArrowLeft class="center" />
       </BButton>
       <span class="mx-auto">
         {{ solicitud?.codigo || '#' }}
@@ -47,7 +47,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
       </span>
       <BDropdown v-if="xlDown" no-caret>
         <template #button-content>
-          <IBiList class="center" />
+          <ILucideMenu class="center" />
         </template>
         <AccionesMenu :user="authUser" :solicitud="solicitud" :rutaBase="rutaBase" />
       </BDropdown>

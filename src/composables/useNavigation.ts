@@ -14,14 +14,14 @@ export function useNavigationSolicitudes() {
         {
           id: 'nav-solicitudes-recibidas-pendientes',
           label: 'Pendientes',
-          icon: 'bi-folder',
+          icon: 'lucide-folder',
           count: notificaciones.value?.pendientes.recibidas.total,
           to: { params: { tray: 'recibidas', state: 'pendientes' } }
         },
         {
           id: 'nav-solicitudes-recibidas-terminadas',
           label: 'Terminadas',
-          icon: 'bi-folder',
+          icon: 'lucide-folder',
           to: { params: { tray: 'recibidas', state: 'terminadas' } }
         }
       ]
@@ -35,14 +35,14 @@ export function useNavigationSolicitudes() {
         {
           id: 'nav-solicitudes-enviadas-pendientes',
           label: 'Pendientes',
-          icon: 'bi-folder',
+          icon: 'lucide-folder',
           count: notificaciones.value?.pendientes.enviadas.total,
           to: { params: { tray: 'enviadas', state: 'pendientes' } }
         },
         {
           id: 'nav-solicitudes-enviadas-terminadas',
           label: 'Terminadas',
-          icon: 'bi-folder',
+          icon: 'lucide-folder',
           to: { params: { tray: 'enviadas', state: 'terminadas' } }
         }
       ]
@@ -55,10 +55,22 @@ export function useNavigationSolicitudes() {
 export function useNavigationApps() {
   const { authUser } = useAuthQuery()
   const options = computed(() => [
-    { label: 'Solicitudes', to: '/solicitudes', icon: 'bi-folder-check' },
-    { label: 'Reportes', to: '/reportes', icon: 'bi-graph-up' },
+    {
+      label: 'Solicitudes',
+      to: '/solicitudes',
+      icon: 'lucide-folder'
+    },
+    {
+      label: 'Reportes',
+      to: '/reportes',
+      icon: 'lucide-chart-line'
+    },
     ...authUser.value?.admin
-      ? [{ label: 'Administración', to: '/admin', icon: 'bi-gear' }]
+      ? [{
+        label: 'Administración',
+        to: '/admin',
+        icon: 'lucide-settings'
+      }]
       : [],
   ])
 
@@ -72,38 +84,38 @@ export function useNavigationReportes() {
       {
         label: 'Mis pendientes',
         to: { name: 'reportes-pendientes' },
-        icon: 'bi-exclamation-diamond'
+        icon: 'lucide-octagon-alert'
       },
       {
         label: 'Desempeño personal',
         to: { name: 'reportes-personas' },
-        icon: 'bi-people'
+        icon: 'lucide-users'
       },
       ...authUser.value?.AR ? [
         {
           label: 'Solicitudes a la VPOR',
           to: { name: 'reportes-externas' },
-          icon: 'bi-box-arrow-in-right'
+          icon: 'lucide-square-arrow-right-enter'
         },
         {
           label: 'Solicitudes de la VPOR',
           to: { name: 'reportes-internas' },
-          icon: 'bi-arrow-right-square'
+          icon: 'lucide-square-arrow-right'
         },
         {
           label: 'Áreas consultadas',
           to: { name: 'reportes-consultadas' },
-          icon: 'bi-shuffle'
+          icon: 'lucide-shuffle'
         },
         {
           label: 'Buscar código',
           to: { name: 'reportes-buscar' },
-          icon: 'bi-search'
+          icon: 'lucide-search'
         },
         {
           label: 'Solicitudes en bruto',
           to: { name: 'reportes-solicitudes' },
-          icon: 'bi-play-circle'
+          icon: 'lucide-database'
         }
       ] : []
     ]
@@ -117,45 +129,22 @@ export function useNavigationAdmin() {
   const AR = authUser.value?.AR
   const options = computed(() => [
     {
-      to: { name: 'admin-usuarios' },
-      icon: 'bi-people',
       label: 'Usuarios',
+      to: { name: 'admin-usuarios' },
+      icon: 'lucide-users',
     },
     ...AR ? [
       {
         label: 'Áreas',
         to: { name: 'admin-areas' },
-        icon: 'bi-diagram-2'
+        icon: 'lucide-land-plot'
       },
       {
         label: 'Tipos de solicitud',
         to: { name: 'admin-tipos' },
-        icon: 'bi-tag'
+        icon: 'lucide-tag'
       }] : []
   ])
 
   return { options }
 }
-
-/*
-export default function useNavOptions() {
-  const { authUser } = useAuthQuery()
-  const AR = authUser.value?.AR
-  const options = computed(() => {
-    return [
-      ...AR ? [
-        {
-          label: 'Áreas',
-          to: { name: 'admin-areas' },
-          icon: 'puzzle'
-        },
-        {
-          label: 'Tipos de solicitud',
-          to: { name: 'admin-tipos' },
-          icon: 'tag'
-        }] : []
-    ]
-  })
-  return { options }
-}
-*/

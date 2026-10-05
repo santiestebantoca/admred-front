@@ -70,8 +70,8 @@ const vInput = {
         <BDropdown v-model="dropdown" :auto-close="false" variant="emphasis">
           <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
             :class="{ history }">
-            <IBiClockHistory v-if="history" />
-            <IBiSearch v-else />
+            <ILucideClockFading v-if="history" />
+            <ILucideSearch v-else />
             {{ nombre }}
             <BButton v-if="history" @click.stop="historial.del(id)" v-tippy="'Eliminar del historial'"
               variant="close" />
