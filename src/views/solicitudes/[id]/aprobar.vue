@@ -4,8 +4,6 @@ const props = defineProps({
   back: Function
 })
 
-import AprobadoRadioSet from '@/components/features/solicitudes/[id]/AprobadoRadioSet.vue'
-import DesaprobadoTextarea from '@/components/features/solicitudes/[id]/DesaprobadoTextarea.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
 import type { SolicitudAprobada } from '@/types/models.js'
@@ -17,6 +15,16 @@ const form = ref<SolicitudAprobada>({
   nota: null,
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  aprobado: {
+    state: errors.value.aprobado ? false : null,
+    invalidFeedback: errors.value.aprobado
+  },
+  nota: {
+    state: errors.value.nota ? false : null,
+    invalidFeedback: errors.value.nota
+  },
+}))
 const requiresNota = computed(() => form.value.aprobado === '0')
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -25,8 +33,8 @@ onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.aprobado) errors.value.aprobado = 'Debe seleccionar una opción'
-  if (requiresNota.value && !form.value.nota) errors.value.nota = 'Este campo no puede estar vacío'
+  if (!form.value.aprobado) errors.value.aprobado = 'Debe seleccionar una opción.'
+  if (requiresNota.value && !form.value.nota) errors.value.nota = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -45,13 +53,20 @@ const submit = async () => {
   <BModal v-model="model" @hidden="back" title="Aprobar respuesta" size="lg" fullscreen="sm" :scrollable="false">
     <div class="min-height-120">
       <p>Aprobar o desaprobar la respuesta del tramitador.</p>
-      <form @submit.prevent>
-        <AprobadoRadioSet v-model:error="errors.aprobado" v-model:value="form.aprobado" />
-        <DesaprobadoTextarea v-if="requiresNota" v-model:error="errors.nota" v-model:value="form.nota" />
-      </form>
+      <BForm id="form-aprobar" @submit.prevent="submit" density="3">
+        <BFormRadioGroup v-model="form.aprobado" stacked density="2" :options="[
+          { text: 'Aprobar respuesta del tramitador', value: '1' },
+          { text: 'Desaprobar respuesta del tramitador', value: '0' },
+        ]" v-bind="errorState.aprobado" @input="errors.aprobado = null" />
+        <BFormGroup v-if="requiresNota" v-bind="errorState.nota">
+          <BFormTextarea v-model="form.nota" no-resize
+            placeholder="* (Obligatorio) Escriba los motivos para desaprobar esta respuesta" rows="8" class="lizo"
+            @input="errors.nota = null" />
+        </BFormGroup>
+      </BForm>
     </div>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-110 me-3" variant="primary">
+      <BButton type="submit" form="form-aprobar" :loading="loading" loading-fill variant="primary w-110 me-3">
         {{ form.aprobado === '0' ? 'Desaprobar' : 'Aprobar' }}
       </BButton>
     </template>

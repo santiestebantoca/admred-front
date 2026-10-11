@@ -11,7 +11,7 @@ import TiemposSubCard from '@/components/features/solicitudes/[id]/TiemposSubCar
 import ParticipantesSubCard from '@/components/features/solicitudes/[id]/ParticipantesSubCard.vue'
 import EsquemaSubCard from '@/components/features/solicitudes/[id]/EsquemaSubCard.vue'
 import AdjuntosSubCard from '@/components/features/solicitudes/[id]/AdjuntosSubCard.vue'
-import EvaluacionWidget from '@/components/features/solicitudes/[id]/EvaluacionWidget.vue'
+import EvaluacionSubCard from '@/components/features/solicitudes/[id]/EvaluacionSubCard.vue'
 import { useSolicitudQuery } from '@/stores/solicitudes'
 import { useAuthQuery } from '@/stores/auth'
 import { formatDate } from '@/composables/useDates'
@@ -57,7 +57,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
     <div :key="solicitud.id" class="container grid solicitud">
       <div class="grid-header hstack gap-3">
         <h5>Solicitud</h5>
-        <EvaluacionWidget v-if="solicitud.evaluacion" :solicitud="solicitud" class="my-auto" />
+        <EvaluacionSubCard v-if="solicitud.evaluacion" :solicitud="solicitud" class="my-auto" />
         <AccionesMenu horizontal class="ms-auto" :user="authUser" :solicitud="solicitud" :rutaBase="rutaBase" />
       </div>
       <!-- Col A -->

@@ -465,7 +465,11 @@ const routesAdmin = [
         component: () => import('@/views/admin/tipos/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-tipos',
-          linkCrear: { name: 'admin-tipos-crear' }
+          linkCrear: { name: 'admin-tipos-crear' },
+          setTipoId: (tipoId) => tipoId && router.push({
+            name: 'admin-tipo',
+            params: { tipoId }
+          }),
         }),
         children: [
           {
@@ -480,43 +484,34 @@ const routesAdmin = [
             path: ':tipoId',
             name: 'admin-tipo',
             component: () => import('@/views/admin/tipos/[id]/index.vue'),
-            //         props: route => ({ id: parseInt(route.params.id) }),
-            //         children: [
-            //           {
-            //             path: '',
-            //             name: 'admin-tipo-details',
-            //             component: () => import('@/views/admin/tipo/tipo/details/TipoDetails.vue'),
-            //             props: () => ({
-            //               back: () => router.push({ name: 'admin-tipos' }),
-            //             }),
-            //             children: [
-            //               {
-            //                 path: 'del',
-            //                 name: 'admin-tipo-del',
-            //                 component: () => import('@/views/admin/tipo/tipo/del/TipoDel.vue'),
-            //                 props: () => ({
-            //                   back: () => router.push({ name: 'admin-tipos' }),
-            //                   cancel: () => router.push({ name: 'admin-tipo-details' }),
-            //                 })
-            //               },
-            //             ]
-            //           },
-            //           {
-            //             path: 'edit',
-            //             name: 'admin-tipo-edit',
-            //             component: () => import('@/views/admin/tipo/tipo/edit/TipoEditForm.vue'),
-            //             props: route => ({
-            //               id: parseInt(route.params.id),
-            //               back: () => router.push({ name: 'admin-tipo-details' }),
-            //             })
-            //           },
-            //           {
-            //             path: 'meta',
-            //             name: 'admin-tipo-meta',
-            //             component: () => import('@/views/admin/tipo/tipo/meta/TipoMeta.vue'),
-            //             props: () => ({ back: () => router.push({ name: 'admin-tipo-details' }), })
-            //           }
-            //         ]
+            props: route => ({
+              showDetalle: route.name === 'admin-tipo',
+              tipoId: parseInt(route.params.tipoId),
+              back: { name: 'admin-tipos' },
+              editar: { name: 'admin-tipo-editar' },
+              eliminar: { name: 'admin-tipo-eliminar' },
+            }),
+            children: [
+              {
+                path: 'editar',
+                name: 'admin-tipo-editar',
+                component: () => import('@/views/admin/tipos/[id]/editar.vue'),
+                props: (route) => ({
+                  tipoId: parseInt(route.params.tipoId),
+                  back: () => router.push({ name: 'admin-tipo' }),
+                })
+              },
+              {
+                path: 'eliminar',
+                name: 'admin-tipo-eliminar',
+                component: () => import('@/views/admin/tipos/[id]/eliminar.vue'),
+                props: (route) => ({
+                  tipoId: parseInt(route.params.tipoId),
+                  back: () => router.push({ name: 'admin-tipo' }),
+                  backLista: () => router.push({ name: 'admin-tipos' }),
+                })
+              },
+            ]
           },
         ]
         //   },

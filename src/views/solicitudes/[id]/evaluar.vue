@@ -14,6 +14,12 @@ const form = ref<SolicitudEvaluada>({
   evaluacion: 0,
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  evaluacion: {
+    state: errors.value.evaluacion ? false : null,
+    invalidFeedback: errors.value.evaluacion
+  },
+}))
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -21,7 +27,7 @@ onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.evaluacion) errors.value.evaluacion = 'Seleccione una calificación de 1 a 5'
+  if (!form.value.evaluacion) errors.value.evaluacion = 'Seleccione una calificación.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -40,13 +46,14 @@ const submit = async () => {
   <BModal v-model="model" @hidden="back" title="Evaluar" fullscreen="sm" :scrollable="false">
     <div class="min-height-110">
       <p>Evaluación de la respuesta recibida.</p>
-      <form @submit.prevent>
-        <BFormRating v-model="form.evaluacion" variant="warning" />
-        <div class="small text-danger ps-1" v-text="errors.evaluacion" />
-      </form>
+      <BForm id="form-evaluar" @submit.prevent="submit" density="3">
+        <BFormGroup v-bind="errorState.evaluacion">
+          <BFormRating v-model="form.evaluacion" variant="warning" @update:model-value="errors.evaluacion = null" />
+        </BFormGroup>
+      </BForm>
     </div>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90 me-3" variant="primary">
+      <BButton type="submit" form="form-evaluar" :loading="loading" loading-fill variant="primary w-90 me-3">
         Evaluar
       </BButton>
     </template>
@@ -54,9 +61,9 @@ const submit = async () => {
 </template>
 
 <style scoped>
-.min-height-110 {
+/* .min-height-110 {
   min-height: 110px;
-}
+} */
 
 :deep(.b-form-rating) {
   width: fit-content;

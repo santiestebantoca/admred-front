@@ -1,12 +1,11 @@
 <script setup>
-const error = defineModel('error')
-const value = defineModel('value')
+const value = defineModel()
 const props = defineProps({
   placement: { type: String, default: 'top-start' }
 })
 
 import { useTiposFiltro, useTiposQuery } from '@/stores/tipos'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 // Filtro propio del widget (estado local): no comparte búsqueda ni página con
 // la lista del admin.
@@ -18,8 +17,6 @@ const rootStyle = computed(() => ({
   '--dropdown-menu-width': view.value === 0 ? '272px' : '290px',
   '--dropdown-menu-height': view.value === 0 ? 'auto' : '290px',
 }))
-
-watch(value, () => error.value = null)
 
 const input = (id) => {
   value.value = id

@@ -42,7 +42,7 @@ const direct = computed(() => !filtered.value || ((filtered.value === 1) && stor
 </script>
 
 <template>
-  <bs-dropdown class="x">
+  <!-- <bs-dropdown class="x">
     <div class="margin">
       <form v-if="direct" @submit.prevent="submit">
         <input v-model="form[DIRECTFIELD]" placeholder="Buscar en nombre" class="form-control" />
@@ -71,7 +71,7 @@ const direct = computed(() => !filtered.value || ((filtered.value === 1) && stor
         <bs-btn label="Buscar" color="primary" @click="submit" />
       </form>
     </bs-dropdown-menu>
-  </bs-dropdown>
+  </bs-dropdown> -->
 </template>
 
 <style scoped>

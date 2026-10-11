@@ -5,8 +5,11 @@
 -->
 
 <script setup>
-const error = defineModel('error')
-const value = defineModel('value')
+const value = defineModel()
+const props = defineProps({
+  state: Boolean,
+  invalidFeedback: String
+})
 
 import { useDestinosSelectQuery } from '@/stores/destinos'
 import { vOnClickOutside } from '@vueuse/components'
@@ -23,6 +26,7 @@ const attrs = computed(() => ({
 const active = computed(() => focus.value || dropdown.value)
 const para = computed(() => active.value || search.value)
 const warning = computed(() => !active.value && !value.value)
+const emit = defineEmits(['input'])
 
 watch(singleOption, d => d && select(d.id, d.nombre), { immediate: true })
 watch(active, active => {
@@ -32,7 +36,7 @@ watch(active, active => {
     if (match) select(match.id, match.nombre)
   }
 })
-watch(value, () => error.value = null)
+watch(value, () => emit('input'))
 onMounted(() => search.value = null)
 
 const select = (id, nombre) => {
@@ -60,7 +64,7 @@ const vInput = {
 </script>
 
 <template>
-  <BContainer v-on-click-outside="() => dropdown = false" class="mb-3">
+  <BContainer v-on-click-outside="() => dropdown = false">
     <BRow class="border-bottom position-relative" @click.stop>
       <BCol v-if="para" cols="auto" class="para-label">
         Para
@@ -78,13 +82,15 @@ const vInput = {
           </BDropdownItemButton>
           <BDropdownText v-if="!destinos?.length">
             <span class="blockquote-footer">
-              <em>Resultados de la busqueda y entradas recientes</em>
+              <em>Resultados de la busqueda y entradas recientes.</em>
             </span>
           </BDropdownText>
         </BDropdown>
       </BCol>
     </BRow>
-    <div class="small text-danger" v-text="error"></div>
+    <BRow>
+      <BFormInvalidFeedback :state="state" :text="invalidFeedback" class="p-0" />
+    </BRow>
   </BContainer>
 </template>
 

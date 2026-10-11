@@ -27,6 +27,12 @@ const { mutateAsync: eliminarUpload } = useUploadDelete()
 const input = useTemplateRef('input')
 const uploaded = ref([])
 const heredados = computed(() => adjuntosHeredados.value ?? [])
+const heredadosPintables = computed(() => {
+  // Este filtro se aplica porque, al enviar el formulario, se actualiza la query de la solicitud y
+  // el control pinta el mismo upload también como heredado de la solicitud actualizada.
+  const idsExcluidos = uploaded.value.map(d => d.id).filter(d => d)
+  return heredados.value.filter((d) => !idsExcluidos.includes(d.upload_id))
+})
 
 watchEffect(() => uploadedIds.value = uploaded.value.map(d => d.id).filter(d => d)
   .concat(heredados.value.map((adjunto) => adjunto.upload_id)))
@@ -65,7 +71,7 @@ defineExpose({ select })
 
 <template>
   <ul>
-    <li v-for="{ id, filename, file, filesize } in heredados" :key="id">
+    <li v-for="{ id, filename, file, filesize } in heredadosPintables" :key="id">
       <BRow class="mx-0">
         <BCol cols="10" class="d-flex aligns-items-center text-truncate">
           <a v-tippy="filename" :href="file" class="text-truncate me-2">

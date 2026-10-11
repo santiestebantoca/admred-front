@@ -3,8 +3,7 @@ const props = defineProps({
   back: Function
 })
 
-import ObservacionesTextarea from '@/components/features/solicitudes/[id]/ObservacionesTextarea.vue'
-import AdjuntosWidget from '@/components/features/solicitudes/[id]/AdjuntosWidget.vue'
+import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudQuery, useSolicitudUpdate } from '@/stores/solicitudes'
 import type { SolicitudRespondida } from '@/types/models.js'
@@ -17,6 +16,12 @@ const form = ref<SolicitudRespondida>({
   adjuntos: [],
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  observaciones: {
+    state: errors.value.observaciones ? false : null,
+    invalidFeedback: errors.value.observaciones
+  },
+}))
 const adjuntosHeredados = ref([])
 const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
@@ -33,7 +38,7 @@ onMounted(() => model.value = true)
 const validate = () => {
   errors.value = {}
   if (!form.value.observaciones && !form.value.adjuntos.length)
-    errors.value.observaciones = 'Este campo no puede estar vacío si no se ha adjuntado un documento'
+    errors.value.observaciones = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -55,13 +60,16 @@ const submit = async () => {
       <BSpinner />
     </div>
     <template v-else>
-      <form @submit.prevent>
-        <ObservacionesTextarea v-model:error="errors.objetivo" v-model:value="form.observaciones" class="mx-n2" />
-        <AdjuntosWidget ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
-      </form>
+      <BForm id="form-responder" @submit.prevent="submit" density="3">
+        <BFormGroup v-bind="errorState.observaciones">
+          <BFormTextarea v-model="form.observaciones" no-resize placeholder="Observaciones" rows="8" class="lizo"
+            @input="errors.observaciones = null" />
+        </BFormGroup>
+        <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
+      </BForm>
     </template>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-110 me-3" variant="primary">
+      <BButton type="submit" form="form-responder" :loading="loading" loading-fill variant="primary w-110 me-3">
         Responder
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">

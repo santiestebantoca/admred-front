@@ -68,7 +68,7 @@ const submit = () => {
       <bs-btn-back @click="back" />
       <span class="fs-5">Editar registro</span>
     </div>
-    <form @submit.prevent class="data-form">
+    <form @submit.prevent="submit" class="data-form">
       <FirstNameInput v-model:error="result.errors.first_name" v-model:value="form.first_name" />
       <LastNameInput v-model:error="result.errors.last_name" v-model:value="form.last_name" />
       <UsernameInput v-model:error="result.errors.username" v-model:value="form.username" />
@@ -76,7 +76,7 @@ const submit = () => {
       <MovilInput v-model:error="result.errors.movil" v-model:value="form.movil" />
       <FijoInput v-model:error="result.errors.fijo" v-model:value="form.fijo" />
       <AreaSelect v-if="areaSelectable" v-model:error="result.errors.area" v-model:value="form.area" />
-      <bs-btn-save-cancel :disable="sending" @save="submit" @cancel="back" padding />
+      <!-- <bs-btn-save-cancel :disable="sending" @save="submit" @cancel="back" padding /> -->
     </form>
   </div>
 </template>

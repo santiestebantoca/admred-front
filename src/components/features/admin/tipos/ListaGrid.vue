@@ -1,18 +1,19 @@
 <script setup>
-const props = defineProps({
-  linkCrear: Object
-})
+// const props = defineProps({
+//   linkCrear: Object
+// })
 
 import Filtro from './ListaFiltro.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useTiposLista } from '@/stores/tipos'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
-// const mobile = inject('app:mobile')
+const linkCrear = inject('admin:tipos:linkCrear')
+const setTipoId = inject('admin:tipos:setTipoId')
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
-  search, nombre, descripcion, isFiltered,
+  search, nombre, descripcion, uso, isFiltered,
   page, limit, limits,
   tipos, isPending, isLoading, total,
   reset,
@@ -25,33 +26,40 @@ const fields = [
   {
     key: 'descripcion',
     label: 'Descripcion',
+    formatter: ({ value }) => value || '-'
+  },
+  {
+    key: 'uso',
+    label: 'Uso',
   },
 ]
 const tableId = 'admin-tipos-tabla'
 const emptyText = computed(() => isFiltered.value
   ? 'No hay tipos que coincidan con los filtros aplicados.'
   : 'Todavía no hay tipos registrados.')
+
+const onSelectedItem = (val) => setTipoId.value(val[0])
 </script>
 
 <template>
-  <div class="pt-3 pb-4">
-    <BRow class="mb-3 align-items-center">
-      <BCol>
-        <Filtro v-model:search="search" v-model:nombre="nombre" v-model:descripcion="descripcion" @reset="reset" />
-      </BCol>
-      <BCol>
-        <BButton :to="linkCrear">
-          <ILucidePlus /> Agregar
-        </BButton>
-      </BCol>
-    </BRow>
+  <div>
+    <div class="hstack align-items-center mb-3 max-w-700">
+      <div class="col-8">
+        <Filtro v-model:search="search" v-model:nombre="nombre" v-model:descripcion="descripcion" v-model:uso="uso"
+          @reset="reset" />
+      </div>
+      <BButton :to="linkCrear" class="ms-auto">
+        <ILucidePlus /> Agregar
+      </BButton>
+    </div>
     <TablePagination v-model:page="page" v-model:per-page="limit" :total-rows="total" :per-page-options="limits"
       :disabled="isLoading" :aria-controls="tableId" />
     <BTable :id="tableId" :items="tipos" :fields="fields" :busy="isLoading" :show-empty="!isPending"
-      :empty-text="emptyText" hover primary-key="id">
+      :empty-text="emptyText" hover primary-key="id" selectable select-mode="single"
+      @update:selected-items="onSelectedItem" v-model:selected-items="active">
       <template #table-colgroup>
-        <col style="width:50%" />
-        <col style="width:50%" />
+        <col style="width:40%" />
+        <col style="width:40%" />
       </template>
       <template #table-busy>
         <div class="py-5 text-center text-muted">

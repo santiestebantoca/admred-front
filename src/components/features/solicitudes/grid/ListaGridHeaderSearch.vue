@@ -11,7 +11,7 @@ const { search } = toRefs(useSolicitudesFiltro())
 
 <style scoped>
 :deep([type="search"]) {
-  padding-top: .25rem;
-  padding-bottom: .25rem;
+  /* padding-top: .25rem;
+  padding-bottom: .25rem; */
 }
 </style>

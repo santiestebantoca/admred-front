@@ -5,6 +5,11 @@ export interface TipoUpdate {
   descripcion: string,
 }
 
+export interface TipoCreate {
+  nombre: string,
+  descripcion: string,
+}
+
 // Usuarios
 export interface UsuarioCreate {
   first_name: string

@@ -12,11 +12,13 @@ export function useTiposFiltro() {
   const search = ref(undefined)
   const nombre = ref(undefined)
   const descripcion = ref(undefined)
+  const uso = ref(undefined)
 
   // Parámetros de filtrado que espera el API
   const filtro = computed(() => ({
     ...nombre.value ? { nombre: nombre.value } : {},
     ...descripcion.value ? { descripcion: descripcion.value } : {},
+    ...uso.value ? { uso: uso.value } : {},
     ...search.value
       ? {
         search: search.value,
@@ -30,11 +32,13 @@ export function useTiposFiltro() {
     search.value = undefined
     nombre.value = undefined
     descripcion.value = undefined
+    uso.value = undefined
   }
 
   return {
     nombre,
     descripcion,
+    uso,
     search,
     filtro,
     isFiltered,

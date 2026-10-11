@@ -49,7 +49,7 @@ const submit = () => {
 </script>
 
 <template>
-  <form @submit.prevent class="data-form">
+  <form @submit.prevent="submit" class="data-form">
     <FirstNameInput v-model:error="result.errors.first_name" v-model:value="form.first_name" />
     <LastNameInput v-model:error="result.errors.last_name" v-model:value="form.last_name" />
     <UsernameInput v-model:error="result.errors.username" v-model:value="form.username" />
@@ -57,8 +57,8 @@ const submit = () => {
     <MovilInput v-model:error="result.errors.movil" v-model:value="form.movil" />
     <FijoInput v-model:error="result.errors.fijo" v-model:value="form.fijo" />
     <AreaSelect v-if="areaSelectable" v-model:error="result.errors.area" v-model:value="form.area" />
-    <bs-btn :disabled="sending" class="mt-3" @click="submit" color="primary">
+    <!-- <bs-btn :disabled="sending" class="mt-3" @click="submit" color="primary">
       Siguiente <i class="bi-chevron-right" style="position: relative;left: 4px" />
-    </bs-btn>
+    </bs-btn> -->
   </form>
 </template>

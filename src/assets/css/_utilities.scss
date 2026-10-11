@@ -11,6 +11,21 @@
   }
 }
 
+/* Textarea */
+textarea {
+
+  // Para textarea en formularios de crear, responder y aprobar solicitud
+  &.lizo {
+    border: none;
+    padding-left: 2px;
+    padding-right: 2px;
+
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+}
+
 /* Button */
 .btn {
   position: relative;
@@ -395,6 +410,14 @@
   min-height: 32px !important;
 }
 
+.max-w-700 {
+  max-width: 700px !important;
+}
+
+.max-w-500 {
+  max-width: 500px !important;
+}
+
 .max-w-400 {
   max-width: 400px !important;
 }
@@ -464,25 +487,6 @@
 .surface-5 {
   background-color: var(--bs-surface-5);
 }
-
-/* Formulario */
-.form-label {
-  font-size: small;
-  font-weight: 600;
-}
-
-// .label-value {
-//   margin-bottom: 16px;
-
-//   >label {
-//     color: var(--bs-gray-600);
-//     font-size: .875em;
-//   }
-
-//   >div {
-//     padding: 2px 0;
-//   }
-// }
 
 /* Badge de estado de solicitud */
 .estado-badge {

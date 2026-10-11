@@ -1,11 +1,10 @@
 <script setup lang="ts">
 const props = defineProps({ back: Function })
 
-import DestinoSelect from '@/components/features/solicitudes/[id]/DestinoSelect.vue'
-import ObjetivoTextarea from '@/components/features/solicitudes/[id]/ObjetivoTextarea.vue'
-import AdjuntosWidget from '@/components/features/solicitudes/[id]/AdjuntosWidget.vue'
-import TipoWidget from '@/components/features/solicitudes/[id]/TipoWidget.vue'
-import CumplirWidget from '@/components/features/solicitudes/[id]/CumplirWidget.vue'
+import SeleccionarDestino from '@/components/features/solicitudes/[id]/SeleccionarDestino.vue'
+import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
+import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
+import SeleccionarCumplir from '@/components/features/solicitudes/[id]/SeleccionarCumplir.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudQuery, useSolicitudCreate } from '@/stores/solicitudes'
 import type { SolicitudCreateFromParent } from '@/types/models.js'
@@ -24,6 +23,16 @@ const form = ref<SolicitudCreateFromParent>({
   cumplir_en: null
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  destino: {
+    state: errors.value.destino ? false : null,
+    invalidFeedback: errors.value.destino
+  },
+  objetivo: {
+    state: errors.value.objetivo ? false : null,
+    invalidFeedback: errors.value.objetivo
+  },
+}))
 const adjuntosHeredados = ref([])
 const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
 const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
@@ -42,8 +51,8 @@ onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.destino) errors.value.destino = 'Seleccione un área válida'
-  if (!form.value.objetivo) errors.value.objetivo = 'Este campo no puede estar vacío'
+  if (!form.value.destino) errors.value.destino = 'Seleccione un área válida.'
+  if (!form.value.objetivo) errors.value.objetivo = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -67,21 +76,24 @@ const submit = async () => {
       <BSpinner />
     </div>
     <template v-else>
-      <form @submit.prevent>
-        <DestinoSelect v-model:error="errors.destino" v-model:value="form.destino" />
-        <ObjetivoTextarea v-model:error="errors.objetivo" v-model:value="form.objetivo" class="mx-n2" />
-        <AdjuntosWidget ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
-      </form>
+      <BForm id="form-reenviar" @submit.prevent="submit" density="3">
+        <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" @input="errors.destino = null" />
+        <BFormGroup v-bind="errorState.objetivo">
+          <BFormTextarea v-model="form.objetivo" no-resize placeholder="Objetivo o alcance de la demanda" rows="8"
+            class="lizo" @input="errors.objetivo = null" />
+        </BFormGroup>
+        <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
+      </BForm>
     </template>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90 me-3" variant="primary">
+      <BButton type="submit" form="form-reenviar" :loading="loading" loading-fill variant="primary w-90 me-3">
         Crear
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
-      <TipoWidget v-model:error="errors.tipo" v-model:value="form.tipo" />
-      <CumplirWidget v-model:error="errors.cumplir_en" v-model:value="form.cumplir_en" />
+      <SeleccionarTipo v-model="form.tipo" />
+      <SeleccionarCumplir v-model="form.cumplir_en" />
     </template>
   </BModal>
 </template>

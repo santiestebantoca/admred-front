@@ -73,14 +73,14 @@ const submit = async () => {
       </div>
     </div>
     <template #footer data-class="bg-light">
-      <form v-if="solicitud.permisos.comentar" @submit.prevent class="w-100">
-        <div class="hstack gap-2">
-          <BFormTextarea placeholder="Escribe una nota" no-resize rows="1" v-model="form.texto" />
-          <BButton v-if="form.texto" variant="link link-primary" @click="submit" class="fs-4 wh-50">
+      <BForm v-if="solicitud.permisos.comentar" @submit.prevent="submit" class="w-100">
+        <div class="hstack gap-2 align-items-end">
+          <BFormTextarea placeholder="Escribe una nota" no-resize max-rows="4" v-model="form.texto" />
+          <BButton v-if="form.texto" type="submit" variant="primary rounded-circle wh-38">
             <IBiSendFill class="center" />
           </BButton>
         </div>
-      </form>
+      </BForm>
       <div v-else class="solo-lectura">Solo lectura</div>
     </template>
   </BModal>

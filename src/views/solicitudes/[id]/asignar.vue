@@ -4,7 +4,7 @@ const props = defineProps({
   back: Function
 })
 
-import TipoWidget from '@/components/features/solicitudes/[id]/TipoWidget.vue'
+import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudQuery, useSolicitudUpdate } from '@/stores/solicitudes'
 import { useTramitadoresQuery } from '@/stores/tramitadores'
@@ -16,6 +16,12 @@ const form = ref({
   tipo: null
 })
 const errors = ref({})
+const errorState = computed(() => ({
+  tramitador: {
+    state: errors.value.tramitador ? false : null,
+    invalidFeedback: errors.value.tramitador
+  },
+}))
 const { tramitadores, isPending: tramitadoresPendientes } = useTramitadoresQuery()
 const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
@@ -30,9 +36,9 @@ watchEffect(() => {
 onMounted(() => model.value = true)
 
 function validate() {
-  const errors = {}
-  if (!form.value.tramitador) errors.tramitador = 'Seleccione un valor'
-  return !Object.keys(errors).length
+  errors.value = {}
+  if (!form.value.tramitador) errors.value.tramitador = 'Seleccione un valor.'
+  return !Object.keys(errors.value).length
 }
 const submit = async () => {
   if (!validate()) return
@@ -48,18 +54,17 @@ const submit = async () => {
 
 <template>
   <BModal v-model="model" @hidden="back" title="Asignar">
-    <form @submit.prevent>
-      <div class="mb-3">
-        <label class="form-label">Tramitador</label>
-        <BFormSelect v-model="form.tramitador" :options="tramitadores" value-field="id" text-field="name" />
-        <div class="small text-danger">{{ errors.tramitador }}</div>
-      </div>
-    </form>
+    <BForm id="form-asignar" @submit.prevent="submit" density="3">
+      <BFormGroup label="Tramitador" v-bind="errorState.tramitador">
+        <BFormSelect v-model="form.tramitador" :options="tramitadores" value-field="id" text-field="name"
+          @input="errors.tramitador = null" />
+      </BFormGroup>
+    </BForm>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90 me-3" variant="primary">
+      <BButton type="submit" form="form-asignar" :loading="loading" loading-fill variant="primary w-90 me-3">
         Asignar
       </BButton>
-      <TipoWidget down v-model:error="errors.tipo" v-model:value="form.tipo" />
+      <SeleccionarTipo down v-model="errors.tipo" />
     </template>
   </BModal>
 </template>

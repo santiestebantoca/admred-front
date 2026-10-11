@@ -1,11 +1,12 @@
 <script setup lang="ts">
-const props = defineProps({ back: Function })
+const props = defineProps({
+  back: Function
+})
 
-import DestinoSelect from '@/components/features/solicitudes/[id]/DestinoSelect.vue'
-import ObjetivoTextarea from '@/components/features/solicitudes/[id]/ObjetivoTextarea.vue'
-import AdjuntosWidget from '@/components/features/solicitudes/[id]/AdjuntosWidget.vue'
-import TipoWidget from '@/components/features/solicitudes/[id]/TipoWidget.vue'
-import CumplirWidget from '@/components/features/solicitudes/[id]/CumplirWidget.vue'
+import SeleccionarDestino from '@/components/features/solicitudes/[id]/SeleccionarDestino.vue'
+import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
+import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
+import SeleccionarCumplir from '@/components/features/solicitudes/[id]/SeleccionarCumplir.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudCreate } from '@/stores/solicitudes'
 import type { SolicitudCreate } from '@/types/models.js'
@@ -23,6 +24,16 @@ const form = ref<SolicitudCreate>({
   cumplir_en: null
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  destino: {
+    state: errors.value.destino ? false : null,
+    invalidFeedback: errors.value.destino
+  },
+  objetivo: {
+    state: errors.value.objetivo ? false : null,
+    invalidFeedback: errors.value.objetivo
+  },
+}))
 const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -51,20 +62,24 @@ const submit = async () => {
 <template>
   <BModalPlus v-model="model" title="Crear solicitud" capsule-title="Crear solicitud" @hidden="back" size="lg"
     fullscreen="sm" :scrollable="false">
-    <form @submit.prevent>
-      <DestinoSelect v-model:error="errors.destino" v-model:value="form.destino" />
-      <ObjetivoTextarea v-model:error="errors.objetivo" v-model:value="form.objetivo" class="mx-n2" />
-      <AdjuntosWidget ref="adjuntosRef" v-model="form.adjuntos" />
-    </form>
+    <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3">
+      <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" @input="errors.destino = null" />
+      <BFormGroup v-bind="errorState.objetivo">
+        <BFormTextarea v-model="form.objetivo" no-resize placeholder="Objetivo o alcance de la demanda" rows="8"
+          class="lizo" @input="errors.objetivo = null" />
+      </BFormGroup>
+      <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" />
+    </BForm>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90 me-3" variant="primary">
+      <BButton type="submit" form="form-solicitud-crear" :loading="loading" loading-fill class="w-90 me-3"
+        variant="primary">
         Crear
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
-      <TipoWidget v-model:error="errors.tipo" v-model:value="form.tipo" />
-      <CumplirWidget v-model:error="errors.cumplir_en" v-model:value="form.cumplir_en" />
+      <SeleccionarTipo v-model="form.tipo" />
+      <SeleccionarCumplir v-model="form.cumplir_en" />
     </template>
   </BModalPlus>
 </template>

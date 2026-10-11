@@ -12,7 +12,7 @@ const LIMITS = [10, 25, 50, 100]
  * de modo que montar otra lista no lo comparte ni lo pisa.
  */
 export function useTiposLista() {
-  const { search, nombre, descripcion, filtro, isFiltered, reset: resetFiltro } = useTiposFiltro()
+  const { search, nombre, descripcion, uso, filtro, isFiltered, reset: resetFiltro } = useTiposFiltro()
 
   // Paginación (la resuelve el servidor)
   const page = ref(1)
@@ -42,6 +42,7 @@ export function useTiposLista() {
   return {
     nombre,
     descripcion,
+    uso,
     search,
     isFiltered,
     page,

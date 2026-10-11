@@ -4,11 +4,22 @@
   &.btn-link {
     text-decoration: none;
   }
+
+  &.disabled {
+    border-color: transparent !important;
+  }
 }
 
-.form-label {
+.form-label,
+.col-form-label {
   font-weight: 600;
-  font-size: .875em;
+  font-size: .875em !important;
+}
+
+.b-form-group {
+  &>.row.d-flex {
+    align-items: baseline;
+  }
 }
 
 .tooltip {
@@ -30,7 +41,8 @@
 }
 
 // reduce su sombra natural
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
   box-shadow: 0 0 0 0.12rem rgba(13, 110, 253, 0.25) !important;
 }
 

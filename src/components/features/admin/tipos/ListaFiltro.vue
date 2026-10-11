@@ -8,11 +8,13 @@ import { ref } from 'vue'
 const search = defineModel('search', { type: String })
 const nombre = defineModel('nombre', { type: String })
 const descripcion = defineModel('descripcion', { type: String })
+const uso = defineModel('uso', { type: String })
 // Para el filtro
 const form = ref({
   search: undefined,
   nombre: undefined,
   descripcion: undefined,
+  uso: undefined
 })
 
 const emit = defineEmits(['reset'])
@@ -24,12 +26,14 @@ const updateFormFromInput = () => {
   form.value.search = obj.search
   form.value.nombre = obj.nombre
   form.value.descripcion = obj.descripcion
+  form.value.uso = obj.uso
 }
 const updateInputFromForm = () => {
   const text = []
   if (form.value.search) text.push(form.value.search.trim())
   if (form.value.nombre) text.push('nombre:' + form.value.nombre.trim())
   if (form.value.descripcion) text.push('desc:' + form.value.descripcion.trim())
+  if (form.value.uso) text.push('uso:' + form.value.uso)
   inputValue.value = text.join(' ')
   submit()
 }
@@ -45,6 +49,7 @@ function getValuesFromInput() {
       else {
         if (arrayValores[0] === 'nombre') obj.nombre = arrayValores[1]
         if (arrayValores[0] === 'desc') obj.descripcion = arrayValores[1]
+        if (arrayValores[0] === 'uso') obj.uso = arrayValores[1]
       }
     }
   })
@@ -55,6 +60,7 @@ const submit = () => {
   search.value = obj.search
   nombre.value = obj.nombre
   descripcion.value = obj.descripcion
+  uso.value = obj.uso
   dropdown.value = false
 }
 const reset = () => {
@@ -79,34 +85,28 @@ const reset = () => {
       <template #button-content>
         <ILucideSlidersHorizontal class="center" />
       </template>
-      <BForm @submit.prevent>
-        <BRow class="align-items-baseline mb-3">
-          <BCol cols="3">
-            <label class="form-label">Buscar texto</label>
-          </BCol>
-          <BCol>
-            <BInput v-model="form.search" />
-          </BCol>
-        </BRow>
-        <BRow class="align-items-baseline mb-3">
-          <BCol cols="2">
-            <label class="form-label">Nombre</label>
-          </BCol>
-          <BCol>
-            <BInput v-model="form.nombre" />
-          </BCol>
-        </BRow>
-        <BRow class="align-items-baseline mb-3">
-          <BCol cols="3">
-            <label class="form-label">Descripción</label>
-          </BCol>
-          <BCol>
-            <BInput v-model="form.descripcion" />
-          </BCol>
-        </BRow>
-        <BButton variant="primary" @click="updateInputFromForm">
-          Buscar
-        </BButton>
+      <BForm @submit.prevent="updateInputFromForm" density="3">
+        <BFormGroup label="Buscar texto" label-cols-md="3" content-cols-md>
+          <BInput v-model="form.search" />
+        </BFormGroup>
+        <BFormGroup label="Nombre" label-cols-md="2" content-cols-md>
+          <BInput v-model="form.nombre" />
+        </BFormGroup>
+        <BFormGroup label="Descripción" label-cols-md="3" content-cols-md>
+          <BInput v-model="form.descripcion" />
+        </BFormGroup>
+        <BFormGroup label="Uso " label-cols-md="2" content-cols-md="4">
+          <BFormSelect v-model="form.uso" :options="[
+            { value: undefined, text: '' },
+            { value: '0', text: 'Sin uso' },
+            { value: '2', text: 'Poco uso' },
+          ]" />
+        </BFormGroup>
+        <BFormButtons>
+          <BButton type="submit" variant="primary">
+            Buscar
+          </BButton>
+        </BFormButtons>
       </BForm>
     </BDropdown>
   </div>

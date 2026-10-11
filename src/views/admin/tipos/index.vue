@@ -1,18 +1,23 @@
 <script setup>
 const props = defineProps({
   showLista: Boolean,
-  linkCrear: Object
+  linkCrear: Object,
+  setTipoId: Function
 })
 
 import ListaGrid from '@/components/features/admin/tipos/ListaGrid.vue'
-import { inject } from 'vue'
+import { computed, inject, provide } from 'vue'
 
 const title = inject('admin:title')
+provide('admin:tipos:linkCrear', computed(() => props.linkCrear))
+provide('admin:tipos:setTipoId', computed(() => props.setTipoId))
 
 title.value = 'Tipos de solicitud'
 </script>
 
 <template>
-  <ListaGrid v-show="showLista" :linkCrear="linkCrear" />
-  <router-view />
+  <div class="pt-3 pb-4">
+    <ListaGrid v-show="showLista" />
+    <router-view />
+  </div>
 </template>

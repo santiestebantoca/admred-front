@@ -1,13 +1,12 @@
 <script setup>
-const error = defineModel('error')
-const value = defineModel('value')
+const value = defineModel()
 const props = defineProps({
   placement: { type: Boolean, default: 'top-start' }
 })
 
 import { Datepicker } from 'vanillajs-datepicker'
 import { formatDate } from '@/composables/useDates'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 const datepicker = ref(null)
 const options = ref({
@@ -24,8 +23,6 @@ const vPicker = {
   }
 }
 const view = ref(0)
-
-watch(value, () => error.value = null)
 
 const change = () => value.value = datepicker.value.getDate(options.value.format)
 </script>

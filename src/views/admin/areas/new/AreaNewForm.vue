@@ -47,12 +47,12 @@ const submit = () => {
       <bs-btn-back @click="back" />
       <span class="fs-5">Nuevo registro</span>
     </div>
-    <form @submit.prevent class="data-form">
+    <form @submit.prevent="submit" class="data-form">
       <NombreInput v-model:error="result.errors.nombre" v-model:value="form.nombre" />
       <NivelSelect v-model:error="result.errors.nivel" v-model:value="form.nivel" />
       <PadreSelect :nivel="form.nivel" v-model:error="result.errors.padre" v-model:value="form.padre"
         v-model:disabled="padreDisabled" />
-      <bs-btn-save-cancel :disable="sending" @save="submit" @cancel="back" padding />
+      <!-- <bs-btn-save-cancel :disable="sending" @save="submit" @cancel="back" padding /> -->
     </form>
   </div>
 </template>
