@@ -1,8 +1,4 @@
 <script setup>
-// const props = defineProps({
-//   linkCrear: Object
-// })
-
 import Filtro from './ListaFiltro.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useTiposLista } from '@/stores/tipos'

@@ -3,8 +3,9 @@ const props = defineProps({
   linkSolicitud: Function
 })
 
-import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, PENDIENTE_TERMINADA, NIVELES_AREAS_INTERNAS } from '@/constants/solicitud'
+import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, PENDIENTE_TERMINADA } from '@/constants/solicitud'
 import { useConsultadasQuery } from '@/stores/consultadas'
+import { useNivelesQuery } from '@/stores/niveles'
 import { formatTime } from '@/composables/useDates'
 import useExportCSV from '@/composables/useExportCSV'
 import { useSolicitudesInternasQuery } from '@/stores/reportes'
@@ -12,6 +13,7 @@ import { ref, computed, inject, watchEffect } from 'vue'
 
 const title = inject('reportes:title')
 const { destinos, params: destinosParams } = useConsultadasQuery()
+const { niveles } = useNivelesQuery()
 const { solicitudes, isPending, isLoading, refresh, params } = useSolicitudesInternasQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
 const form = ref({
@@ -39,7 +41,7 @@ watchEffect(() => destinosParams.value = {
   desde: form.value.desde,
   hasta: form.value.hasta,
   origen_id: form.value.origen,
-  origen_nivel: NIVELES_AREAS_INTERNAS
+  origen_nivel: niveles.value?.filter((d) => d.alcance === 'interno').map((d) => d.id)
 })
 
 function fechaformatter({ value }) { return formatTime(value) || '-' }

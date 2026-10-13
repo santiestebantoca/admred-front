@@ -6,5 +6,4 @@ export const tiposApi = {
   delete: (id) => api.delete(`/tipos/tipos/${id}`).then(res => res.data),
   getById: (id) => api.get(`/tipos/tipos/${id}`).then(res => res.data),
   update: (id, data) => api.put(`/tipos/tipos/${id}`, data).then(res => res.data),
-
 }

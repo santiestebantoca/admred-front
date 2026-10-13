@@ -1,3 +1,17 @@
+// Areas
+export interface AreaUpdate {
+  id: number | string,
+  nombre: string,
+  padre: number | null,
+  nivel: number | null,
+}
+
+export interface AreaCreate {
+  nombre: string,
+  padre: number | null,
+  nivel: number | null,
+}
+
 // Tipos
 export interface TipoUpdate {
   id: number | string,

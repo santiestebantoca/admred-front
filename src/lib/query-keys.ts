@@ -41,6 +41,17 @@ export const queryKeys = {
     detalles: () => [...queryKeys.usuarios.root, 'detalle'],
     detalle: (id) => [...queryKeys.usuarios.detalles(), id],
   },
+  areas: {
+    root: ['areas'],
+    listas: () => [...queryKeys.areas.root, 'lista'],
+    lista: (filtros) => [...queryKeys.areas.listas(), { ...filtros }],
+    detalles: () => [...queryKeys.usuarios.root, 'detalle'],
+    detalle: (id) => [...queryKeys.usuarios.detalles(), id],
+  },
+  niveles: {
+    root: ['niveles'],
+    listas: () => [...queryKeys.niveles.root, 'lista'],
+  },
   tramitadores: {
     root: ['tramitadores'],
     listas: () => [...queryKeys.tramitadores.root, 'lista'],

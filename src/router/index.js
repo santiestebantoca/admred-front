@@ -393,71 +393,58 @@ const routesAdmin = [
       {
         path: 'areas',
         name: 'admin-areas',
-        // component: () => import('@/views/admin/areas/index.vue'),
-        // children: [
-        //   {
-        //     path: '',
-        //     name: 'admin-areas',
-        //     component: () => import('@/views/admin/area/areas/AdminAreas.vue'),
-        //     props: route => ({
-        //       grid: route.name === 'admin-areas',
-        //       newItem: () => router.push({ name: 'admin-areas-new', params: {} }),
-        //       linkItem: id => router.push({ name: 'admin-area-details', params: { id } }),
-        //     }),
-        //     children: [
-        //       {
-        //         path: ':id',
-        //         name: 'admin-area',
-        //         component: () => import('@/views/admin/area/area/AdminArea.vue'),
-        //         props: route => ({ id: parseInt(route.params.id) }),
-        //         children: [
-        //           {
-        //             path: '',
-        //             name: 'admin-area-details',
-        //             component: () => import('@/views/admin/area/area/details/AreaDetails.vue'),
-        //             props: () => ({
-        //               back: () => router.push({ name: 'admin-areas' }),
-        //             }),
-        //             children: [
-        //               {
-        //                 path: 'del',
-        //                 name: 'admin-area-del',
-        //                 component: () => import('@/views/admin/area/area/del/AreaDel.vue'),
-        //                 props: () => ({
-        //                   back: () => router.push({ name: 'admin-areas' }),
-        //                   cancel: () => router.push({ name: 'admin-area-details' }),
-        //                 })
-        //               },
-        //             ]
-        //           },
-        //           {
-        //             path: 'edit',
-        //             name: 'admin-area-edit',
-        //             component: () => import('@/views/admin/area/area/edit/AreaEditForm.vue'),
-        //             props: route => ({
-        //               id: parseInt(route.params.id),
-        //               back: () => router.push({ name: 'admin-area-details' }),
-        //             })
-        //           },
-        //           {
-        //             path: 'meta',
-        //             name: 'admin-area-meta',
-        //             component: () => import('@/views/admin/area/area/meta/AreaMeta.vue'),
-        //             props: () => ({ back: () => router.push({ name: 'admin-area-details' }), })
-        //           }
-        //         ]
-        //       },
-        //     ]
-        //   },
-        //   {
-        //     path: 'new',
-        //     name: 'admin-areas-new',
-        //     component: () => import('@/views/admin/area/new/AreaNewForm.vue'),
-        //     props: () => ({
-        //       back: () => router.push({ name: 'admin-areas' })
-        //     })
-        //   }
-        // ]
+        component: () => import('@/views/admin/areas/index.vue'),
+        props: (route) => ({
+          showLista: route.name === 'admin-areas',
+          linkCrear: { name: 'admin-areas-crear' },
+          setAreaId: (areaId) => areaId && router.push({
+            name: 'admin-area',
+            params: { areaId }
+          }),
+        }),
+        children: [
+          {
+            path: 'crear',
+            name: 'admin-areas-crear',
+            component: () => import('@/views/admin/areas/crear.vue'),
+            props: () => ({
+              back: () => router.push({ name: 'admin-areas' })
+            })
+          },
+          {
+            path: ':areaId',
+            name: 'admin-area',
+            component: () => import('@/views/admin/areas/[id]/index.vue'),
+            props: route => ({
+              showDetalle: route.name === 'admin-area',
+              areaId: parseInt(route.params.areaId),
+              back: { name: 'admin-areas' },
+              editar: { name: 'admin-area-editar' },
+              eliminar: { name: 'admin-area-eliminar' },
+            }),
+            children: [
+              {
+                path: 'editar',
+                name: 'admin-area-editar',
+                component: () => import('@/views/admin/areas/[id]/editar.vue'),
+                props: (route) => ({
+                  areaId: parseInt(route.params.areaId),
+                  back: () => router.push({ name: 'admin-area' }),
+                })
+              },
+              {
+                path: 'eliminar',
+                name: 'admin-area-eliminar',
+                component: () => import('@/views/admin/areas/[id]/eliminar.vue'),
+                props: (route) => ({
+                  areaId: parseInt(route.params.areaId),
+                  back: () => router.push({ name: 'admin-area' }),
+                  backLista: () => router.push({ name: 'admin-areas' }),
+                })
+              },
+            ]
+          },
+        ]
       },
       {
         path: 'tipos',
@@ -514,9 +501,6 @@ const routesAdmin = [
             ]
           },
         ]
-        //   },
-        //   
-        // ]
       },
     ]
   }

@@ -7,6 +7,7 @@ const props = defineProps({
   eliminar: Object,
 })
 
+import { formatTime } from '@/composables/useDates'
 import { useTipoQuery } from '@/stores/tipos'
 
 const { tipo, isPending } = useTipoQuery(props.tipoId)
@@ -23,7 +24,7 @@ const { tipo, isPending } = useTipoQuery(props.tipoId)
         <BButton :to="editar" variant="flat ms-auto">
           <ILucidePenLine /> Editar
         </BButton>
-        <BButton v-if="!tipo.uso" :to="eliminar" variant="flat">
+        <BButton v-if="tipo.permisos.eliminar" :to="eliminar" variant="flat">
           <ILucideTrash /> Eliminar
         </BButton>
       </template>
@@ -51,11 +52,11 @@ const { tipo, isPending } = useTipoQuery(props.tipoId)
         </div>
       </div>
       <template v-if="tipo.modified_by">
-        <!-- <div class="w-100 bg-light mx-n2 p-2 rounded-3 mt-3"> -->
         <div class="pt-3 border-top">
           <label class="form-label">Modificado</label>
           <div>
-            {{ tipo.modified_by || '-' }}, {{ tipo.modified_on.slice(0, 10) }}
+            {{ tipo.modified_by }},
+            {{ formatTime(tipo.modified_on) }}
           </div>
         </div>
       </template>

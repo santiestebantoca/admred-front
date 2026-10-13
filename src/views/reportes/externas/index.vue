@@ -3,8 +3,9 @@ const props = defineProps({
   linkSolicitud: Function
 })
 
-import { DIRECCION_ADMINISTRACION_ID, NIVELES_AREAS_EXTERNAS, PENDIENTE_TERMINADA } from '@/constants/solicitud'
+import { DIRECCION_ADMINISTRACION_ID, PENDIENTE_TERMINADA } from '@/constants/solicitud'
 import { useDemandantesQuery } from '@/stores/demandantes'
+import { useNivelesQuery } from '@/stores/niveles'
 import { formatTime } from '@/composables/useDates'
 import useExportCSV from '@/composables/useExportCSV'
 import { useSolicitudesExternasQuery } from '@/stores/reportes'
@@ -12,6 +13,7 @@ import { ref, computed, inject, watchEffect } from 'vue'
 
 const title = inject('reportes:title')
 const { origenes, params: origenesParams } = useDemandantesQuery()
+const { niveles } = useNivelesQuery()
 const { solicitudes, isPending, isLoading, refresh, params } = useSolicitudesExternasQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
 const form = ref({
@@ -37,7 +39,7 @@ watchEffect(() => origenesParams.value = {
   desde: form.value.desde,
   hasta: form.value.hasta,
   destino_id: DIRECCION_ADMINISTRACION_ID,
-  origen_nivel: NIVELES_AREAS_EXTERNAS
+  origen_nivel: niveles.value?.filter((d) => d.alcance === 'externo').map((d) => d.id)
 })
 
 function fechaformatter({ value }) { return formatTime(value) || '-' }
