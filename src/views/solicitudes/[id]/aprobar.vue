@@ -18,11 +18,13 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   aprobado: {
     state: errors.value.aprobado ? false : null,
-    invalidFeedback: errors.value.aprobado
+    invalidFeedback: errors.value.aprobado,
+    onInput: () => errors.value.aprobado = null
   },
   nota: {
     state: errors.value.nota ? false : null,
-    invalidFeedback: errors.value.nota
+    invalidFeedback: errors.value.nota,
+    onInput: () => errors.value.nota = null
   },
 }))
 const requiresNota = computed(() => form.value.aprobado === '0')
@@ -57,11 +59,10 @@ const submit = async () => {
         <BFormRadioGroup v-model="form.aprobado" stacked density="2" :options="[
           { text: 'Aprobar respuesta del tramitador', value: '1' },
           { text: 'Desaprobar respuesta del tramitador', value: '0' },
-        ]" v-bind="errorState.aprobado" @input="errors.aprobado = null" />
+        ]" v-bind="errorState.aprobado" />
         <BFormGroup v-if="requiresNota" v-bind="errorState.nota">
           <BFormTextarea v-model="form.nota" no-resize
-            placeholder="* (Obligatorio) Escriba los motivos para desaprobar esta respuesta" rows="8" class="lizo"
-            @input="errors.nota = null" />
+            placeholder="* (Obligatorio) Escriba los motivos para desaprobar esta respuesta" rows="8" class="lizo" />
         </BFormGroup>
       </BForm>
     </div>

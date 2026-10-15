@@ -15,11 +15,13 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   username: {
     state: errors.value.username ? false : null,
-    invalidFeedback: errors.value.username
+    invalidFeedback: errors.value.username,
+    onInput: () => errors.value.username = null
   },
   password: {
     state: errors.value.password ? false : null,
-    invalidFeedback: errors.value.password
+    invalidFeedback: errors.value.password,
+    onInput: () => errors.value.password = null
   },
 }))
 const alert = ref(0)
@@ -56,13 +58,11 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       <BForm @submit.prevent="submit" density="3">
         <BFormGroup class="position-relative" v-bind="errorState.username">
           <ILucideUser class="p-icon" />
-          <BFormInput v-model="form.username" name="username" placeholder="Nombre de usuario"
-            @input="errors.username = null" />
+          <BFormInput v-model="form.username" name="username" placeholder="Nombre de usuario" />
         </BFormGroup>
         <BFormGroup class="position-relative" v-bind="errorState.password">
           <ILucideLock class="p-icon" />
-          <BFormInput :type="type" v-model="form.password" name="password" placeholder="Contraseña"
-            @input="errors.password = null" />
+          <BFormInput :type="type" v-model="form.password" name="password" placeholder="Contraseña" />
           <BButton @click.stop="toggleType" variant="link link-dark wh-34" class="p-end-button">
             <template v-if="!(errorState.password.state === false)">
               <ILucideEye v-if="type === 'password'" class="center" />

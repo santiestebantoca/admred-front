@@ -27,11 +27,13 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   destino: {
     state: errors.value.destino ? false : null,
-    invalidFeedback: errors.value.destino
+    invalidFeedback: errors.value.destino,
+    onInput: () => errors.value.destino = null
   },
   objetivo: {
     state: errors.value.objetivo ? false : null,
-    invalidFeedback: errors.value.objetivo
+    invalidFeedback: errors.value.objetivo,
+    onInput: () => errors.value.objetivo = null
   },
 }))
 const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
@@ -63,10 +65,10 @@ const submit = async () => {
   <BModalPlus v-model="model" title="Crear solicitud" capsule-title="Crear solicitud" @hidden="back" size="lg"
     fullscreen="sm" :scrollable="false">
     <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3">
-      <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" @input="errors.destino = null" />
+      <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
       <BFormGroup v-bind="errorState.objetivo">
         <BFormTextarea v-model="form.objetivo" no-resize placeholder="Objetivo o alcance de la demanda" rows="8"
-          class="lizo" @input="errors.objetivo = null" />
+          class="lizo" />
       </BFormGroup>
       <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" />
     </BForm>

@@ -19,7 +19,8 @@ const errors = ref({})
 const errorState = computed(() => ({
   tramitador: {
     state: errors.value.tramitador ? false : null,
-    invalidFeedback: errors.value.tramitador
+    invalidFeedback: errors.value.tramitador,
+    onInput: () => errors.value.tramitador = null
   },
 }))
 const { tramitadores, isPending: tramitadoresPendientes } = useTramitadoresQuery()
@@ -56,8 +57,7 @@ const submit = async () => {
   <BModal v-model="model" @hidden="back" title="Asignar">
     <BForm id="form-asignar" @submit.prevent="submit" density="3">
       <BFormGroup label="Tramitador" v-bind="errorState.tramitador">
-        <BFormSelect v-model="form.tramitador" :options="tramitadores" value-field="id" text-field="name"
-          @input="errors.tramitador = null" />
+        <BFormSelect v-model="form.tramitador" :options="tramitadores" value-field="id" text-field="name" />
       </BFormGroup>
     </BForm>
     <template #footer>

@@ -7,11 +7,6 @@ export const queryKeys = {
     root: ['authGroups'],
     listas: () => [...queryKeys.authGroups.root, 'lista'],
   },
-  authMembership: {
-    root: ['authMembership'],
-    listas: () => [...queryKeys.authMembership.root, 'lista'],
-    lista: (filtros) => [...queryKeys.authMembership.listas(), { ...filtros }],
-  },
   notificaciones: {
     root: ['notificaciones'],
     listas: () => [...queryKeys.notificaciones.root, 'lista'],

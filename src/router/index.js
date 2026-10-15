@@ -306,89 +306,67 @@ const routesAdmin = [
       {
         path: 'usuarios',
         name: 'admin-usuarios',
-        // component: () => import('@/views/admin/usuarios/index.vue'),
-        // children: [
-        //   {
-        //     path: '',
-        //     name: 'admin-users',
-        //     component: () => import('@/views/admin/user/users/AdminUsers.vue'),
-        //     props: route => ({
-        //       grid: route.name === 'admin-users',
-        //       newItem: () => router.push({ name: 'admin-users-new', params: {} }),
-        //       linkItem: id => router.push({ name: 'admin-user-details', params: { id } }),
-        //     }),
-        //     children: [
-        //       {
-        //         path: ':id',
-        //         name: 'admin-user',
-        //         component: () => import('@/views/admin/user/user/AdminUser.vue'),
-        //         props: route => ({ id: parseInt(route.params.id) }),
-        //         children: [
-        //           {
-        //             path: '',
-        //             name: 'admin-user-details',
-        //             component: () => import('@/views/admin/user/user/details/UserDetails.vue'),
-        //             props: () => ({
-        //               back: () => router.push({ name: 'admin-users' }),
-        //             }),
-        //             children: [
-        //               {
-        //                 path: 'del',
-        //                 name: 'admin-user-del',
-        //                 component: () => import('@/views/admin/user/user/del/UserDel.vue'),
-        //                 props: () => ({
-        //                   back: () => router.push({ name: 'admin-users' }),
-        //                   cancel: () => router.push({ name: 'admin-user-details' }),
-        //                   block: () => router.push({ name: 'admin-user-block' }),
-        //                 })
-        //               },
-        //               {
-        //                 path: 'block',
-        //                 name: 'admin-user-block',
-        //                 component: () => import('@/views/admin/user/user/block/UserBlock.vue'),
-        //                 props: () => ({
-        //                   back: () => router.push({ name: 'admin-user-details' }),
-        //                 })
-        //               },
-        //             ]
-        //           },
-        //           {
-        //             path: 'edit',
-        //             name: 'admin-user-edit',
-        //             component: () => import('@/views/admin/user/user/edit/UserEditForm.vue'),
-        //             props: route => ({
-        //               id: parseInt(route.params.id),
-        //               back: () => router.push({ name: 'admin-user-details' }),
-        //             })
-        //           },
-        //           {
-        //             path: 'membership',
-        //             name: 'admin-user-membership',
-        //             component: () => import('@/views/admin/user/user/membership/UserMembershipForm.vue'),
-        //             props: route => ({
-        //               id: parseInt(route.params.id),
-        //               back: () => router.push({ name: 'admin-user-details' }),
-        //             })
-        //           },
-        //           {
-        //             path: 'meta',
-        //             name: 'admin-user-meta',
-        //             component: () => import('@/views/admin/user/user/meta/UserMeta.vue'),
-        //             props: () => ({ back: () => router.push({ name: 'admin-user-details' }), })
-        //           }
-        //         ]
-        //       }
-        //     ]
-        //   },
-        //   {
-        //     path: 'new',
-        //     name: 'admin-users-new',
-        //     component: () => import('@/views/admin/user/new/UserNewWizard.vue'),
-        //     props: () => ({
-        //       back: () => router.push({ name: 'admin-users' }),
-        //     }),
-        //   },
-        // ]
+        component: () => import('@/views/admin/usuarios/index.vue'),
+        props: (route) => ({
+          showLista: route.name === 'admin-usuarios',
+          linkCrear: { name: 'admin-usuarios-crear' },
+          setUsuarioId: (usuarioId) => usuarioId && router.push({
+            name: 'admin-usuario',
+            params: { usuarioId }
+          }),
+        }),
+        children: [
+          {
+            path: 'crear',
+            name: 'admin-usuarios-crear',
+            component: () => import('@/views/admin/usuarios/crear.vue'),
+            props: () => ({
+              back: () => router.push({ name: 'admin-usuarios' })
+            })
+          },
+          {
+            path: ':usuarioId',
+            name: 'admin-usuario',
+            component: () => import('@/views/admin/usuarios/[id]/index.vue'),
+            props: route => ({
+              showDetalle: route.name === 'admin-usuario',
+              usuarioId: parseInt(route.params.usuarioId),
+              back: { name: 'admin-usuarios' },
+              editar: { name: 'admin-usuario-editar' },
+              eliminar: { name: 'admin-usuario-eliminar' },
+            }),
+            children: [
+              {
+                path: 'editar',
+                name: 'admin-usuario-editar',
+                component: () => import('@/views/admin/usuarios/[id]/editar.vue'),
+                props: (route) => ({
+                  usuarioId: parseInt(route.params.usuarioId),
+                  back: () => router.push({ name: 'admin-usuario' }),
+                })
+              },
+              {
+                path: 'membresia',
+                name: 'admin-usuario-membresia',
+                component: () => import('@/views/admin/usuarios/[id]/membresia.vue'),
+                props: (route) => ({
+                  usuarioId: parseInt(route.params.usuarioId),
+                  back: () => router.push({ name: 'admin-usuario' }),
+                })
+              },
+              {
+                path: 'eliminar',
+                name: 'admin-usuario-eliminar',
+                component: () => import('@/views/admin/usuarios/[id]/eliminar.vue'),
+                props: (route) => ({
+                  usuarioId: parseInt(route.params.usuarioId),
+                  back: () => router.push({ name: 'admin-usuario' }),
+                  backLista: () => router.push({ name: 'admin-usuarios' }),
+                })
+              },
+            ]
+          },
+        ]
       },
       {
         path: 'areas',

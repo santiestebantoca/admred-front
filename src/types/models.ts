@@ -1,34 +1,39 @@
 // Areas
 export interface AreaUpdate {
-  id: number | string,
-  nombre: string,
-  padre: number | null,
-  nivel: number | null,
+  id: number | string
+  nombre: string
+  padre: number | null
+  nivel: number | null
 }
 
 export interface AreaCreate {
-  nombre: string,
-  padre: number | null,
-  nivel: number | null,
+  nombre: string
+  padre: number | null
+  nivel: number | null
 }
 
 // Tipos
 export interface TipoUpdate {
-  id: number | string,
-  nombre: string,
-  descripcion: string,
+  id: number | string
+  nombre: string
+  descripcion: string
 }
 
 export interface TipoCreate {
-  nombre: string,
-  descripcion: string,
+  nombre: string
+  descripcion: string
 }
 
 // Usuarios
 export interface UsuarioCreate {
-  first_name: string
-  last_name: string
-  username: string
+  first_name: string | null
+  last_name: string | null
+  username: string | null
+  email: string | null
+  area: string | null
+  fijo: string | null
+  movil: string | null
+  grupos: string[]
 }
 
 export interface UsuarioUpdate extends UsuarioCreate {
@@ -38,129 +43,129 @@ export interface UsuarioUpdate extends UsuarioCreate {
 
 // Solicitudes
 interface UsuarioSolicitud {
-  id: number,
-  name: string,
-  username: string,
-  email: string | null,
-  fijo: string | null,
-  movil: string | null,
+  id: number
+  name: string
+  username: string
+  email: string | null
+  fijo: string | null
+  movil: string | null
   registration_key: string | null
 }
 
 interface SolicitudEsquema {
-  id: number,
-  codigo: string,
-  origen: string,
-  destino: string,
-  estado: string,
-  origen_id: number,
-  destino_id: number,
+  id: number
+  codigo: string
+  origen: string
+  destino: string
+  estado: string
+  origen_id: number
+  destino_id: number
 }
 
 interface AdjuntoSolicitud {
-  id: number,
-  solicitud_id: number,
-  upload_id: number,
+  id: number
+  solicitud_id: number
+  upload_id: number
   tipo: number
 }
 
 export interface SolicitudDetalle {
-  id: number,
-  codigo: string,
-  objetivo: string,
+  id: number
+  codigo: string
+  objetivo: string
   origen: {
-    id: number,
+    id: number
     nombre: string
-  },
+  }
   destino: {
-    id: number,
+    id: number
     nombre: string
-  },
+  }
   tipo: {
-    id: number,
+    id: number
     nombre: string
-  },
+  }
   estado: {
-    id: number,
+    id: number
     nombre: string
-  },
-  remitente: UsuarioSolicitud,
-  supervisor: UsuarioSolicitud | null,
-  tramitador: UsuarioSolicitud | null,
-  padre: SolicitudEsquema | null,
-  hijos: SolicitudEsquema[],
-  solicitado_en: string,
-  tramitador_en: string | null,
-  respuesta_en: string | null,
-  terminado_en: string | null,
-  cumplir_en: string | null,
-  observaciones: string | null,
-  evaluacion: number | null,
-  cant_nota: number,
-  adjuntos_solicitud: AdjuntoSolicitud[],
-  adjuntos_respuesta: AdjuntoSolicitud[],
+  }
+  remitente: UsuarioSolicitud
+  supervisor: UsuarioSolicitud | null
+  tramitador: UsuarioSolicitud | null
+  padre: SolicitudEsquema | null
+  hijos: SolicitudEsquema[]
+  solicitado_en: string
+  tramitador_en: string | null
+  respuesta_en: string | null
+  terminado_en: string | null
+  cumplir_en: string | null
+  observaciones: string | null
+  evaluacion: number | null
+  cant_nota: number
+  adjuntos_solicitud: AdjuntoSolicitud[]
+  adjuntos_respuesta: AdjuntoSolicitud[]
   permisos: {
-    asignar: boolean,
-    reenviar: boolean,
-    responder: boolean,
-    aprobar: boolean,
-    evaluar: boolean,
-    comentar: boolean,
+    asignar: boolean
+    reenviar: boolean
+    responder: boolean
+    aprobar: boolean
+    evaluar: boolean
+    comentar: boolean
   }
 }
 
 export interface SolicitudCreate {
-  destino: number,
-  objetivo: string,
-  adjuntos: number[],
-  tipo: number,
+  destino: number
+  objetivo: string
+  adjuntos: number[]
+  tipo: number
   cumplir_en?: string
 }
 
 export interface SolicitudCreateFromParent {
-  padre: number,
-  destino: number,
-  objetivo: string,
-  adjuntos: number[],
-  tipo: number,
+  padre: number
+  destino: number
+  objetivo: string
+  adjuntos: number[]
+  tipo: number
   cumplir_en?: string
 }
 
 export interface SolicitudUpdate {
-  id: number | string,
-  tipo?: number,
-  cumplir_en?: string,
+  id: number | string
+  tipo?: number
+  cumplir_en?: string
   tramitador?: number
 }
 
 export interface SolicitudRespondida {
-  observaciones: string,
-  adjuntos: number[],
+  observaciones: string
+  adjuntos: number[]
 }
 
 export interface SolicitudAprobada {
-  aprobado: string,
-  nota?: string,
+  aprobado: string
+  nota?: string
 }
 
 export interface SolicitudEvaluada {
-  evaluacion: number,
+  evaluacion: number
 }
 
 // Notas
 export interface Nota {
-  id: number,
-  fecha: string,
+  id: number
+  fecha: string
   autor: {
-    name: string,
-  },
-  como: string,
-  texto: string,
-  evento: string | null,
+    name: string
+  }
+  como: string
+  texto: string
+  evento: string | null
 }
 
 export interface NotaCreate {
-  texto: string,
+  texto: string
   solicitud: number
 }
 

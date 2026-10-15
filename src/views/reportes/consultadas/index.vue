@@ -1,5 +1,5 @@
 <script setup>
-import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, CURSO_SOLICITUD } from '@/constants/solicitud'
+import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, CURSO_SOLICITUD } from '@/constants'
 import useExportCSV from '@/composables/useExportCSV'
 import { useAreasConsultadasQuery } from '@/stores/reportes'
 import { ref, inject } from 'vue'

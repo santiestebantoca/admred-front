@@ -1,4 +1,5 @@
 <script setup>
+import { USOS_DEL_TIPO } from '@/constants'
 import { ref } from 'vue'
 
 // Los filtros son estado de quien usa el componente (ListaGrid); aquí sólo se
@@ -96,11 +97,7 @@ const reset = () => {
           <BInput v-model="form.descripcion" />
         </BFormGroup>
         <BFormGroup label="Uso " label-cols-md="2" content-cols-md="4">
-          <BFormSelect v-model="form.uso" :options="[
-            { value: undefined, text: '' },
-            { value: '0', text: 'Sin uso' },
-            { value: '2', text: 'Poco uso' },
-          ]" />
+          <BFormSelect v-model="form.uso" :options="USOS_DEL_TIPO" />
         </BFormGroup>
         <BFormButtons>
           <BButton type="submit" variant="primary">

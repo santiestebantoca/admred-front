@@ -1,5 +1,5 @@
 <script setup>
-import { AREAS_AR } from '@/constants/solicitud'
+import { AREAS_AR } from '@/constants'
 import { formatTime } from '@/composables/useDates'
 import useExportCSV from '@/composables/useExportCSV'
 import { useSolicitudesRawQuery } from '@/stores/reportes'

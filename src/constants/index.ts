@@ -29,3 +29,24 @@ export const CURSO_SOLICITUD = [
 ]
 
 export const DIRECCION_ADMINISTRACION_ID = 2
+
+export const USOS_DEL_TIPO = [
+  { value: undefined, text: '' },
+  { value: '0', text: 'Sin uso' },
+  { value: '2', text: 'Poco uso' },
+]
+
+export const ROLES_DEL_USUARIO = [
+  { value: undefined, text: '' },
+  { value: '1', text: 'Admnistrador' },
+  { value: '2', text: 'Supervisor' },
+]
+
+export const ESTADOS_DEL_USUARIO = [
+  { value: undefined, text: '' },
+  { value: 'blocked', text: 'Bloqueado' },
+]
+
+export const EMAIL_PATRON = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+export const TELEFONO_PATRON = /^[1-9][0-9]{7}$/

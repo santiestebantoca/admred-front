@@ -18,11 +18,13 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   nombre: {
     state: errors.value.nombre ? false : null,
-    invalidFeedback: errors.value.nombre
+    invalidFeedback: errors.value.nombre,
+    onInput: () => errors.value.nombre = null
   },
   descripcion: {
     state: errors.value.descripcion ? false : null,
-    invalidFeedback: errors.value.descripcion
+    invalidFeedback: errors.value.descripcion,
+    onInput: () => errors.value.descripcion = null
   },
 }))
 const { mutateAsync: crearTipo, asyncStatus } = useTipoCreate()
@@ -57,17 +59,14 @@ const submit = () => {
     </div>
     <BForm @submit.prevent="submit" density="3">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
-        <BFormInput v-model="form.nombre" trim @input="errors.nombre = null" />
+        <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
       <BFormGroup label="Descripción" v-bind="errorState.descripcion">
-        <BFormTextarea v-model="form.descripcion" trim @input="errors.descripcion = null" no-resize />
+        <BFormTextarea v-model="form.descripcion" trim no-resize />
       </BFormGroup>
       <BFormButtons class="py-4">
         <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
           Crear
-        </BButton>
-        <BButton type="reset" variant="emphasis">
-          Reiniciar
         </BButton>
       </BFormButtons>
     </BForm>

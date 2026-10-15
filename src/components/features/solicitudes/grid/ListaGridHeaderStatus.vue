@@ -1,5 +1,5 @@
 <script setup>
-import { PENDIENTE_STATUS } from '@/constants/solicitud'
+import { PENDIENTE_STATUS } from '@/constants'
 import { useSolicitudesFiltro } from '@/stores/solicitudes'
 import { computed, toRefs } from 'vue';
 

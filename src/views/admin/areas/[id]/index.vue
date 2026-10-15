@@ -42,13 +42,13 @@ const { area, isPending } = useAreaQuery(props.areaId)
       <div class="w-100">
         <label class="form-label">Nivel</label>
         <div>
-          {{ area.nivel.nombre }}
+          {{ area.nivel?.nombre }}
         </div>
       </div>
       <div class="w-100">
         <label class="form-label">Pertenece al área</label>
         <div>
-          {{ area.padre.nombre }}
+          {{ area.padre?.nombre || '-' }}
         </div>
       </div>
       <template v-if="area.modified_by">

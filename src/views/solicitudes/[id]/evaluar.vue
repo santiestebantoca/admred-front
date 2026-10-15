@@ -17,7 +17,7 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   evaluacion: {
     state: errors.value.evaluacion ? false : null,
-    invalidFeedback: errors.value.evaluacion
+    invalidFeedback: errors.value.evaluacion,
   },
 }))
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
@@ -48,7 +48,7 @@ const submit = async () => {
       <p>Evaluación de la respuesta recibida.</p>
       <BForm id="form-evaluar" @submit.prevent="submit" density="3">
         <BFormGroup v-bind="errorState.evaluacion">
-          <BFormRating v-model="form.evaluacion" variant="warning" @update:model-value="errors.evaluacion = null" />
+          <BFormRating v-model="form.evaluacion" variant="warning" @update:modelValue="errors.evaluacion = null" />
         </BFormGroup>
       </BForm>
     </div>

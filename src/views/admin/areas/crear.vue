@@ -21,15 +21,18 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   nombre: {
     state: errors.value.nombre ? false : null,
-    invalidFeedback: errors.value.nombre
+    invalidFeedback: errors.value.nombre,
+    onInput: () => errors.value.nombre = null
   },
   nivel: {
     state: errors.value.nivel ? false : null,
-    invalidFeedback: errors.value.nivel
+    invalidFeedback: errors.value.nivel,
+    onInput: () => errors.value.nivel = null
   },
   padre: {
     state: errors.value.padre ? false : null,
-    invalidFeedback: errors.value.padre
+    invalidFeedback: errors.value.padre,
+    onInput: () => errors.value.padre = null
   },
 }))
 const { mutateAsync: crearArea, asyncStatus } = useAreaCreate()
@@ -73,21 +76,18 @@ const submit = () => {
     </div>
     <BForm @submit.prevent="submit" density="3">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
-        <BFormInput v-model="form.nombre" trim @input="errors.nombre = null" />
+        <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
-      <BFormGroup label="Nivel" v-bind="errorState.nivel" @input="errors.nivel = null">
+      <BFormGroup label="Nivel" v-bind="errorState.nivel">
         <BFormSelect v-model="form.nivel" :options="niveles" text-field="nombre" value-field="id" />
       </BFormGroup>
-      <BFormGroup label="Pertenece a" v-bind="errorState.padre" @input="errors.padre = null">
+      <BFormGroup label="Pertenece a" v-bind="errorState.padre">
         <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending"
           text-field="nombre" value-field="id" />
       </BFormGroup>
       <BFormButtons class="py-4">
         <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
           Crear
-        </BButton>
-        <BButton type="reset" variant="emphasis">
-          Reiniciar
         </BButton>
       </BFormButtons>
     </BForm>

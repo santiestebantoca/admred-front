@@ -1,5 +1,5 @@
 <script setup>
-import { PERIODOS } from '@/constants/solicitud'
+import { PERIODOS } from '@/constants'
 import { useSolicitudesFiltro } from '@/stores/solicitudes'
 import { computed, toRefs } from 'vue';
 

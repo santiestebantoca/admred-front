@@ -53,7 +53,7 @@ export const useSolicitudesQuery = defineQuery(() => {
 
   return {
     solicitudes: computed(() => data.value?.data),
-    total: computed(() => data.value?.total),
+    total: computed(() => data.value?.meta.total),
     isPending,
     isLoading,
     isStale,

@@ -3,7 +3,7 @@ const props = defineProps({
   linkSolicitud: Function
 })
 
-import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, PENDIENTE_TERMINADA } from '@/constants/solicitud'
+import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, PENDIENTE_TERMINADA } from '@/constants'
 import { useConsultadasQuery } from '@/stores/consultadas'
 import { useNivelesQuery } from '@/stores/niveles'
 import { formatTime } from '@/composables/useDates'

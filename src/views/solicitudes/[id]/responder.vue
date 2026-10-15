@@ -19,7 +19,8 @@ const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   observaciones: {
     state: errors.value.observaciones ? false : null,
-    invalidFeedback: errors.value.observaciones
+    invalidFeedback: errors.value.observaciones,
+    onInput: () => errors.value.observaciones = null
   },
 }))
 const adjuntosHeredados = ref([])
@@ -62,8 +63,7 @@ const submit = async () => {
     <template v-else>
       <BForm id="form-responder" @submit.prevent="submit" density="3">
         <BFormGroup v-bind="errorState.observaciones">
-          <BFormTextarea v-model="form.observaciones" no-resize placeholder="Observaciones" rows="8" class="lizo"
-            @input="errors.observaciones = null" />
+          <BFormTextarea v-model="form.observaciones" no-resize placeholder="Observaciones" rows="8" class="lizo" />
         </BFormGroup>
         <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
       </BForm>
