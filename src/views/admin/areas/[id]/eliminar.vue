@@ -32,11 +32,10 @@ const submit = () => eliminarArea(props.areaId)
       <h5 class="mb-1">Eliminar área</h5>
     </div>
     <p>
-      Esta acción eliminará permanentemente el área seleccionada.
+      Se eliminará el área permanentemente.
     </p>
-    <p>
-      La acción es segura porque el área no está asociada a ninguna operación.
-      No obstante, debe tener en cuenta que esta acción no se puede deshacer.
+    <p class="fw-semibold">
+      Esta acción no se puede deshacer.
     </p>
     <BFormButtons class="py-4">
       <BButton variant="secondary" @click="back">

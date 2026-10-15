@@ -1,21 +1,18 @@
 import { useQuery } from '@pinia/colada'
 import { usuariosApi as api } from '@/api/usuarios'
 import { queryKeys } from '@/lib/query-keys'
-import { ref } from 'vue'
+import { toValue } from 'vue'
 
-export function useUsuarioQuery(id?: number | string) {
-  const usuarioId = ref(id)
-
+export function useUsuarioQuery(id) {
   const { data, isPending } = useQuery({
-    key: () => queryKeys.usuarios.detalle(usuarioId.value),
-    query: () => api.getById(usuarioId.value),
-    enabled: () => !!usuarioId.value,
+    key: () => queryKeys.usuarios.detalle(toValue(id)),
+    query: () => api.getById(toValue(id)),
+    enabled: () => toValue(id),
     // staleTime: Infinity
   })
 
   return {
     usuario: data,
     isPending,
-    usuarioId
   }
 }

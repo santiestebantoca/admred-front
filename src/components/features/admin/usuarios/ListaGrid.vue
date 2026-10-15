@@ -26,7 +26,9 @@ const fields = [
   {
     key: 'registration_key',
     label: 'Estado de registro',
-    formatter: ({ value }) => value || '-'
+    formatter: ({ value }) => value
+      ? value === 'blocked' ? 'Bloqueado' : value
+      : '-'
   },
 ]
 const tableId = 'admin-usuarios-tabla'

@@ -346,15 +346,6 @@ const routesAdmin = [
                 })
               },
               {
-                path: 'membresia',
-                name: 'admin-usuario-membresia',
-                component: () => import('@/views/admin/usuarios/[id]/membresia.vue'),
-                props: (route) => ({
-                  usuarioId: parseInt(route.params.usuarioId),
-                  back: () => router.push({ name: 'admin-usuario' }),
-                })
-              },
-              {
                 path: 'eliminar',
                 name: 'admin-usuario-eliminar',
                 component: () => import('@/views/admin/usuarios/[id]/eliminar.vue'),

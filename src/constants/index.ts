@@ -50,3 +50,8 @@ export const ESTADOS_DEL_USUARIO = [
 export const EMAIL_PATRON = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 export const TELEFONO_PATRON = /^[1-9][0-9]{7}$/
+
+export const REGISTRATION_KEY_OPTIONS = [
+  { value: '', text: 'Normal' },
+  { value: 'blocked', text: 'Bloqueado' },
+]

@@ -1,7 +1,7 @@
 <script setup>
 import { ROLES_DEL_USUARIO, ESTADOS_DEL_USUARIO } from '@/constants'
-import { tidy, arrange } from '@tidyjs/tidy'
-import { useAreasQuery } from '@/stores/areas'
+import { useAuthQuery } from '@/stores/auth'
+import { useAreasOpcionesQuery } from '@/stores/areas'
 import { ref, computed } from 'vue'
 
 // Los filtros son estado de quien usa el componente (ListaGrid); aquí sólo se
@@ -21,8 +21,9 @@ const form = ref({
   rol: undefined,
   estado: undefined
 })
-const { areas: _areas } = useAreasQuery()
-const areas = computed(() => _areas.value && tidy(_areas.value, arrange(['nombre'])))
+const { authUser } = useAuthQuery()
+const showArea = computed(() => authUser.value?.AR)
+const { areas } = useAreasOpcionesQuery(showArea)
 const emit = defineEmits(['reset'])
 const dropdown = ref(false)
 const inputValue = ref(undefined) // valor del input principal ej., "info nombre:informa"
@@ -102,10 +103,10 @@ const reset = () => {
         <BFormGroup label="Nombre" label-cols-md="2" content-cols-md>
           <BInput v-model="form.nombre" />
         </BFormGroup>
-        <BFormGroup label="Área" label-cols-md="2" content-cols-md>
+        <BFormGroup v-if="showArea" label="Área" label-cols-md="2" content-cols-md>
           <BFormSelect v-model="form.area" :options="areas" value-field="id" text-field="nombre" />
         </BFormGroup>
-        <BFormGroup label="Rol" label-cols-md="2" content-cols-md="auto">
+        <BFormGroup label="Grupos" label-cols-md="2" content-cols-md="auto">
           <BFormSelect id="rol-select" v-model="form.rol" :options="ROLES_DEL_USUARIO" />
         </BFormGroup>
         <BFormGroup label="Estado" label-cols-md="2" content-cols-md="auto">

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 const props = defineProps({
   showDetalle: Boolean,
-  tipoId: Number,
+  usuarioId: Number,
   back: Object,
   editar: Object,
   eliminar: Object,
 })
 
 import { formatTime } from '@/composables/useDates'
-import { useTipoQuery } from '@/stores/tipos'
+import { useUsuarioQuery } from '@/stores/usuarios'
 
-const { tipo, isPending } = useTipoQuery(props.tipoId)
+const { usuario, isPending } = useUsuarioQuery(props.usuarioId)
 </script>
 
 <template>
@@ -24,7 +24,7 @@ const { tipo, isPending } = useTipoQuery(props.tipoId)
         <BButton :to="editar" variant="flat ms-auto">
           <ILucidePenLine /> Editar
         </BButton>
-        <BButton v-if="tipo.permisos.eliminar" :to="eliminar" variant="flat">
+        <BButton v-if="usuario.permisos.eliminar" :to="eliminar" variant="flat">
           <ILucideTrash /> Eliminar
         </BButton>
       </template>
@@ -36,27 +36,48 @@ const { tipo, isPending } = useTipoQuery(props.tipoId)
       <div class="w-100">
         <label class="form-label">Nombre</label>
         <div>
-          {{ tipo.nombre }}
+          {{ usuario.first_name }} {{ usuario.last_name }}
         </div>
       </div>
       <div class="w-100">
-        <label class="form-label">Descripción</label>
+        <label class="form-label">Nombre de usuario</label>
         <div>
-          {{ tipo.descripcion || '-' }}
+          {{ usuario.username }}
         </div>
       </div>
       <div class="w-100">
-        <label class="form-label">Uso</label>
+        <label class="form-label">Correo</label>
         <div>
-          {{ tipo.uso }}
+          {{ usuario.email || '-' }}
         </div>
       </div>
-      <template v-if="tipo.modified_by">
+      <div class="w-100">
+        <label class="form-label">Teléfonos</label>
+        <div>
+          {{ [usuario.movil, usuario.fijo].filter(Boolean).join(', ') || '-' }}
+        </div>
+      </div>
+      <div class="w-100">
+        <label class="form-label">Pertenece al área</label>
+        <div>
+          {{ usuario.area.nombre }}
+        </div>
+      </div>
+      <div class="w-100">
+        <label class="form-label">Grupos</label>
+        <div class="text-uppercase">
+          {{usuario.grupos.map((grupo) => grupo.role).join(', ') || '-'}}
+        </div>
+      </div>
+      <div v-if="usuario.registration_key === 'blocked'" class="w-100 bg-danger-subtle text-center p-2">
+        <span class="text-danger small fw-semibold">Registro bloquedo</span>
+      </div>
+      <template v-if="usuario.modified_by">
         <div class="pt-3 border-top">
           <label class="form-label">Modificado</label>
           <div>
-            {{ tipo.modified_by }},
-            {{ formatTime(tipo.modified_on) }}
+            {{ usuario.modified_by }},
+            {{ formatTime(usuario.modified_on) }}
           </div>
         </div>
       </template>

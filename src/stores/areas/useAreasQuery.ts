@@ -1,7 +1,8 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { areasApi as api } from '@/api/areas'
-import { computed, toValue } from 'vue'
+import { tidy, arrange } from '@tidyjs/tidy'
+import { ref, computed, toValue } from 'vue'
 
 /**
  * Consulta de areas del sistema.
@@ -40,6 +41,33 @@ export function useAreasDelNivelQuery(nivel) {
 
   return {
     areas: computed(() => toValue(nivel) ? data.value?.data : undefined),
+    isPending,
+    isLoading,
+  }
+}
+
+export function useAreasOpcionesQuery(enabled) {
+  const search = ref(undefined)
+  const params = computed(() => ({
+    search: search.value,
+    search_in: search.value && ['nombre']
+  }))
+
+  const { data, isPending, isLoading } = useQuery({
+    key: () => queryKeys.areas.lista(params.value),
+    query: () => api.getAll(params.value),
+    enabled: () => toValue(enabled),
+    staleTime: Infinity
+  })
+
+  const areas = computed(() => tidy(
+    data.value?.data.map((d) => ({ text: d.nombre, value: d.id })) || [],
+    arrange(['text'])
+  ))
+
+  return {
+    areas,
+    search,
     isPending,
     isLoading,
   }

@@ -6,11 +6,10 @@ const props = defineProps({
 import { EMAIL_PATRON, TELEFONO_PATRON } from '@/constants'
 import { isValidationError } from '@/api/client'
 import { useAuthQuery } from '@/stores/auth'
-import { useAreasQuery } from '@/stores/areas'
+import { useAreasOpcionesQuery } from '@/stores/areas'
 import { useAuthGroupsQuery } from '@/stores/auth-groups'
 import { useUsuarioCreate } from '@/stores/usuarios'
 import type { UsuarioCreate } from '@/types/models.js'
-import { tidy, arrange } from '@tidyjs/tidy'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, watchEffect } from 'vue'
 
@@ -67,9 +66,8 @@ const errorState = computed(() => ({
 const { mutateAsync: crearUsuario, asyncStatus } = useUsuarioCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const showArea = computed(() => authUser.value?.AR)
-const { groups, isPending: groupsPending } = useAuthGroupsQuery()
-const { areas: _areas, isPending: areasPending } = useAreasQuery()
-const areas = computed(() => _areas.value && tidy(_areas.value, arrange(['nombre'])))
+const { groups } = useAuthGroupsQuery()
+const { areas } = useAreasOpcionesQuery(showArea)
 
 watchEffect(() => {
   if (form.value.username) form.value.email = form.value.username + '@etecsa.cu'
@@ -120,27 +118,32 @@ const submit = () => {
       <BFormGroup label="Nombre de usuario" v-bind="errorState.username">
         <BFormInput v-model="form.username" trim />
       </BFormGroup>
+      <BFormGroup label="Correo" v-bind="errorState.email">
+        <BFormInput v-model="form.email" trim />
+      </BFormGroup>
       <BRow>
         <BCol>
-          <BFormGroup label="Tel. móvil" v-bind="errorState.movil">
+          <BFormGroup label="Móvil" v-bind="errorState.movil">
             <BFormInput v-model="form.movil" trim />
           </BFormGroup>
         </BCol>
         <BCol>
-          <BFormGroup label="Tel. oficina" v-bind="errorState.fijo">
+          <BFormGroup label="Oficina" v-bind="errorState.fijo">
             <BFormInput v-model="form.fijo" trim />
           </BFormGroup>
         </BCol>
       </BRow>
       <BFormGroup v-if="showArea" label="Pertenece al área" v-bind="errorState.area">
-        <BFormSelect v-model="form.area" :options="areas" text-field="nombre" value-field="id" />
+        <BFormSelect v-model="form.area" :options="areas" />
       </BFormGroup>
-      <BFormGroup v-slot="{ ariaDescribedby }" label="Roles del usuario (autorización)">
+      <BFormGroup v-slot="{ ariaDescribedby }" label="Grupos">
         <BFormCheckboxGroup v-model="form.grupos" :aria-describedby="ariaDescribedby">
-          <BFormCheckbox v-for="group in groups" :value="group.id" switch class="my-2">
-            <div class="text-uppercase"> {{ group.role }} </div>
-            <div class=" text-secondary"> {{ group.description }} </div>
-          </BFormCheckbox>
+          <div class="border rounded-2 p-2">
+            <BFormCheckbox v-for="group in groups" :value="group.id" class="my-2">
+              <div class="text-capitalize"> {{ group.role }} </div>
+              <div class=" text-secondary"> {{ group.description }} </div>
+            </BFormCheckbox>
+          </div>
         </BFormCheckboxGroup>
       </BFormGroup>
       <BFormButtons class="py-4">
