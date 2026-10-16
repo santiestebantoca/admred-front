@@ -45,12 +45,12 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
         <ListaSearch />
       </BCol>
       <BCol v-if="!mobile" cols="auto">
-        <BButton @click="refetch" variant="flat wh-34" v-tippy="'Actualizar'">
+        <BButton @click="refetch" variant="flat wh-36" v-tippy="'Actualizar'">
           <ILucideRefreshCcw class="center" />
         </BButton>
       </BCol>
       <BCol cols="auto">
-        <BDropdown variant="flat wh-34" no-caret v-tippy="'Menu de la tabla'">
+        <BDropdown variant="flat wh-36" no-caret v-tippy="'Menu de la tabla'">
           <template #button-content>
             <ILucideEllipsis class="center" />
           </template>
@@ -77,11 +77,15 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
   --bs-btn-active-bg: var(--bs-gray-200);
 
   &::after {
-    margin-left: 1em;
+    margin-left: 8px;
+    margin-right: -2px;
   }
 }
 
-:deep(.btn-link),
+:deep(.btn-link) {
+  --bs-border-color: var(--bs-gray-200);
+}
+
 :deep(input) {
   --bs-border-color: var(--bs-gray-500);
 }

@@ -309,6 +309,7 @@ const routesAdmin = [
         component: () => import('@/views/admin/usuarios/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-usuarios',
+          usuarioId: parseInt(route.params.usuarioId),
           linkCrear: { name: 'admin-usuarios-crear' },
           setUsuarioId: (usuarioId) => usuarioId && router.push({
             name: 'admin-usuario',
@@ -365,6 +366,7 @@ const routesAdmin = [
         component: () => import('@/views/admin/areas/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-areas',
+          areaId: parseInt(route.params.areaId),
           linkCrear: { name: 'admin-areas-crear' },
           setAreaId: (areaId) => areaId && router.push({
             name: 'admin-area',
@@ -421,6 +423,7 @@ const routesAdmin = [
         component: () => import('@/views/admin/tipos/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-tipos',
+          tipoId: parseInt(route.params.tipoId),
           linkCrear: { name: 'admin-tipos-crear' },
           setTipoId: (tipoId) => tipoId && router.push({
             name: 'admin-tipo',

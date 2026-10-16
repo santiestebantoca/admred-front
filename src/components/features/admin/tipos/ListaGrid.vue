@@ -2,10 +2,12 @@
 import Filtro from './ListaFiltro.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useTiposLista } from '@/stores/tipos'
-import { computed, inject } from 'vue'
+import { ref, computed, inject, watchEffect } from 'vue'
 
+const tipoId = inject('admin:tipos:tipoId')
 const linkCrear = inject('admin:tipos:linkCrear')
 const setTipoId = inject('admin:tipos:setTipoId')
+const active = ref([])
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -33,6 +35,8 @@ const tableId = 'admin-tipos-tabla'
 const emptyText = computed(() => isFiltered.value
   ? 'No hay tipos que coincidan con los filtros aplicados.'
   : 'Todavía no hay tipos registrados.')
+
+watchEffect(() => tipoId.value && (active.value = [tipoId.value]))
 
 const onSelectedItem = (val) => setTipoId.value(val[0])
 </script>

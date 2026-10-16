@@ -32,6 +32,8 @@ const mobile = inject('app:mobile')
     grid-template-rows: auto 1fr auto;
     overflow: hidden;
     border: 1px solid var(--bs-gray-300);
+    border-top: 1px solid var(--bs-gray-200);
+    border-bottom: 1px solid var(--bs-gray-400);
     border-radius: var(--bs-border-radius-xl); // lg
     background-color: white;
   }

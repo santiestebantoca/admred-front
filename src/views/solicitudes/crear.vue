@@ -62,7 +62,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <BModalPlus v-model="model" title="Crear solicitud" capsule-title="Crear solicitud" @hidden="back" size="lg"
+  <BModalPlus v-model="model" title="Nueva solicitud" capsule-title="Nueva solicitud" @hidden="back" size="lg"
     fullscreen="sm" :scrollable="false">
     <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3">
       <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
@@ -75,7 +75,7 @@ const submit = async () => {
     <template #footer>
       <BButton type="submit" form="form-solicitud-crear" :loading="loading" loading-fill class="w-90 me-3"
         variant="primary">
-        Crear
+        Enviar
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />

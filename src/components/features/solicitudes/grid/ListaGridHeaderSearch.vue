@@ -10,8 +10,9 @@ const { search } = toRefs(useSolicitudesFiltro())
 </template>
 
 <style scoped>
+/** Garantiza una altura de 36px */
 :deep([type="search"]) {
-  /* padding-top: .25rem;
-  padding-bottom: .25rem; */
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 </style>

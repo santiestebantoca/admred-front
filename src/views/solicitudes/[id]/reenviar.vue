@@ -72,8 +72,8 @@ const submit = async () => {
 </script>
 
 <template>
-  <BModal v-model="model" title="Crear solicitud (Reenviada)" @hidden="back" size="lg" fullscreen="sm"
-    :scrollable="false">
+  <BModalPlus v-model="model" title="Nueva solicitud (Reenviada)" capsule-title="Nueva solicitud" @hidden="back"
+    size="lg" fullscreen="sm" :scrollable="false">
     <div v-if="solicitudPendiente" class="py-5 my-5 text-center">
       <BSpinner />
     </div>
@@ -89,7 +89,7 @@ const submit = async () => {
     </template>
     <template #footer>
       <BButton type="submit" form="form-reenviar" :loading="loading" loading-fill variant="primary w-90 me-3">
-        Crear
+        Enviar
       </BButton>
       <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
@@ -97,5 +97,5 @@ const submit = async () => {
       <SeleccionarTipo v-model="form.tipo" />
       <SeleccionarCumplir v-model="form.cumplir_en" />
     </template>
-  </BModal>
+  </BModalPlus>
 </template>

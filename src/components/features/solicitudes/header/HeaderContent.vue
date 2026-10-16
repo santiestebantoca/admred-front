@@ -22,10 +22,10 @@ const mobile = inject('app:mobile')
     <BNavbarBrand to="/home" class="py-0" :class="{ 'fs-6 fw-semibold': mobile }">
       {{ title }}
     </BNavbarBrand>
-    <div class="ms-auto d-flex gap-2">
+    <div class="ms-auto d-flex gap-3">
       <Notificaciones />
-      <AppsMenu v-if="!mobile" />
       <UserMenu v-if="!mobile" />
+      <AppsMenu v-if="!mobile" />
     </div>
   </BNavbar>
 </template>

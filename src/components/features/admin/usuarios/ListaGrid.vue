@@ -2,10 +2,12 @@
 import Filtro from './ListaFiltro.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useUsuariosLista } from '@/stores/usuarios'
-import { computed, inject } from 'vue'
+import { ref, computed, inject, watchEffect } from 'vue'
 
+const usuarioId = inject('admin:usuarios:usuarioId')
 const linkCrear = inject('admin:usuarios:linkCrear')
 const setUsuarioId = inject('admin:usuarios:setUsuarioId')
+const active = ref([])
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -35,6 +37,8 @@ const tableId = 'admin-usuarios-tabla'
 const emptyText = computed(() => isFiltered.value
   ? 'No hay usuarios que coincidan con los filtros aplicados.'
   : 'Todavía no hay usuarios registrados.')
+
+watchEffect(() => usuarioId.value && (active.value = [usuarioId.value]))
 
 const onSelectedItem = (val) => setUsuarioId.value(val[0])
 </script>

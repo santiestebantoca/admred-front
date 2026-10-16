@@ -19,6 +19,7 @@ import { computed } from 'vue'
 import ILucideLandPlot from '~icons/lucide/land-plot'
 import ILucideTag from '~icons/lucide/tag'
 import ILucideUsers from '~icons/lucide/users'
+import ILucideUserCheck from '~icons/lucide/user-check'
 import ILucideFolder from '~icons/lucide/folder'
 import ILucideChartLine from '~icons/lucide/chart-line'
 import ILucideSettings from '~icons/lucide/settings'
@@ -36,6 +37,7 @@ import ILucideForward from '~icons/lucide/forward'
 import ILucideReply from '~icons/lucide/reply'
 
 const iconMap: Record<string, Component> = {
+  'lucide-user-check': ILucideUserCheck,
   'lucide-users': ILucideUsers,
   'lucide-tag': ILucideTag,
   'lucide-land-plot': ILucideLandPlot,

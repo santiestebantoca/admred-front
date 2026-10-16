@@ -61,8 +61,9 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
         <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0" :busy="isLoading"
           selectable select-mode="single" hover @update:selected-items="onSelectedItem" v-model:selected-items="active">
           <template #table-colgroup>
-            <col style="width:80px" />
-            <col style="width:50%" />
+            <!-- <col style="width:80px" /> -->
+            <col style="width:110px" />
+            <col style="width:45%" />
             <col :style="{ width: state === 'pendientes' ? '20%' : '25%' }" />
           </template>
           <template #[`cell(3)`]="{ value }">

@@ -2,10 +2,12 @@
 import Filtro from './ListaFiltro.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useAreasLista } from '@/stores/areas'
-import { computed, inject } from 'vue'
+import { ref, computed, inject, watchEffect } from 'vue'
 
+const areaId = inject('admin:areas:areaId')
 const linkCrear = inject('admin:areas:linkCrear')
 const setAreaId = inject('admin:areas:setAreaId')
+const active = ref([])
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -33,6 +35,8 @@ const tableId = 'admin-areas-tabla'
 const emptyText = computed(() => isFiltered.value
   ? 'No hay areas que coincidan con los filtros aplicados.'
   : 'Todavía no hay areas registradas.')
+
+watchEffect(() => areaId.value && (active.value = [areaId.value]))
 
 const onSelectedItem = (val) => setAreaId.value(val[0])
 </script>

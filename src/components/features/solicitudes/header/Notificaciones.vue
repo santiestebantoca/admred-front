@@ -15,7 +15,8 @@ const model = ref(false)
 
 <template>
   <template v-if="porAtender">
-    <BButton @click="model = true" variant="flat wh-34" v-tippy="'Notificaciones'" :class="{ 'me-3': !mobile }">
+    <BButton @click="model = true" variant="flat wh-34 me-2" v-tippy="'Notificaciones'"
+      :class="{ 'me-3 wh-36': !mobile }">
       <ILucideBell class="center" />
       <BBadge variant="danger" class="position-absolute top-0 translate-middle-x" pill
         :class="[mobile ? 'start-0' : 'start-100']">

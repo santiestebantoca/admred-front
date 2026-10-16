@@ -14,7 +14,7 @@ const opciones = computed(() => {
       ? [{
         title: 'Asignar',
         to: { name: props.rutaBase + '-asignar' },
-        icon: 'lucide-users'
+        icon: 'lucide-user-check'
       }]
       : [],
     ...props.solicitud.permisos.reenviar

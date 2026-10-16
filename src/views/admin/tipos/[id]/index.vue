@@ -19,7 +19,7 @@ const { tipo, isPending } = useTipoQuery(props.tipoId)
       <BButton :to="back" variant="flat wh-34 ms-n2">
         <ILucideArrowLeft class="center" />
       </BButton>
-      <h5 class="mb-1">Detalles del registro</h5>
+      <h5 class="mb-1">Detalles del tipo</h5>
       <template v-if="!isPending">
         <BButton :to="editar" variant="flat ms-auto">
           <ILucidePenLine /> Editar

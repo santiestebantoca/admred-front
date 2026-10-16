@@ -5,7 +5,7 @@ const { options } = useNavigationApps()
 </script>
 
 <template>
-  <BDropdown variant="flat wh-34" no-caret strategy="fixed" v-tippy="'Aplicaciones'">
+  <BDropdown variant="flat wh-36" no-caret strategy="fixed" v-tippy="'Aplicaciones'">
     <template #button-content>
       <ILucideEllipsis class="center" />
     </template>

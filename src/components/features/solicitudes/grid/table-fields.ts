@@ -24,15 +24,12 @@ type SolicitudEnviada = [
   number | null        // 7 - root
 ]
 
-const codigoformatter = ({ value }) => value.slice(2)
-
 const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
   {
     key: '1',
     label: '#',
     sortable: true,
     tdClass: 'td-codigo',
-    formatter: codigoformatter
   },
   {
     key: '2',
@@ -48,9 +45,9 @@ const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
   {
     key: '4',
     label: 'Presentada',
-    accessor: (item) => listTime(item[4]),
     sortable: true,
     tdClass: 'td-fecha',
+    formatter: ({ value }) => listTime(value)
   },
   {
     key: '3',
@@ -65,7 +62,6 @@ const fieldsRecibidasTerminadas: TableFieldRaw<SolicitudRecibida>[] = [
     label: '#',
     sortable: true,
     tdClass: 'td-codigo',
-    formatter: codigoformatter
   },
   {
     key: '2',
@@ -81,9 +77,9 @@ const fieldsRecibidasTerminadas: TableFieldRaw<SolicitudRecibida>[] = [
   {
     key: '5',
     label: 'Terminada',
-    accessor: (item) => listTime(item[5]),
     sortable: true,
     tdClass: 'td-fecha',
+    formatter: ({ value }) => listTime(value)
   },
 ]
 
@@ -93,7 +89,6 @@ const fieldsEnviadasPendientes: TableFieldRaw<SolicitudEnviada>[] = [
     label: '#',
     sortable: true,
     tdClass: 'td-codigo',
-    formatter: codigoformatter
   },
   {
     key: '2',
@@ -109,9 +104,9 @@ const fieldsEnviadasPendientes: TableFieldRaw<SolicitudEnviada>[] = [
   {
     key: '4',
     label: 'Presentada',
-    accessor: (item) => listTime(item[4]),
     sortable: true,
     tdClass: 'td-fecha',
+    formatter: ({ value }) => listTime(value)
   },
   {
     key: '3',
@@ -126,7 +121,6 @@ const fieldsEnviadasTerminadas: TableFieldRaw<SolicitudEnviada>[] = [
     label: '#',
     sortable: true,
     tdClass: 'td-codigo',
-    formatter: codigoformatter
   },
   {
     key: '2',
@@ -142,9 +136,9 @@ const fieldsEnviadasTerminadas: TableFieldRaw<SolicitudEnviada>[] = [
   {
     key: '5',
     label: 'Terminada',
-    accessor: (item) => listTime(item[5]),
     sortable: true,
     tdClass: 'td-fecha',
+    formatter: ({ value }) => listTime(value)
   },
 ]
 
@@ -160,39 +154,5 @@ export function useFields() {
       else if (state.value === 'terminadas') return fieldsEnviadasTerminadas
     }
   })
-  // d.id === id ? 'tr-active' : ''
-  // mobile.value ? shorterTime(d.solicitado_en) : listTime(d.solicitado_en)
   return { fields, tray, state }
 }
-
-/*
-<!-- <bs-table-scroller class="height">
-            <bs-table stickyHeader class="px-3 table-custom" hover>
-              <template #colgroup>
-                <col style="width:110px" />
-                <col style="width:50%" />
-                <col style="width:25%" />
-                <col style="" />
-                <col style="" />
-              </template>
-<template #thead>
-                <tr>
-                  <bs-table-th v-for="{ name, label } in ths" :key="name" :label="label"
-                    :order="folder.orderBy.field === name && folder.orderBy.direction" @click="thClick(name)" />
-                </tr>
-              </template>
-<template #tbody>
-                <tr v-for="d in data" :key="d.id" :class="d.cls" type="button"
-                  @click="$router.replace({ query: { item: d.id } }); itemId = d.id">
-                  <td class="wrap codigo">
-                    <span v-text="d.codigo" />
-                  </td>
-                  <td class="bold pe-4 wrap" v-text="d.objetivo" />
-                  <td class="bold wrap" v-text="d.dePara" />
-                  <td class="wrap" v-text="d.presentada" />
-                  <td class="wrap" v-text="d.estadoTerminada" />
-                </tr>
-              </template>
-</bs-table>
-</bs-table-scroller> -->
-*/
