@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps({ next: Function })
 
+import AcercaDe from '@/components/features/AcercaDe.vue'
 import { useLogin } from '@/stores/auth'
 import type { LoginCredentials } from '@/types/models'
 import { ref, computed, watchEffect } from 'vue'
@@ -27,6 +28,7 @@ const errorState = computed(() => ({
 const alert = ref(0)
 const { mutateAsync: login, state: loginState, asyncStatus } = useLogin()
 const loading = computed(() => asyncStatus.value === 'loading')
+const model = ref(false)
 
 watchEffect(() => alert.value = loginState.value.error ? 5000 : 0)
 
@@ -45,7 +47,6 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
 
 <template>
   <div class="grid">
-    <!-- <div class="mb-3 content p-3 bg-white rounded-4 shadow"> -->
     <div class="mb-3 content">
       <h4 class="text-primary-emphasis mt-1 text-center">ADM Red</h4>
       <h5 class="text-primary-emphasis fw-semibold text-center">Inicio de sesión</h5>
@@ -81,7 +82,13 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       </BAlert>
     </div>
     <div class="text-dark text-opacity-50 text-center small">
+      <div>
+        <BButton variant="link link-secondary dotted" @click="model = true">
+          ADM Red v2.1.1
+        </BButton>
+      </div>
       ETECSA &copy; {{ new Date().getFullYear() }}
+      <AcercaDe v-model="model" />
     </div>
   </div>
 </template>
@@ -124,5 +131,11 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   position: absolute;
   top: 2px;
   right: 2px;
+}
+
+.btn-link.dotted {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  /* cursor: help; */
 }
 </style>
