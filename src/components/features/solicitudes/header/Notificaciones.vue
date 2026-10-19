@@ -75,7 +75,7 @@ const model = ref(false)
 
 <style scoped lang="scss">
 .btn-link {
-  --bs-btn-padding-y: 0.25rem !important;
+  --bs-btn-padding-y: 5px !important;
   --bs-btn-padding-x: 1rem !important;
   border: 1px solid var(--bs-border-color);
 

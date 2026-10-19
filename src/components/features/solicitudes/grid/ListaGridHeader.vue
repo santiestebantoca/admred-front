@@ -73,24 +73,15 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 <style scoped lang="scss">
 :deep(.dropdown-toggle) {
   --bs-btn-padding-x: 1em;
-  --bs-btn-hover-bg: var(--bs-gray-200);
-  --bs-btn-active-bg: var(--bs-gray-200);
 
+  // caret
   &::after {
     margin-left: 8px;
     margin-right: -2px;
   }
 }
 
-:deep(.btn-link) {
-  --bs-border-color: var(--bs-gray-200);
-}
-
 :deep(input) {
   --bs-border-color: var(--bs-gray-500);
-}
-
-.btn-flat {
-  color: var(--bs-body-color);
 }
 </style>
