@@ -8,6 +8,7 @@ import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/Seleccio
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
 import SeleccionarCumplir from '@/components/features/solicitudes/[id]/SeleccionarCumplir.vue'
 import { isValidationError } from '@/api/client'
+import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudCreate } from '@/stores/solicitudes'
 import type { SolicitudCreate } from '@/types/models.js'
 import { useToast } from 'bootstrap-vue-next'
@@ -39,12 +40,29 @@ const errorState = computed(() => ({
 const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
+const objetivo = computed({
+  get: () => form.value.objetivo,
+  set: valor => { form.value.objetivo = valor }
+})
+const {
+  max: maxObjetivo,
+  largo: objetivoLength,
+  aviso: avisoObjetivo,
+  tope: topeObjetivo,
+  formatear: formatearObjetivo,
+  alTerminarComposicion: alTerminarComposicionObjetivo,
+  validar: validarObjetivo
+} = useTextLimit(objetivo)
+const PLACEHOLDER_OBJETIVO = `Objetivo o alcance de la demanda (máximo ${maxObjetivo} caracteres)`
+
 onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
   if (!form.value.destino) errors.value.destino = 'Seleccione un área válida'
   if (!form.value.objetivo) errors.value.objetivo = 'Este campo no puede estar vacío'
+  else if (!validarObjetivo(form.value.objetivo))
+    errors.value.objetivo = `El objetivo no puede superar los ${topeObjetivo.value} caracteres`
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -67,8 +85,16 @@ const submit = async () => {
     <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3">
       <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
       <BFormGroup v-bind="errorState.objetivo">
-        <BFormTextarea v-model="form.objetivo" no-resize placeholder="Objetivo o alcance de la demanda" rows="8"
-          class="lizo" />
+        <BFormTextarea v-model="form.objetivo" no-resize :placeholder="PLACEHOLDER_OBJETIVO"
+          :formatter="formatearObjetivo" @compositionend="alTerminarComposicionObjetivo"
+          aria-describedby="objetivo-ayuda" rows="8" class="lizo" />
+        <div id="objetivo-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
+          <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObjetivo }}</span>
+          <span class="ms-auto text-nowrap"
+            :class="objetivoLength >= maxObjetivo ? 'text-danger fw-semibold' : 'text-secondary'">
+            {{ objetivoLength }}/{{ maxObjetivo }}
+          </span>
+        </div>
       </BFormGroup>
       <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" />
     </BForm>

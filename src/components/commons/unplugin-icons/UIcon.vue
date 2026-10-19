@@ -35,6 +35,8 @@ import ILucideClockFading from '~icons/lucide/clock-fading'
 import ILucideStickyNote from '~icons/lucide/sticky-note'
 import ILucideForward from '~icons/lucide/forward'
 import ILucideReply from '~icons/lucide/reply'
+// import ILucideUsersCollaboration from '~icons/lucide/users-collaboration'
+import ILucideLogOut from '~icons/lucide/log-out'
 
 const iconMap: Record<string, Component> = {
   'lucide-user-check': ILucideUserCheck,
@@ -56,6 +58,8 @@ const iconMap: Record<string, Component> = {
   'lucide-sticky-note': ILucideStickyNote,
   'lucide-forward': ILucideForward,
   'lucide-reply': ILucideReply,
+  // 'lucide-users-collaboration': ILucideUsersCollaboration,
+  'lucide-log-out': ILucideLogOut,
 }
 
 const props = defineProps<{ name?: string }>()

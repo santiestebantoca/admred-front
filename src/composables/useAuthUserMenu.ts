@@ -9,13 +9,13 @@ export default function useAuthUserMenu() {
       {
         title: 'Cerrar sesión',
         path: { name: 'auth-logout' },
-        icon: 'bi-box-arrow-right'
+        icon: 'lucide-log-out'
       },]
     if (authUser.value?.can_impersonate || authUser.value?.is_impersonating)
       res.push({
         title: 'Personificar',
         path: { name: 'auth-impersonate' },
-        icon: 'bi-people'
+        icon: 'lucide-users'
       })
     return res
   })

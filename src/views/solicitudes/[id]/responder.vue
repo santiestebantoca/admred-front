@@ -5,6 +5,7 @@ const props = defineProps({
 
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import { isValidationError } from '@/api/client'
+import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudQuery, useSolicitudUpdate } from '@/stores/solicitudes'
 import type { SolicitudRespondida } from '@/types/models.js'
 import { ref, computed, onMounted, useTemplateRef, watchEffect } from 'vue'
@@ -28,9 +29,26 @@ const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
+const observaciones = computed({
+  get: () => form.value.observaciones,
+  set: valor => { form.value.observaciones = valor }
+})
+const {
+  max: maxObservaciones,
+  largo: observacionesLength,
+  aviso: avisoObservaciones,
+  tope: topeObservaciones,
+  registrarHeredado,
+  formatear: formatearObservaciones,
+  alTerminarComposicion: alTerminarComposicionObservaciones,
+  validar: validarObservaciones
+} = useTextLimit(observaciones)
+const PLACEHOLDER_OBSERVACIONES = `Observaciones (máximo ${maxObservaciones} caracteres)`
+
 watchEffect(() => {
   if (solicitud.value) {
     form.value.observaciones = solicitud.value.observaciones
+    registrarHeredado(solicitud.value.observaciones)
     adjuntosHeredados.value = solicitud.value.adjuntos_respuesta
   }
 })
@@ -40,6 +58,8 @@ const validate = () => {
   errors.value = {}
   if (!form.value.observaciones && !form.value.adjuntos.length)
     errors.value.observaciones = 'Este campo no puede estar vacío.'
+  else if (!validarObservaciones(form.value.observaciones))
+    errors.value.observaciones = `Las observaciones no pueden superar los ${topeObservaciones.value} caracteres`
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -63,7 +83,16 @@ const submit = async () => {
     <template v-else>
       <BForm id="form-responder" @submit.prevent="submit" density="3">
         <BFormGroup v-bind="errorState.observaciones">
-          <BFormTextarea v-model="form.observaciones" no-resize placeholder="Observaciones" rows="8" class="lizo" />
+          <BFormTextarea v-model="form.observaciones" no-resize :placeholder="PLACEHOLDER_OBSERVACIONES"
+            :formatter="formatearObservaciones" @compositionend="alTerminarComposicionObservaciones"
+            aria-describedby="observaciones-ayuda" rows="8" class="lizo" />
+          <div id="observaciones-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
+            <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObservaciones }}</span>
+            <span class="ms-auto text-nowrap"
+              :class="observacionesLength >= maxObservaciones ? 'text-danger fw-semibold' : 'text-secondary'">
+              {{ observacionesLength }}/{{ maxObservaciones }}
+            </span>
+          </div>
         </BFormGroup>
         <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
       </BForm>

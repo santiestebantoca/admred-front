@@ -5,6 +5,7 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
 import type { SolicitudAprobada } from '@/types/models.js'
 import { ref, computed, onMounted } from 'vue'
@@ -31,12 +32,29 @@ const requiresNota = computed(() => form.value.aprobado === '0')
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
+const nota = computed({
+  get: () => form.value.nota,
+  set: valor => { form.value.nota = valor }
+})
+const {
+  max: maxNota,
+  largo: notaLength,
+  aviso: avisoNota,
+  tope: topeNota,
+  formatear: formatearNota,
+  alTerminarComposicion: alTerminarComposicionNota,
+  validar: validarNota
+} = useTextLimit(nota)
+const PLACEHOLDER_NOTA = `* (Obligatorio) Escriba los motivos para desaprobar esta respuesta (máximo ${maxNota} caracteres)`
+
 onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
   if (!form.value.aprobado) errors.value.aprobado = 'Debe seleccionar una opción.'
   if (requiresNota.value && !form.value.nota) errors.value.nota = 'Este campo no puede estar vacío.'
+  else if (!validarNota(form.value.nota))
+    errors.value.nota = `La nota no puede superar los ${topeNota.value} caracteres`
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -61,8 +79,16 @@ const submit = async () => {
           { text: 'Desaprobar respuesta del tramitador', value: '0' },
         ]" v-bind="errorState.aprobado" />
         <BFormGroup v-if="requiresNota" v-bind="errorState.nota">
-          <BFormTextarea v-model="form.nota" no-resize
-            placeholder="* (Obligatorio) Escriba los motivos para desaprobar esta respuesta" rows="8" class="lizo" />
+          <BFormTextarea v-model="form.nota" no-resize :placeholder="PLACEHOLDER_NOTA"
+            :formatter="formatearNota" @compositionend="alTerminarComposicionNota"
+            aria-describedby="nota-ayuda" rows="8" class="lizo" />
+          <div id="nota-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
+            <span class="text-danger fw-semibold" aria-live="polite">{{ avisoNota }}</span>
+            <span class="ms-auto text-nowrap"
+              :class="notaLength >= maxNota ? 'text-danger fw-semibold' : 'text-secondary'">
+              {{ notaLength }}/{{ maxNota }}
+            </span>
+          </div>
         </BFormGroup>
       </BForm>
     </div>

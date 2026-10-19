@@ -12,7 +12,8 @@ const tippy = ref({
 <template>
   <BDropdown v-if="authUser" variant="flat wh-36" no-caret strategy="fixed" v-tippy="tippy">
     <template #button-content>
-      <img src="@/assets/images/user.png" width="22" class="center" />
+      <!-- <img src="@/assets/images/user.png" width="22" class="center" /> -->
+      <ILucideUser class="center" />
     </template>
     <div class="min-w-340 px-3 py-2 d-flex flex-column gap-3">
       <p v-if="isImpersonating" class="text-center text-danger fw-bold">
@@ -24,7 +25,7 @@ const tippy = ref({
         <span class="d-block mt-3">@ {{ authUser.area_nombre }}</span>
       </p>
       <div class="d-flex gap-3">
-        <BButton v-for="action in actions" :key="action.title" :to="action.path" variant="primary">
+        <BButton v-for="action in actions" :key="action.title" :to="action.path" variant="link">
           <UIcon :name="action.icon" class="me" />
           {{ action.title }}
         </BButton>
