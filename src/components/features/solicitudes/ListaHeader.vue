@@ -23,8 +23,7 @@ const closeDropdown = () => model.value = false
         <template v-else>
           <BDropdown v-model="model" variant="link" auto-close="outside" no-caret :offset="{ alignmentAxis: 50 }">
             <template #button-content>
-              <div class="dige" />
-              <ILucideFolderOpen class="text-orange-800" />
+              <ILucideFolderOpen class="text-primary" />
               <ILucideChevronRight class="small opacity-50" />
               <span class="letter-spacing-1 w-180">
                 {{ tray }} {{ state }}
@@ -55,7 +54,6 @@ const closeDropdown = () => model.value = false
   --bs-btn-bg: rgba(var(--bs-surface-5-rgb), .7);
   --bs-btn-hover-bg: rgba(var(--bs-surface-5-rgb), 1);
   --bs-btn-active-bg: rgba(var(--bs-surface-5-rgb), 1);
-  padding-left: 16px;
 
   .w-180 {
     display: inline-block;
@@ -67,17 +65,5 @@ const closeDropdown = () => model.value = false
   svg.small {
     top: unset;
   }
-
-  // .dige {
-  //   content: '';
-  //   display: block;
-  //   position: absolute;
-  //   top: 10px;
-  //   height: 16px;
-  //   left: 1px;
-  //   width: 3px;
-  //   border-radius: 4px;
-  //   background-color: rgba(var(--bs-primary-rgb), .8);
-  // }
 }
 </style>

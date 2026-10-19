@@ -94,7 +94,6 @@ declare module 'vue' {
     ILucideChevronDown: typeof import('~icons/lucide/chevron-down')['default']
     ILucideChevronLeft: typeof import('~icons/lucide/chevron-left')['default']
     ILucideChevronRight: typeof import('~icons/lucide/chevron-right')['default']
-    ILucideCircleQuestionMark: typeof import('~icons/lucide/circle-question-mark')['default']
     ILucideClock: typeof import('~icons/lucide/clock')['default']
     ILucideClockFading: typeof import('~icons/lucide/clock-fading')['default']
     ILucideCornerDownLeft: typeof import('~icons/lucide/corner-down-left')['default']
