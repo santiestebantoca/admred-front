@@ -7,7 +7,7 @@
       <BCol>
         <h5>ADM Red</h5>
         <p>
-          Version 2.1.1 (Transicional) (16/10/2026)
+          Versión 2.1.1 (Transicional) (16/10/2026)
         </p>
         <p>
           Esta versión incluye cambios menores, parches y refactorizaciones.

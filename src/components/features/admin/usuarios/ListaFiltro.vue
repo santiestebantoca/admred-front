@@ -104,7 +104,7 @@ const reset = () => {
           <BInput v-model="form.nombre" />
         </BFormGroup>
         <BFormGroup v-if="showArea" label="Área" label-cols-md="2" content-cols-md>
-          <BFormSelect v-model="form.area" :options="areas" value-field="id" text-field="nombre" />
+          <BFormSelect v-model="form.area" :options="areas" />
         </BFormGroup>
         <BFormGroup label="Grupos" label-cols-md="2" content-cols-md="auto">
           <BFormSelect id="rol-select" v-model="form.rol" :options="ROLES_DEL_USUARIO" />
