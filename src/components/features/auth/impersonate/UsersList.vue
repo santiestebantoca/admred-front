@@ -4,7 +4,7 @@ import {
   useImpersonate
 } from '@/stores/auth'
 import { BAccordion } from 'bootstrap-vue-next'
-import { ref, computed, inject } from 'vue'
+import { inject } from 'vue'
 
 const { users } = useImpersonateQuery()
 const { mutateAsync: impersonate, asyncStatus: status } = useImpersonate()

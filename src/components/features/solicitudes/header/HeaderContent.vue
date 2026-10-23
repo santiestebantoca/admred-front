@@ -7,14 +7,13 @@ const props = defineProps({
 import AppsMenu from './AppsMenu.vue'
 import Notificaciones from './Notificaciones.vue'
 import UserMenu from './UserMenu.vue'
-import { inject, ref } from 'vue'
+import { inject } from 'vue'
 
 const mobile = inject('app:mobile')
-const model = ref(false)
 </script>
 
 <template>
-  <BNavbar :class="{ mobile }" class="px-md-3">
+  <BNavbar class="px-md-3">
     <template v-if="!noLeftButton && mobile">
       <BButton variant="flat wh-34 ms-n1 me-1" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left>
         <ILucideMenu class="center" />
