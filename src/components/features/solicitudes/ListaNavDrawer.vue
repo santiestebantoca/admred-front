@@ -11,7 +11,7 @@ const { hide: hideDrawer } = useToggle('drawer-left')
     <BListGroupItem class="title">
       Carpetas
     </BListGroupItem>
-    <RootTree>
+    <RootTree no-ident>
       <TreeNode v-for="data in options" :data="data" :key="data.id">
         <template #default="{ data }">
           <BListGroupItem v-if="data.to" @click="hideDrawer" :to="data.to" class="highlight-active">

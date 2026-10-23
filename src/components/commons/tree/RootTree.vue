@@ -4,7 +4,8 @@ const props = withDefaults(defineProps<{
   list?: boolean
   selectable?: boolean
   childrenNames?: string[]
-  itemIdName?: string
+  itemIdName?: string,
+  noIdent?: boolean
 }>(), {
   childrenNames: () => [] as string[],
   itemIdName: 'id',
@@ -22,6 +23,7 @@ provide('tree:selectable', toRef(props, 'selectable'))
 provide('tree:active', active)
 provide('tree:onNodeClick', handleNodeClick)
 provide('tree:list', toRef(props, 'list'))
+provide('tree:noIdent', toRef(props, 'noIdent'))
 provide('tree:childrenNames', toRef(props, 'childrenNames'))
 provide('tree:itemIdName', toRef(props, 'itemIdName'))
 

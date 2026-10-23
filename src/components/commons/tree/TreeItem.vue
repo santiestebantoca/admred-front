@@ -17,9 +17,10 @@ import { computed, inject, type Ref } from 'vue'
 // const selectable = inject<Ref<boolean>>('tree:selectable', { value: false } as Ref<boolean>)
 // const active = inject<Ref<string | number | null>>('tree:active', { value: null } as Ref<string | number | null>)
 const list = inject<Ref<boolean>>('tree:list', { value: false } as Ref<boolean>)
+const noIdent = inject<Ref<boolean>>('tree:noIdent', { value: false } as Ref<boolean>)
 // const isActive = computed(() => selectable.value && active.value !== null && props.treeItemId === active.value)
 const rootStyle = computed(() => ({
-  '--li-padding-left': list.value ? '8px' : `${14 * (props.level || 0) + 32}px`,
+  '--li-padding-left': `${14 * (props.level || 0) + 32}px`,
   ...props.descendantActive && !open.value ? { '--li-bg-color': 'var(--bs-gray-100)' } : {}
 }))
 
@@ -30,14 +31,22 @@ const rootStyle = computed(() => ({
 </script>
 
 <template>
-  <span :style="rootStyle">
+  <span :style="rootStyle" :class="{ ident: !(list || noIdent) }">
     <slot></slot>
   </span>
 </template>
 
 <style scoped lang="scss">
+:deep(.list-group-item),
 :deep(.dropdown-item) {
-  padding-left: var(--li-padding-left) !important;
   position: relative;
+}
+
+.ident {
+
+  :deep(.list-group-item),
+  :deep(.dropdown-item) {
+    padding-left: var(--li-padding-left);
+  }
 }
 </style>
