@@ -47,7 +47,7 @@ const closeDropdown = () => model.value = false
 </template>
 
 <style scoped lang="scss">
-:deep(.btn-link) {
+:deep(.dropdown-toggle) {
   --bs-btn-color: var(--bs-info-900);
   --bs-btn-hover-color: var(--bs-info-900);
   --bs-btn-active-color: var(--bs-info-900);

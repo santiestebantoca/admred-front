@@ -11,15 +11,15 @@ const { hide: hideDrawer } = useToggle('drawer-left')
     <BListGroupItem class="title">
       Carpetas
     </BListGroupItem>
-    <RootTree no-ident>
+    <RootTree>
       <TreeNode v-for="data in options" :data="data" :key="data.id">
         <template #default="{ data }">
           <BListGroupItem v-if="data.to" @click="hideDrawer" :to="data.to" class="highlight-active">
             <UIcon :name="data.icon" />
-            <span v-text="data.label" />
+            {{ data.label }}
             <span v-if="data.count" v-text="data.count" class="float-end text-secondary" />
           </BListGroupItem>
-          <BListGroupItem v-else class="small">
+          <BListGroupItem v-else class="small hstack">
             {{ data.label }}
           </BListGroupItem>
         </template>

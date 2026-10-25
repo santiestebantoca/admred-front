@@ -1,15 +1,11 @@
 <script lang="ts" setup>
 const active = defineModel<string | number | null>()
 const props = withDefaults(defineProps<{
-  list?: boolean
-  selectable?: boolean
   childrenNames?: string[]
   itemIdName?: string,
-  noIdent?: boolean
 }>(), {
   childrenNames: () => [] as string[],
   itemIdName: 'id',
-  selectable: true
 })
 
 import { provide, toRef, ref, watchEffect, onMounted, onUnmounted, type Ref } from 'vue'
@@ -18,12 +14,9 @@ const ids = ref(new Set<string | number>())
 const handleNodeClick = (id: string | number) => active.value = id
 const mounted = ref(false)
 
-provide('tree:ids', ids)
-provide('tree:selectable', toRef(props, 'selectable'))
+provide('tree:ids', ids) // Todos los ids actualizados por cada TreeNode al motarse y desmontarse
 provide('tree:active', active)
 provide('tree:onNodeClick', handleNodeClick)
-provide('tree:list', toRef(props, 'list'))
-provide('tree:noIdent', toRef(props, 'noIdent'))
 provide('tree:childrenNames', toRef(props, 'childrenNames'))
 provide('tree:itemIdName', toRef(props, 'itemIdName'))
 

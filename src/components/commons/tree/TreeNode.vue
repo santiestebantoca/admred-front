@@ -9,16 +9,16 @@ const props = withDefaults(defineProps<{
 import { ref, inject, computed, onMounted, onUnmounted, type Ref } from 'vue'
 
 const ids = inject<Ref<Set<string | number>>>('tree:ids', { value: new Set() } as Ref<Set<string | number>>)
-const list = inject<Ref<boolean>>('tree:list', { value: false } as Ref<boolean>)
 const childrenNames = inject<Ref<string[]>>('tree:childrenNames', { value: [] } as Ref<string[]>)
 const itemIdName = inject<Ref<string>>('tree:itemIdName', { value: 'id' } as Ref<string>)
 const active = inject<Ref<string | number | null>>('tree:active', { value: null } as Ref<string | number | null>)
-const emit = defineEmits(['click'])
 const open = ref(props.data.open ?? false)
 const childrenName = computed(() => [...childrenNames.value, 'children'].find(name => Object.prototype.hasOwnProperty.call(props.data, name)) || 'children')
 const leaf = computed(() => !props.data[childrenName.value]?.length)
 const descendantIds = computed(() => getAllNodeIds(props.data))
+const isActive = computed(() => active.value !== null && active.value === props.data[itemIdName.value])
 const isDescendantActive = computed(() => active.value !== null && descendantIds.value.some(d => d === active.value))
+const ident = computed(() => `${14 * props.level + 32}px`)
 
 onMounted(() => ids.value.add(props.data[itemIdName.value]))
 onUnmounted(() => ids.value.delete(props.data[itemIdName.value]))
@@ -37,16 +37,15 @@ const toggle = () => open.value = !open.value
 </script>
 
 <template>
-  <TreeItem v-model:open="open" :level="level" :leaf="leaf" :treeItemId="data[itemIdName]"
-    :descendantActive="isDescendantActive" :key="data[itemIdName]">
-    <slot :data="data" :leaf="leaf" :toggle="toggle" :open="open" />
-  </TreeItem>
-  <template v-if="!list && !leaf && childrenName">
+  <slot :data="data" :leaf="leaf" :toggle="toggle" :open="open" :ident="ident" :active="active" :isActive="isActive"
+    :isDescendantActive="isDescendantActive" :level="level" />
+  <template v-if="!leaf">
     <span v-show="open">
       <TreeNode v-for="(child, index) in data[childrenName]" :key="child[itemIdName] || index" :data="child"
         :level="level + 1">
-        <template #default="{ data, leaf, toggle, open }">
-          <slot :data="data" :leaf="leaf" :toggle="toggle" :open="open" />
+        <template #default="{ data, leaf, toggle, open, ident, active, isActive, isDescendantActive, level }">
+          <slot :data="data" :leaf="leaf" :toggle="toggle" :open="open" :ident="ident" :active="active"
+            :isActive="isActive" :isDescendantActive="isDescendantActive" :level="level" />
         </template>
       </TreeNode>
     </span>
