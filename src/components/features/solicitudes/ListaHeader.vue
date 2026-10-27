@@ -23,7 +23,7 @@ const closeDropdown = () => model.value = false
         <template v-else>
           <BDropdown v-model="model" variant="link" auto-close="outside" no-caret :offset="{ alignmentAxis: 50 }">
             <template #button-content>
-              <ILucideFolderOpen class="text-primary" />
+              <ILucideFolder style="color:var(--bs-gray-800)" />
               <ILucideChevronRight class="small opacity-50" />
               <span class="letter-spacing-1 w-180">
                 {{ tray }} {{ state }}
@@ -48,9 +48,9 @@ const closeDropdown = () => model.value = false
 
 <style scoped lang="scss">
 :deep(.dropdown-toggle) {
-  --bs-btn-color: var(--bs-info-900);
-  --bs-btn-hover-color: var(--bs-info-900);
-  --bs-btn-active-color: var(--bs-info-900);
+  --bs-btn-color: var(--bs-dark);
+  --bs-btn-hover-color: var(--bs-dark);
+  --bs-btn-active-color: var(--bs-dark);
   --bs-btn-bg: rgba(var(--bs-surface-5-rgb), .7);
   --bs-btn-hover-bg: rgba(var(--bs-surface-5-rgb), 1);
   --bs-btn-active-bg: rgba(var(--bs-surface-5-rgb), 1);

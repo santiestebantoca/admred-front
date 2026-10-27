@@ -25,12 +25,8 @@ const submit = () => eliminarTipo(props.tipoId)
 
 <template>
   <div class="max-w-700">
-    <div class="hstack gap-2 mb-4 h-38">
-      <BButton @click="back" variant="flat wh-34 ms-n2">
-        <ILucideArrowLeft class="center" />
-      </BButton>
-      <h5 class="mb-1">Eliminar tipo</h5>
-    </div>
+    <h5 class="mb-5">Eliminar tipo</h5>
+
     <p>
       Esta acción eliminará permanentemente el tipo seleccionado.
     </p>

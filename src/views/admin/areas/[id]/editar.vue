@@ -73,12 +73,8 @@ const submit = () => {
 
 <template>
   <div class="max-w-500">
-    <div class="hstack gap-2 mb-4">
-      <BButton @click="back" variant="flat wh-34 ms-n2">
-        <ILucideArrowLeft class="center" />
-      </BButton>
-      <h5 class="mb-1">Editar área</h5>
-    </div>
+    <h5 class="mb-5">Editar área</h5>
+
     <BForm @submit.prevent="submit" density="3">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
@@ -94,8 +90,8 @@ const submit = () => {
         <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
           Guardar
         </BButton>
-        <BButton @click="back" variant="emphasis">
-          Descartar cambios
+        <BButton @click="back" variant="emphasis w-90">
+          Cancelar
         </BButton>
       </BFormButtons>
     </BForm>

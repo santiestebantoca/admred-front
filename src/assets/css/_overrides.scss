@@ -61,9 +61,12 @@
 
 .list-group-item,
 .dropdown-item {
-  --bs-list-group-item-padding-y: 0.25rem;
-  height: 36px; // su natural es 32, con 34 el texto luce más centrado
-  padding-top: 5px !important; // height 36 obliga al padding top para centrar
+  --bs-list-group-item-padding-y: 6px; // 0.5rem (8px) -> height 40px
+  --bs-list-group-item-padding-x: 1rem;
+
+  // centrado vertical con alto 36px;
+  padding-top: 5px !important;
+  padding-bottom: 7px !important;
 
   // evita flash azul al pinchar
   &.active,

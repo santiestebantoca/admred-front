@@ -102,12 +102,8 @@ const submit = () => {
 
 <template>
   <div class="max-w-500">
-    <div class="hstack gap-2 mb-4">
-      <BButton @click="back" variant="flat wh-34 ms-n2">
-        <ILucideArrowLeft class="center" />
-      </BButton>
-      <h5 class="mb-1">Nuevo usuario</h5>
-    </div>
+    <h5 class="mb-5">Nuevo usuario</h5>
+
     <BForm @submit.prevent="submit" density="3">
       <BFormGroup label="Nombre" v-bind="errorState.first_name">
         <BFormInput v-model="form.first_name" trim />
@@ -123,12 +119,12 @@ const submit = () => {
       </BFormGroup>
       <BRow>
         <BCol>
-          <BFormGroup label="Móvil" v-bind="errorState.movil">
+          <BFormGroup label="Tel. Móvil" v-bind="errorState.movil">
             <BFormInput v-model="form.movil" trim />
           </BFormGroup>
         </BCol>
         <BCol>
-          <BFormGroup label="Oficina" v-bind="errorState.fijo">
+          <BFormGroup label="Tel. Oficina" v-bind="errorState.fijo">
             <BFormInput v-model="form.fijo" trim />
           </BFormGroup>
         </BCol>
@@ -149,6 +145,9 @@ const submit = () => {
       <BFormButtons class="py-4">
         <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
           Crear
+        </BButton>
+        <BButton variant="emphasis w-90" @click="back">
+          Cancelar
         </BButton>
       </BFormButtons>
     </BForm>

@@ -16,6 +16,8 @@ const props = withDefaults(defineProps<{
 <style scoped lang="scss">
 .btn {
   margin-left: -26px;
+  margin-top: -4px;
+  margin-bottom: -4px;
   position: relative;
   top: -2px;
 

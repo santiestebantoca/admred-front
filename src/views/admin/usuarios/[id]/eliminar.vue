@@ -25,12 +25,8 @@ const submit = () => eliminarUsuario(props.usuarioId)
 
 <template>
   <div class="max-w-700">
-    <div class="hstack gap-2 mb-4 h-38">
-      <BButton @click="back" variant="flat wh-34 ms-n2">
-        <ILucideArrowLeft class="center" />
-      </BButton>
-      <h5 class="mb-1">Eliminar usuario</h5>
-    </div>
+    <h5 class="mb-5">Eliminar usuario</h5>
+
     <p>
       Se eliminará el usuario permanentemente.
     </p>

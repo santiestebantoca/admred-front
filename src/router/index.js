@@ -478,22 +478,6 @@ const routesAdmin = [
   }
 ]
 
-// const routesApp = [
-//   {
-//     path: '/index',
-//     name: 'index',
-//     component: () => import('@/views/app/index.vue'),
-//     meta: { requiresAuth: true },
-//     children: [
-//       {
-//         path: '',
-//         name: 'app-home',
-//         component: () => import('@/views/app/home.vue')
-//       }
-//     ]
-//   },
-// ]
-
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: [

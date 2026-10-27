@@ -51,12 +51,8 @@ const submit = () => {
 
 <template>
   <div class="max-w-500">
-    <div class="hstack gap-2 mb-4">
-      <BButton @click="back" variant="flat wh-34 ms-n2">
-        <ILucideArrowLeft class="center" />
-      </BButton>
-      <h5 class="mb-1">Nuevo tipo</h5>
-    </div>
+    <h5 class="mb-5">Nuevo tipo</h5>
+
     <BForm @submit.prevent="submit" density="3">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
@@ -67,6 +63,9 @@ const submit = () => {
       <BFormButtons class="py-4">
         <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
           Crear
+        </BButton>
+        <BButton variant="emphasis w-90" @click="back">
+          Cancelar
         </BButton>
       </BFormButtons>
     </BForm>

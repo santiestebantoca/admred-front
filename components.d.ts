@@ -103,6 +103,7 @@ declare module 'vue' {
     ILucideEllipsisVertical: typeof import('~icons/lucide/ellipsis-vertical')['default']
     ILucideEye: typeof import('~icons/lucide/eye')['default']
     ILucideEyeOff: typeof import('~icons/lucide/eye-off')['default']
+    ILucideFolder: typeof import('~icons/lucide/folder')['default']
     ILucideFolderOpen: typeof import('~icons/lucide/folder-open')['default']
     ILucideFunnel: typeof import('~icons/lucide/funnel')['default']
     ILucideLock: typeof import('~icons/lucide/lock')['default']

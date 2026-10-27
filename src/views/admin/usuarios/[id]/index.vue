@@ -15,7 +15,7 @@ const { usuario, isPending } = useUsuarioQuery(props.usuarioId)
 
 <template>
   <div v-show="showDetalle" class="max-w-700">
-    <div class="hstack gap-2 mb-4">
+    <div class="hstack gap-2 mb-5">
       <BButton :to="back" variant="flat wh-34 ms-n2">
         <ILucideArrowLeft class="center" />
       </BButton>
