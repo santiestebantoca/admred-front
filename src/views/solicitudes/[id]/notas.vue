@@ -1,25 +1,23 @@
 <script setup lang="ts">
 const props = defineProps({
-  solicitudId: Number,
   back: Function
 })
 
 import { isValidationError } from '@/api/client'
-import { useSolicitudQuery } from '@/stores/solicitudes'
 import { useNotasQuery, useNotaCreate } from '@/stores/notas'
-import type { NotaCreate } from '@/types/models.js'
-import { ref, useTemplateRef, watch, onMounted, nextTick } from 'vue'
+import type { NotaCreate, SolicitudDetalle } from '@/types/models.js'
+import { ref, useTemplateRef, watch, onMounted, nextTick, inject, Ref } from 'vue'
 
 const model = ref(false)
 const modalBody = useTemplateRef('modalBody')
+const solicitud = inject<Ref<SolicitudDetalle>>('solicitud:solicitud')
 const form = ref<NotaCreate>({
   texto: null,
-  solicitud: props.solicitudId
+  solicitud: solicitud.value.id
 })
 const errors = ref<Record<string, any>>({})
-const { notas, isPending } = useNotasQuery(props.solicitudId)
+const { notas, isPending } = useNotasQuery(solicitud.value.id)
 const { mutateAsync: crearNota, asyncStatus } = useNotaCreate()
-const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
 
 onMounted(() => model.value = true)
 watch(notas, () => nextTick(() => scroll()))
@@ -74,9 +72,9 @@ const submit = async () => {
     </div>
     <template #footer data-class="bg-light">
       <BForm v-if="solicitud.permisos.comentar" @submit.prevent="submit" class="w-100">
-        <div class="hstack gap-2 align-items-end">
-          <BFormTextarea placeholder="Escribe una nota" no-resize max-rows="4" v-model="form.texto" />
-          <BButton v-if="form.texto" type="submit" variant="primary rounded-circle wh-38">
+        <div class="position-relative">
+          <BFormTextarea placeholder="Escribe una nota" no-resize max-rows="4" v-model="form.texto" class="pe-5" />
+          <BButton type="submit" :disabled="!form.texto" variant="flat btn-enviar" v-tippy="'Enviar nota'">
             <IBiSendFill class="center" />
           </BButton>
         </div>
@@ -160,6 +158,22 @@ textarea {
   padding: 8px 16px;
   border-radius: var(--bs-border-radius-lg);
   box-shadow: var(--bs-box-shadow-sm);
+}
+
+.btn-enviar {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  --bs-btn-color: var(--bs-primary) !important;
+  --bs-btn-active-color: var(--bs-primary) !important;
+  --bs-btn-hover-color: var(--bs-primary) !important;
+
+  &:disabled {
+    color: var(--bs-secondary);
+  }
 }
 
 .db {

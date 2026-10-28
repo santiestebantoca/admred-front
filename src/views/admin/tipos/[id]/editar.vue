@@ -5,14 +5,15 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
-import { useTipoQuery, useTipoUpdate } from '@/stores/tipos'
+import { useTipoUpdate } from '@/stores/tipos'
 import type { TipoUpdate } from '@/types/models.js'
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, inject, Ref } from 'vue'
 
+const tipo = inject<Ref>('tipo:tipo')
 const form = ref<TipoUpdate>({
   id: props.tipoId,
-  nombre: null,
-  descripcion: null,
+  nombre: tipo.value.nombre,
+  descripcion: tipo.value.descripcion,
 })
 const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
@@ -27,16 +28,8 @@ const errorState = computed(() => ({
     onInput: () => errors.value.descripcion = null
   },
 }))
-const { tipo, isPending } = useTipoQuery(props.tipoId)
 const { mutateAsync: actualizarTipo, asyncStatus } = useTipoUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
-
-watchEffect(() => {
-  if (tipo.value) {
-    form.value.nombre = tipo.value.nombre
-    form.value.descripcion = tipo.value.descripcion
-  }
-})
 
 const validate = () => {
   errors.value = {}

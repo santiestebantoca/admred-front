@@ -9,8 +9,10 @@ const props = defineProps({
 
 import { formatTime } from '@/composables/useDates'
 import { useTipoQuery } from '@/stores/tipos'
+import { provide } from 'vue';
 
 const { tipo, isPending } = useTipoQuery(props.tipoId)
+provide('tipo:tipo', tipo)
 </script>
 
 <template>
@@ -62,5 +64,5 @@ const { tipo, isPending } = useTipoQuery(props.tipoId)
       </template>
     </div>
   </div>
-  <router-view />
+  <router-view v-if="tipo" />
 </template>

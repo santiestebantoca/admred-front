@@ -138,17 +138,26 @@ export interface SolicitudUpdate {
   tramitador?: number
 }
 
+export interface SolicitudAsignada {
+  id: number
+  tramitador: number
+  tipo?: number
+}
+
 export interface SolicitudRespondida {
+  id: number
   observaciones: string
   adjuntos: number[]
 }
 
 export interface SolicitudAprobada {
+  id: number
   aprobado: string
   nota?: string
 }
 
 export interface SolicitudEvaluada {
+  id: number
   evaluacion: number
 }
 
@@ -168,57 +177,6 @@ export interface NotaCreate {
   texto: string
   solicitud: number
 }
-
-// Grupos
-// export interface GrupoCreate {
-//   nombre: string
-//   apodo?: string
-//   label?: string
-//   descripcion?: string
-//   pertenece?: number | string
-// }
-
-// export interface GrupoUpdate extends GrupoCreate {
-//   id: number | string
-// }
-
-// Mensajes
-// export interface MensajePayload {
-//   destinatarios: (number | string)[]
-//   texto: string
-//   continua: boolean
-//   previo?: number | string
-// }
-
-// Plantillas
-// export interface PlantillaPayload {
-//   texto: string
-// }
-
-// export interface PlantillaUpdate extends PlantillaPayload {
-//   id: number | string
-// }
-
-// Suscriptores
-// export interface SuscriptorCreate {
-//   nombre: string
-//   cargo?: string
-//   telefono?: string
-//   correo?: string
-//   grupo?: number | string
-//   activo?: boolean
-//   suplente?: number | string
-// }
-
-// export interface SuscriptorUpdate extends Partial<SuscriptorCreate> {
-//   id: number | string
-// }
-
-// // Notificados
-// export interface NotificadosUpdate {
-//   id: number | string
-//   grupo_b?: (number | string)[]
-// }
 
 // Autenticación
 export interface LoginCredentials {

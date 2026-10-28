@@ -9,8 +9,10 @@ const props = defineProps({
 
 import { formatTime } from '@/composables/useDates'
 import { useUsuarioQuery } from '@/stores/usuarios'
+import { provide } from 'vue';
 
 const { usuario, isPending } = useUsuarioQuery(props.usuarioId)
+provide('usuario:usuario', usuario)
 </script>
 
 <template>
@@ -83,5 +85,5 @@ const { usuario, isPending } = useUsuarioQuery(props.usuarioId)
       </template>
     </div>
   </div>
-  <router-view />
+  <router-view v-if="usuario" />
 </template>

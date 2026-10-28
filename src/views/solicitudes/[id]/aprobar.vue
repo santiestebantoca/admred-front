@@ -12,6 +12,7 @@ import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const form = ref<SolicitudAprobada>({
+  id: props.solicitudId,
   aprobado: null,
   nota: null,
 })
@@ -59,8 +60,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  const payload = { id: props.solicitudId, ...form.value }
-  actualizarSolicitud(payload)
+  actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)
@@ -79,9 +79,8 @@ const submit = async () => {
           { text: 'Desaprobar respuesta del tramitador', value: '0' },
         ]" v-bind="errorState.aprobado" />
         <BFormGroup v-if="requiresNota" v-bind="errorState.nota">
-          <BFormTextarea v-model="form.nota" no-resize :placeholder="PLACEHOLDER_NOTA"
-            :formatter="formatearNota" @compositionend="alTerminarComposicionNota"
-            aria-describedby="nota-ayuda" rows="8" class="lizo" />
+          <BFormTextarea v-model="form.nota" no-resize :placeholder="PLACEHOLDER_NOTA" :formatter="formatearNota"
+            @compositionend="alTerminarComposicionNota" aria-describedby="nota-ayuda" rows="6" class="lizo" />
           <div id="nota-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
             <span class="text-danger fw-semibold" aria-live="polite">{{ avisoNota }}</span>
             <span class="ms-auto text-nowrap"

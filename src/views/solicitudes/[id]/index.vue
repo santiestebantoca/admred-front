@@ -15,13 +15,13 @@ import EvaluacionSubCard from '@/components/features/solicitudes/[id]/Evaluacion
 import { useSolicitudQuery } from '@/stores/solicitudes'
 import { useAuthQuery } from '@/stores/auth'
 import { formatDate } from '@/composables/useDates'
-import { ref, computed, inject, onMounted, watchEffect } from 'vue'
+import { ref, computed, inject, onMounted, watchEffect, provide } from 'vue'
 
 const xlDown = inject('app:xlDown')
 const model = ref(false)
 const shown = ref(false)
-const solicitud = ref(undefined)
-const { solicitud: _solicitud, isPending, isLoading, solicitudId } = useSolicitudQuery()
+const solicitudId = computed(() => props.solicitudId)
+const { solicitud, isPending, isLoading } = useSolicitudQuery(solicitudId)
 const { authUser } = useAuthQuery()
 const rootStyle = computed(() => ({
   '--bs-modal-header-border-width': 0,
@@ -30,8 +30,8 @@ const rootStyle = computed(() => ({
 }))
 
 onMounted(() => watchEffect(() => !isPending.value && (model.value = true))) // espera al inicio
-watchEffect(() => solicitudId.value = props.solicitudId)
-watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // evita parpadeo
+
+provide('solicitud:solicitud', solicitud)
 </script>
 
 <template>
@@ -137,7 +137,7 @@ watchEffect(() => _solicitud.value && (solicitud.value = _solicitud.value)) // e
       </div>
     </div>
   </BModal>
-  <RouterView v-if="shown" />
+  <RouterView v-if="shown && solicitud" />
 </template>
 
 <style scoped lang="scss">

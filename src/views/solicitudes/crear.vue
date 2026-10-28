@@ -87,7 +87,7 @@ const submit = async () => {
       <BFormGroup v-bind="errorState.objetivo">
         <BFormTextarea v-model="form.objetivo" no-resize :placeholder="PLACEHOLDER_OBJETIVO"
           :formatter="formatearObjetivo" @compositionend="alTerminarComposicionObjetivo"
-          aria-describedby="objetivo-ayuda" rows="8" class="lizo" />
+          aria-describedby="objetivo-ayuda" rows="6" class="lizo" />
         <div id="objetivo-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
           <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObjetivo }}</span>
           <span class="ms-auto text-nowrap"

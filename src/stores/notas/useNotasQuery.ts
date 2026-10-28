@@ -3,19 +3,18 @@ import { queryKeys } from '@/lib/query-keys'
 import { notasApi as api } from '@/api/notas'
 import { formatHM, formatDate } from '@/composables/useDates'
 import { Nota } from '@/types/models'
-import { ref, computed } from 'vue'
+import { computed, toValue } from 'vue'
 
 type NotaConHora = Nota & {
   hora: string,
 }
 
-export function useNotasQuery(_solicitudId?: number | string) {
-  const solicitudId = ref(_solicitudId)
+export function useNotasQuery(solicitudId?: number | string) {
 
   const { data: _data, isPending } = useQuery<Nota[]>({
-    key: () => queryKeys.notas.lista({ solicitudId: solicitudId.value }),
-    query: () => api.getAll({ solicitudId: solicitudId.value }),
-    enabled: () => !!solicitudId.value,
+    key: () => queryKeys.notas.lista({ solicitudId: toValue(solicitudId) }),
+    query: () => api.getAll({ solicitudId: toValue(solicitudId) }),
+    enabled: () => !!toValue(solicitudId),
     // staleTime: Infinity
   })
 
@@ -33,6 +32,5 @@ export function useNotasQuery(_solicitudId?: number | string) {
   return {
     notas,
     isPending,
-    solicitudId
   }
 }

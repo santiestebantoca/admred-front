@@ -3,11 +3,11 @@ import { usuariosApi as api } from '@/api/usuarios'
 import { queryKeys } from '@/lib/query-keys'
 import { toValue } from 'vue'
 
-export function useUsuarioQuery(id) {
+export function useUsuarioQuery(usuarioId) {
   const { data, isPending } = useQuery({
-    key: () => queryKeys.usuarios.detalle(toValue(id)),
-    query: () => api.getById(toValue(id)),
-    enabled: () => toValue(id),
+    key: () => queryKeys.usuarios.detalle(toValue(usuarioId)),
+    query: () => api.getById(toValue(usuarioId)),
+    enabled: () => toValue(usuarioId),
     // staleTime: Infinity
   })
 

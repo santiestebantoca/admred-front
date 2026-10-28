@@ -9,22 +9,23 @@ import { isValidationError } from '@/api/client'
 import { useAuthQuery } from '@/stores/auth'
 import { useAreasOpcionesQuery } from '@/stores/areas'
 import { useAuthGroupsQuery } from '@/stores/auth-groups'
-import { useUsuarioQuery, useUsuarioUpdate } from '@/stores/usuarios'
+import { useUsuarioUpdate } from '@/stores/usuarios'
 import type { UsuarioUpdate } from '@/types/models.js'
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, inject, Ref } from 'vue'
 
 const { authUser } = useAuthQuery()
+const usuario = inject<Ref>('usuario:usuario')
 const form = ref<UsuarioUpdate>({
   id: props.usuarioId,
-  first_name: null,
-  last_name: null,
-  username: null, // si no tiene actividad auditable (coincide con permiso de eliminar)
-  email: null, // se actualiza con username, no aparece en la IU
-  area: null,
-  fijo: null,
-  movil: null,
-  grupos: [],
-  registration_key: null
+  first_name: usuario.value.first_name,
+  last_name: usuario.value.last_name,
+  username: usuario.value.username, // si no tiene actividad auditable (coincide con permiso de eliminar)
+  email: usuario.value.email, // se actualiza con username, no aparece en la IU
+  area: usuario.value.area.id,
+  fijo: usuario.value.fijo,
+  movil: usuario.value.movil,
+  grupos: usuario.value.grupos.map((d) => d.id),
+  registration_key: usuario.value.registration_key
 })
 const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
@@ -69,31 +70,12 @@ const errorState = computed(() => ({
     onInput: () => errors.value.registration_key = null
   },
 }))
-const { usuario, isPending } = useUsuarioQuery(props.usuarioId)
 const { mutateAsync: actualizarUsuario, asyncStatus } = useUsuarioUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const showUsername = computed(() => usuario.value?.permisos.eliminar)
 const showArea = computed(() => authUser.value?.AR)
 const { groups } = useAuthGroupsQuery()
 const { areas } = useAreasOpcionesQuery(showArea)
-
-watchEffect(() => {
-  if (usuario.value) {
-    form.value.first_name = usuario.value.first_name
-    form.value.last_name = usuario.value.last_name
-    form.value.username = usuario.value.username
-    form.value.email = usuario.value.email
-    form.value.area = usuario.value.area.id
-    form.value.fijo = usuario.value.fijo
-    form.value.movil = usuario.value.movil
-    form.value.grupos = usuario.value.grupos.map((d) => d.id)
-    form.value.registration_key = usuario.value.registration_key
-  }
-})
-// watchEffect(() => {
-//   if (form.value.username) form.value.email = form.value.username + '@etecsa.cu'
-//   else form.value.email = null
-// })
 
 const validate = () => {
   errors.value = {}

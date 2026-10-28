@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps({ back: Function })
+const props = defineProps({
+  back: Function
+})
 
 import SeleccionarDestino from '@/components/features/solicitudes/[id]/SeleccionarDestino.vue'
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
@@ -7,22 +9,24 @@ import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarT
 import SeleccionarCumplir from '@/components/features/solicitudes/[id]/SeleccionarCumplir.vue'
 import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
-import { useSolicitudQuery, useSolicitudCreate } from '@/stores/solicitudes'
-import type { SolicitudCreateFromParent } from '@/types/models.js'
+import { useSolicitudCreate } from '@/stores/solicitudes'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, computed, onMounted, useTemplateRef, watchEffect } from 'vue'
+import type { SolicitudCreateFromParent, SolicitudDetalle } from '@/types/models.js'
+import { ref, computed, onMounted, useTemplateRef, inject, Ref } from 'vue'
 
 const model = ref(false)
 const toast = useToast()
 const adjuntos = useTemplateRef('adjuntosRef')
+const solicitud = inject<Ref<SolicitudDetalle>>('solicitud:solicitud')
 const form = ref<SolicitudCreateFromParent>({
-  padre: null,
+  padre: solicitud.value.id,
   destino: null,
-  objetivo: null,
+  objetivo: solicitud.value.objetivo,
   adjuntos: [],
-  tipo: null,
-  cumplir_en: null
+  tipo: solicitud.value.tipo?.id,
+  cumplir_en: solicitud.value.cumplir_en?.slice(0, 10)
 })
+const adjuntosHeredados = ref(solicitud.value.adjuntos_solicitud)
 const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   destino: {
@@ -36,8 +40,6 @@ const errorState = computed(() => ({
     onInput: () => errors.value.objetivo = null
   },
 }))
-const adjuntosHeredados = ref([])
-const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
 const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -55,18 +57,9 @@ const {
   alTerminarComposicion: alTerminarComposicionObjetivo,
   validar: validarObjetivo
 } = useTextLimit(objetivo)
+registrarHeredado(solicitud.value.objetivo)
 const PLACEHOLDER_OBJETIVO = `Objetivo o alcance de la demanda (máximo ${maxObjetivo} caracteres)`
 
-watchEffect(() => {
-  if (solicitud.value) {
-    form.value.padre = solicitud.value.id
-    form.value.objetivo = solicitud.value.objetivo
-    registrarHeredado(solicitud.value.objetivo)
-    form.value.tipo = solicitud.value.tipo?.id
-    form.value.cumplir_en = solicitud.value.cumplir_en?.slice(0, 10)
-    adjuntosHeredados.value = solicitud.value.adjuntos_solicitud
-  }
-})
 onMounted(() => model.value = true)
 
 const validate = () => {
@@ -94,27 +87,22 @@ const submit = async () => {
 <template>
   <BModalPlus v-model="model" title="Nueva solicitud (Reenviada)" capsule-title="Nueva solicitud" @hidden="back"
     size="lg" fullscreen="sm" :scrollable="false">
-    <div v-if="solicitudPendiente" class="py-5 my-5 text-center">
-      <BSpinner />
-    </div>
-    <template v-else>
-      <BForm id="form-reenviar" @submit.prevent="submit" density="3">
-        <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
-        <BFormGroup v-bind="errorState.objetivo">
-          <BFormTextarea v-model="form.objetivo" no-resize :placeholder="PLACEHOLDER_OBJETIVO"
-            :formatter="formatearObjetivo" @compositionend="alTerminarComposicionObjetivo"
-            aria-describedby="objetivo-ayuda" rows="8" class="lizo" />
-          <div id="objetivo-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
-            <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObjetivo }}</span>
-            <span class="ms-auto text-nowrap"
-              :class="objetivoLength >= maxObjetivo ? 'text-danger fw-semibold' : 'text-secondary'">
-              {{ objetivoLength }}/{{ maxObjetivo }}
-            </span>
-          </div>
-        </BFormGroup>
-        <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
-      </BForm>
-    </template>
+    <BForm id="form-reenviar" @submit.prevent="submit" density="3">
+      <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
+      <BFormGroup v-bind="errorState.objetivo">
+        <BFormTextarea v-model="form.objetivo" no-resize :placeholder="PLACEHOLDER_OBJETIVO"
+          :formatter="formatearObjetivo" @compositionend="alTerminarComposicionObjetivo"
+          aria-describedby="objetivo-ayuda" rows="6" class="lizo" />
+        <div id="objetivo-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
+          <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObjetivo }}</span>
+          <span class="ms-auto text-nowrap"
+            :class="objetivoLength >= maxObjetivo ? 'text-danger fw-semibold' : 'text-secondary'">
+            {{ objetivoLength }}/{{ maxObjetivo }}
+          </span>
+        </div>
+      </BFormGroup>
+      <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
+    </BForm>
     <template #footer>
       <BButton type="submit" form="form-reenviar" :loading="loading" loading-fill variant="primary w-90 me-3">
         Enviar

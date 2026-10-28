@@ -6,14 +6,16 @@ const props = defineProps({
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
-import { useSolicitudQuery, useSolicitudUpdate } from '@/stores/solicitudes'
-import type { SolicitudRespondida } from '@/types/models.js'
-import { ref, computed, onMounted, useTemplateRef, watchEffect } from 'vue'
+import { useSolicitudUpdate } from '@/stores/solicitudes'
+import type { SolicitudRespondida, SolicitudDetalle } from '@/types/models.js'
+import { ref, computed, onMounted, useTemplateRef, inject, Ref } from 'vue'
 
 const model = ref(false)
 const adjuntos = useTemplateRef('adjuntosRef')
+const solicitud = inject<Ref<SolicitudDetalle>>('solicitud:solicitud')
 const form = ref<SolicitudRespondida>({
-  observaciones: null,
+  id: solicitud.value.id,
+  observaciones: solicitud.value.observaciones,
   adjuntos: [],
 })
 const errors = ref<Record<string, any>>({})
@@ -24,8 +26,7 @@ const errorState = computed(() => ({
     onInput: () => errors.value.observaciones = null
   },
 }))
-const adjuntosHeredados = ref([])
-const { solicitud, isPending: solicitudPendiente } = useSolicitudQuery()
+const adjuntosHeredados = ref(solicitud.value.adjuntos_respuesta)
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -43,15 +44,9 @@ const {
   alTerminarComposicion: alTerminarComposicionObservaciones,
   validar: validarObservaciones
 } = useTextLimit(observaciones)
+registrarHeredado(solicitud.value.observaciones)
 const PLACEHOLDER_OBSERVACIONES = `Observaciones (máximo ${maxObservaciones} caracteres)`
 
-watchEffect(() => {
-  if (solicitud.value) {
-    form.value.observaciones = solicitud.value.observaciones
-    registrarHeredado(solicitud.value.observaciones)
-    adjuntosHeredados.value = solicitud.value.adjuntos_respuesta
-  }
-})
 onMounted(() => model.value = true)
 
 const validate = () => {
@@ -64,8 +59,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  const payload = { id: solicitud.value.id, ...form.value }
-  actualizarSolicitud(payload)
+  actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)
@@ -77,26 +71,21 @@ const submit = async () => {
 <template>
   <BModalPlus v-model="model" @hidden="back" title="Responder solicitud" capsule-title="Responder solicitud" size="lg"
     fullscreen="sm" :scrollable="false">
-    <div v-if="solicitudPendiente" class="py-5 my-5 text-center">
-      <BSpinner />
-    </div>
-    <template v-else>
-      <BForm id="form-responder" @submit.prevent="submit" density="3">
-        <BFormGroup v-bind="errorState.observaciones">
-          <BFormTextarea v-model="form.observaciones" no-resize :placeholder="PLACEHOLDER_OBSERVACIONES"
-            :formatter="formatearObservaciones" @compositionend="alTerminarComposicionObservaciones"
-            aria-describedby="observaciones-ayuda" rows="8" class="lizo" />
-          <div id="observaciones-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
-            <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObservaciones }}</span>
-            <span class="ms-auto text-nowrap"
-              :class="observacionesLength >= maxObservaciones ? 'text-danger fw-semibold' : 'text-secondary'">
-              {{ observacionesLength }}/{{ maxObservaciones }}
-            </span>
-          </div>
-        </BFormGroup>
-        <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
-      </BForm>
-    </template>
+    <BForm id="form-responder" @submit.prevent="submit" density="3">
+      <BFormGroup v-bind="errorState.observaciones">
+        <BFormTextarea v-model="form.observaciones" no-resize :placeholder="PLACEHOLDER_OBSERVACIONES"
+          :formatter="formatearObservaciones" @compositionend="alTerminarComposicionObservaciones"
+          aria-describedby="observaciones-ayuda" rows="6" class="lizo" />
+        <div id="observaciones-ayuda" class="d-flex justify-content-between gap-2 mt-1 small">
+          <span class="text-danger fw-semibold" aria-live="polite">{{ avisoObservaciones }}</span>
+          <span class="ms-auto text-nowrap"
+            :class="observacionesLength >= maxObservaciones ? 'text-danger fw-semibold' : 'text-secondary'">
+            {{ observacionesLength }}/{{ maxObservaciones }}
+          </span>
+        </div>
+      </BFormGroup>
+      <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
+    </BForm>
     <template #footer>
       <BButton type="submit" form="form-responder" :loading="loading" loading-fill variant="primary w-110 me-3">
         Responder

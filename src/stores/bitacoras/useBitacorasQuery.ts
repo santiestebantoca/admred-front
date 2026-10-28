@@ -1,21 +1,19 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { bitacorasApi as api } from '@/api/bitacoras'
-import { ref } from 'vue'
+import { toValue } from 'vue'
 
-export function useBitacorasQuery(_solicitudId?: number | string) {
-  const solicitudId = ref(_solicitudId)
+export function useBitacorasQuery(solicitudId?: number | string) {
 
   const { data, isPending } = useQuery({
-    key: () => queryKeys.bitacoras.lista({ solicitudId: solicitudId.value }),
-    query: () => api.getAll({ solicitudId: solicitudId.value }),
-    enabled: () => !!solicitudId.value,
+    key: () => queryKeys.bitacoras.lista({ solicitudId: toValue(solicitudId) }),
+    query: () => api.getAll({ solicitudId: toValue(solicitudId) }),
+    enabled: () => !!toValue(solicitudId),
     // staleTime: Infinity
   })
 
   return {
     registros: data,
     isPending,
-    solicitudId
   }
 }

@@ -11,6 +11,7 @@ import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const form = ref<SolicitudEvaluada>({
+  id: props.solicitudId,
   evaluacion: 0,
 })
 const errors = ref<Record<string, any>>({})
@@ -32,8 +33,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  const payload = { id: props.solicitudId, ...form.value }
-  actualizarSolicitud(payload)
+  actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)
@@ -61,10 +61,6 @@ const submit = async () => {
 </template>
 
 <style scoped>
-/* .min-height-110 {
-  min-height: 110px;
-} */
-
 :deep(.b-form-rating) {
   width: fit-content;
 

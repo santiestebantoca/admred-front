@@ -11,7 +11,7 @@ const state = inject('solicitudes:state')
 const solicitudId = inject('solicitudes:solicitudId')
 const setSolicitudId = inject('solicitudes:setSolicitudId')
 const filaExpandida = inject('solicitudes:filaExpandida')
-const { fields, tray: _tray, state: _state } = useFields()
+const { fields } = useFields(tray, state)
 const { solicitudes, total, isPending, isLoading, isFiltered } = useSolicitudesQuery()
 const height = ref(null)
 const container = useTemplateRef('container')
@@ -20,10 +20,6 @@ const rootStyle = computed(() => ({
   '--td-white-space': filaExpandida.value ? 'unset' : 'nowrap'
 }))
 
-watchEffect(() => {
-  _tray.value = tray.value
-  _state.value = state.value
-})
 watchEffect(() => solicitudId.value && (active.value = [solicitudId.value]))
 useResizeObserver(container, entries => {
   const containerHeight = entries[0].contentRect.height

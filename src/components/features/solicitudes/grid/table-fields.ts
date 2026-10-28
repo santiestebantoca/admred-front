@@ -1,6 +1,6 @@
 import type { TableFieldRaw } from 'bootstrap-vue-next'
 import { listTime } from '@/composables/useDates'
-import { ref, computed } from 'vue'
+import { computed, toValue } from 'vue'
 
 type SolicitudRecibida = [
   number,              // 0 - id
@@ -142,17 +142,15 @@ const fieldsEnviadasTerminadas: TableFieldRaw<SolicitudEnviada>[] = [
   },
 ]
 
-export function useFields() {
-  const tray = ref(undefined)
-  const state = ref(undefined)
+export function useFields(tray, state) {
   const fields = computed(() => {
-    if (tray.value === 'recibidas') {
-      if (state.value === 'pendientes') return fieldsRecibidasPendientes
-      else if (state.value === 'terminadas') return fieldsRecibidasTerminadas
-    } else if (tray.value === 'enviadas') {
-      if (state.value === 'pendientes') return fieldsEnviadasPendientes
-      else if (state.value === 'terminadas') return fieldsEnviadasTerminadas
+    if (toValue(tray) === 'recibidas') {
+      if (toValue(state) === 'pendientes') return fieldsRecibidasPendientes
+      else if (toValue(state) === 'terminadas') return fieldsRecibidasTerminadas
+    } else if (toValue(tray) === 'enviadas') {
+      if (toValue(state) === 'pendientes') return fieldsEnviadasPendientes
+      else if (toValue(state) === 'terminadas') return fieldsEnviadasTerminadas
     }
   })
-  return { fields, tray, state }
+  return { fields }
 }

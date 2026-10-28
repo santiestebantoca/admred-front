@@ -3,16 +3,15 @@ import { solicitudesApi as api } from '@/api/solicitudes'
 import { SolicitudDetalle } from '@/types/models'
 import { queryKeys } from '@/lib/query-keys'
 import { timeDeltaDH, timeDeltaWDH } from '@/composables/useTimeDelta'
-import { computed, ref } from 'vue'
+import { computed, toValue } from 'vue'
 
-export const useSolicitudQuery = defineQuery((id?: number | string) => {
-  const solicitudId = ref(id)
+export function useSolicitudQuery(solicitudId?: number | string) {
 
   const { data: _data, isPending, isLoading } = useQuery<SolicitudDetalle>({
-    key: () => queryKeys.solicitudes.detalle(solicitudId.value),
-    query: () => api.getById(solicitudId.value),
-    enabled: () => !!solicitudId.value,
-    // staleTime: Infinity
+    key: () => queryKeys.solicitudes.detalle(toValue(solicitudId)),
+    query: () => api.getById(toValue(solicitudId)),
+    enabled: () => !!toValue(solicitudId),
+    placeholderData: (previousData) => previousData,
   })
 
   const data = computed(() => {
@@ -28,7 +27,6 @@ export const useSolicitudQuery = defineQuery((id?: number | string) => {
   return {
     solicitud: data,
     isPending,
-    isLoading,
-    solicitudId
+    isLoading
   }
-})
+}

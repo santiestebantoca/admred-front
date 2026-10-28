@@ -15,6 +15,7 @@ export function useTiposQuery(params = {}) {
   const { data, isPending, isLoading } = useQuery({
     key: () => queryKeys.tipos.lista(toValue(params)),
     query: () => api.getAll(toValue(params)),
+    staleTime: Infinity,
     // Mientras se carga otra página o búsqueda se conserva el resultado
     // anterior: así la tabla y la paginación no "parpadean" ni pierden el total.
     placeholderData: (previousData) => previousData,

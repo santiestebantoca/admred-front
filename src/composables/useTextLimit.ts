@@ -1,5 +1,4 @@
-import { computed, nextTick, ref, watch } from 'vue'
-import type { Ref } from 'vue'
+import { computed, nextTick, ref, watch, Ref } from 'vue'
 
 export const TEXTO_MAX_DEFAULT = 250
 

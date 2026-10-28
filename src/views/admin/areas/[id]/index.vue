@@ -9,8 +9,11 @@ const props = defineProps({
 
 import { formatTime } from '@/composables/useDates'
 import { useAreaQuery } from '@/stores/areas'
+import { provide } from 'vue'
 
 const { area, isPending } = useAreaQuery(props.areaId)
+
+provide('area:area', area)
 </script>
 
 <template>
@@ -62,5 +65,5 @@ const { area, isPending } = useAreaQuery(props.areaId)
       </template>
     </div>
   </div>
-  <router-view />
+  <router-view v-if="area" />
 </template>

@@ -7,15 +7,16 @@ const props = defineProps({
 import { isValidationError } from '@/api/client'
 import { useNivelesQuery } from '@/stores/niveles'
 import { useAreasDelNivelQuery } from '@/stores/areas'
-import { useAreaQuery, useAreaUpdate } from '@/stores/areas'
+import { useAreaUpdate } from '@/stores/areas'
 import type { AreaUpdate } from '@/types/models.js'
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watch, inject, Ref } from 'vue'
 
+const area = inject<Ref>('area:area')
 const form = ref<AreaUpdate>({
   id: props.areaId,
-  nombre: null,
-  nivel: null,
-  padre: null // se reinicia cuando cambia 'nivel'
+  nombre: area.value.nombre,
+  nivel: area.value.nivel.id,
+  padre: area.value.padre?.id // se reinicia cuando cambia 'nivel'
 })
 const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
@@ -35,7 +36,6 @@ const errorState = computed(() => ({
     onInput: () => errors.value.padre = null
   },
 }))
-const { area, isPending } = useAreaQuery(props.areaId)
 const { mutateAsync: actualizarArea, asyncStatus } = useAreaUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const { niveles } = useNivelesQuery()
@@ -44,13 +44,6 @@ const nivelPadre = computed(() => form.value.nivel
   : undefined)
 const { areas: padres, isPending: padresPending } = useAreasDelNivelQuery(nivelPadre)
 
-watchEffect(() => {
-  if (area.value) {
-    form.value.nombre = area.value.nombre
-    form.value.nivel = area.value.nivel.id
-    form.value.padre = area.value.padre.id
-  }
-})
 watch(() => form.value.nivel, () => form.value.padre = null)
 
 const validate = () => {

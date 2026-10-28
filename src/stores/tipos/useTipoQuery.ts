@@ -1,21 +1,19 @@
 import { useQuery } from '@pinia/colada'
 import { tiposApi as api } from '@/api/tipos'
 import { queryKeys } from '@/lib/query-keys'
-import { ref } from 'vue'
+import { toValue } from 'vue'
 
-export function useTipoQuery(id?: number | string) {
-  const tipoId = ref(id)
+export function useTipoQuery(tipoId?: number | string) {
 
   const { data, isPending } = useQuery({
-    key: () => queryKeys.tipos.detalle(tipoId.value),
-    query: () => api.getById(tipoId.value),
-    enabled: () => !!tipoId.value,
+    key: () => queryKeys.tipos.detalle(toValue(tipoId)),
+    query: () => api.getById(toValue(tipoId)),
+    enabled: () => !!toValue(tipoId),
     // staleTime: Infinity
   })
 
   return {
     tipo: data,
     isPending,
-    tipoId
   }
 }
