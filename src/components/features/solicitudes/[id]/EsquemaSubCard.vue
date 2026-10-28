@@ -7,14 +7,14 @@ const props = defineProps({
 
 <template>
   <BListGroup :class="{ inicial: !solicitud.padre }">
-    <BListGroupItem v-if="solicitud.padre" class="padre">
+    <BListGroupItem v-if="solicitud.padre" class="padre hstack">
       <IBiCircleFill />
       <BButton :to="linkSolicitud(solicitud.padre.id)" variant="link"
         v-tippy="`De: ${solicitud.padre.origen} / Para: ${solicitud.origen.nombre}`">
         {{ solicitud.padre.codigo }}
       </BButton>
     </BListGroupItem>
-    <BListGroupItem class="actual">
+    <BListGroupItem class="actual hstack">
       <ILucideCornerDownRight />
       <IBiCircleFill />
       <BButton variant="link">
@@ -22,7 +22,7 @@ const props = defineProps({
       </BButton>
       <span class="fw-semibold">(Actual)</span>
     </BListGroupItem>
-    <BListGroupItem v-for="hijo in solicitud.hijos" class="hijo">
+    <BListGroupItem v-for="hijo in solicitud.hijos" class="hijo hstack">
       <ILucideCornerDownRight />
       <IBiCircleFill />
       <BButton :to="linkSolicitud(hijo.id)" variant="link" v-tippy="`Para: ${hijo.destino}`">
@@ -48,8 +48,7 @@ const props = defineProps({
     --bs-list-group-item-padding-x: 2px;
     --bs-list-group-item-padding-y: 2px;
     --bs-list-group-border-width: 0;
-    height: 30px;
-    display: flex;
+    min-height: 30px;
     gap: 12px;
     cursor: default;
 
@@ -69,7 +68,6 @@ const props = defineProps({
 
     &.padre {
       svg {
-        top: 9px;
         width: 10px;
         height: 10px;
         color: var(--bs-orange);
@@ -79,14 +77,13 @@ const props = defineProps({
     &.actual {
       svg {
         &:first-child {
-          top: 5px;
+          top: -1px;
           left: 4px;
           color: var(--bs-orange);
           display: var(--item-actual-svg-first-child-display);
         }
 
         &:nth-child(2) {
-          top: 9px;
           width: 10px;
           height: 10px;
           color: var(--bs-primary);
@@ -99,13 +96,12 @@ const props = defineProps({
 
       svg {
         &:first-child {
-          top: 5px;
+          top: -1px;
           left: 4px;
           color: var(--bs-primary-300);
         }
 
         &:nth-child(2) {
-          top: 9px;
           width: 10px;
           height: 10px;
           color: var(--bs-primary);

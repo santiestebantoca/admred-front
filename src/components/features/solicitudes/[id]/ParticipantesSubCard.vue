@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
   <BListGroup>
-    <BListGroupItem>
+    <BListGroupItem class="hstack">
       <span class="text-gray-800 fw-semibold" v-tippy="'Remitente'">Rem.</span>
       <span id="remitente-popover" class="data" :class="{ blocked: solicitud.remitente.blocked }">
         {{ solicitud.remitente.name }}
@@ -14,7 +14,7 @@ const props = defineProps({
     </BListGroupItem>
     <template v-if="(solicitud.estado.id > 1)">
       <template v-if="solicitud.supervisor.id === solicitud.tramitador.id">
-        <BListGroupItem>
+        <BListGroupItem class="hstack">
           <span class="text-gray-800 fw-semibold" v-tippy="'Supervisor/Tramitador'">Tram.</span>
           <span id="tramitador-popover" class="data" :class="{ blocked: solicitud.tramitador.blocked }">
             {{ solicitud.tramitador.name }}
@@ -23,7 +23,7 @@ const props = defineProps({
       </template>
       <template v-else>
         <template v-if="solicitud.supervisor">
-          <BListGroupItem>
+          <BListGroupItem class="hstack">
             <span class="text-gray-800 fw-semibold" v-tippy="'Supervisor'">Sup.</span>
             <span id="supervisor-popover" class="data" :class="{ blocked: solicitud.supervisor.blocked }">
               {{ solicitud.supervisor.name }}
@@ -31,7 +31,7 @@ const props = defineProps({
           </BListGroupItem>
         </template>
         <template v-if="solicitud.tramitador">
-          <BListGroupItem>
+          <BListGroupItem class="hstack">
             <span class="text-gray-800 fw-semibold" v-tippy="'Tramitador'">Tram.</span>
             <span id="tramitador-popover" class="data" :class="{ blocked: solicitud.tramitador.blocked }">
               {{ solicitud.tramitador.name }}
@@ -122,11 +122,9 @@ const props = defineProps({
 .list-group-item {
   --bs-list-group-item-padding-x: 0;
   --bs-list-group-border-width: 0;
-  display: flex;
+  min-height: 30px;
   gap: 12px;
   cursor: default;
-  padding-bottom: 0;
-  height: 32px;
 
   .text-gray-800 {
     color: var(--bs-gray-800);

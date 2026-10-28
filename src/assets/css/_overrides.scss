@@ -83,6 +83,16 @@
     position: relative;
     top: -2px; // lo centra vertical
   }
+
+  &.hstack {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 36px;
+
+    >svg {
+      top: 1px; // lo centra vertical
+    }
+  }
 }
 
 .spinner-border {
