@@ -8,9 +8,8 @@ const text = computed(() => PERIODOS.find(d => d.value === period.value)?.text)
 </script>
 
 <template>
-  <BDropdown v-tippy="'Terminadas en el período'" variant="link link-dark fw-semibold border h-36 py-1">
+  <BDropdown v-tippy="'Terminadas en el período'" variant="link link-dark border h-36 py-1 fw-semibold">
     <template #button-content>
-      <ILucideRotateCcw class="ms-n1 fs-09" />
       {{ text }}
     </template>
     <BDropdownItem v-for="{ text, value } in PERIODOS" @click="period = value">

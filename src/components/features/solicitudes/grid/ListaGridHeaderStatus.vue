@@ -8,9 +8,8 @@ const text = computed(() => PENDIENTE_STATUS.find(d => d.value === status.value)
 </script>
 
 <template>
-  <BDropdown v-tippy="'Estado pendiente'" variant="link link-dark fw-semibold border h-36 py-1">
+  <BDropdown v-tippy="'Estado pendiente'" variant="link link-dark border h-36 py-1 fw-semibold">
     <template #button-content>
-      <ILucideScan class="ms-n1 fs-09" />
       {{ text }}
     </template>
     <BDropdownItem v-for="{ text, value } in PENDIENTE_STATUS" @click="status = value">

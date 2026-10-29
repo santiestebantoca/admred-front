@@ -105,6 +105,7 @@ declare module 'vue' {
     ILucideEyeOff: typeof import('~icons/lucide/eye-off')['default']
     ILucideFolder: typeof import('~icons/lucide/folder')['default']
     ILucideFunnel: typeof import('~icons/lucide/funnel')['default']
+    ILucideListFilter: typeof import('~icons/lucide/list-filter')['default']
     ILucideLock: typeof import('~icons/lucide/lock')['default']
     ILucideMenu: typeof import('~icons/lucide/menu')['default']
     ILucidePaperclip: typeof import('~icons/lucide/paperclip')['default']

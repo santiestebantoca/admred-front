@@ -74,6 +74,10 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 :deep(.dropdown-toggle) {
   --bs-btn-padding-x: 1em;
 
+  &:hover {
+    --bs-border-color: var(--bs-gray-400);
+  }
+
   // caret
   &::after {
     margin-left: 8px;
