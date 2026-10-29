@@ -8,7 +8,7 @@ const text = computed(() => PENDIENTE_STATUS.find(d => d.value === status.value)
 </script>
 
 <template>
-  <BDropdown v-tippy="'Estado pendiente'" variant="link link-dark border h-36 py-1 fw-semibold">
+  <BDropdown v-tippy="'Estado pendiente'" variant="link link-dark border h-36 py-1">
     <template #button-content>
       {{ text }}
     </template>

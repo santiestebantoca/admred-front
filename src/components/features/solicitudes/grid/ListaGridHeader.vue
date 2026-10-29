@@ -73,6 +73,7 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 <style scoped lang="scss">
 :deep(.dropdown-toggle) {
   --bs-btn-padding-x: 1em;
+  font-weight: 600;
 
   &:hover {
     --bs-border-color: var(--bs-gray-400);
