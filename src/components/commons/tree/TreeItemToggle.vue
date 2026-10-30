@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<{
 </script>
 
 <template>
-  <BButton variant="link wh-26">
+  <BButton variant="link wh-26 tree-item-toggle">
     <ILucideChevronDown v-if="open" class="small center" />
     <ILucideChevronRight v-else class="small center" />
   </BButton>
@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<{
   margin-top: -4px;
   margin-bottom: -4px;
   position: relative;
-  top: -2px;
+  top: -1px;
 
   &:not(:hover) {
     color: var(--bs-gray-700);

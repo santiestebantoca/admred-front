@@ -89,6 +89,11 @@
     padding-bottom: 0 !important;
     min-height: 36px;
 
+    // para centar el botón open del tree
+    >.tree-item-toggle {
+      top: 1px;
+    }
+
     >svg {
       top: 1px; // lo centra vertical
     }
