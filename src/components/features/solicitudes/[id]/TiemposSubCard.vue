@@ -48,14 +48,18 @@ const items = computed(() => [
 </template>
 
 <style scoped lang="scss">
-:deep(.tr-last-bold) {
-  tr:last-child {
-    font-weight: 600;
-  }
-}
+.b-table {
+  --bs-body-bg: transparent;
 
-:deep(.td-thin) {
-  padding: 3px 0;
-  border: none;
+  :deep(.tr-last-bold) {
+    tr:last-child {
+      font-weight: 600;
+    }
+  }
+
+  :deep(.td-thin) {
+    padding: 3px 0;
+    border: none;
+  }
 }
 </style>

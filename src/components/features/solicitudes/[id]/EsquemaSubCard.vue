@@ -28,8 +28,10 @@ const props = defineProps({
       <BButton :to="linkSolicitud(hijo.id)" variant="link" v-tippy="`Para: ${hijo.destino}`">
         {{ hijo.codigo }}
       </BButton>
-      <span v-if="hijo.estado !== 'Terminado'" class="text-dark text-opacity-25">Pendiente</span>
-      <ILucideCheck v-else class="text-success top-50 translate-middle-y" />
+      <span v-if="hijo.estado !== 'Terminado'" class="text-dark text-opacity-25">
+        Pendiente
+      </span>
+      <ILucideCheck v-else />
     </BListGroupItem>
   </BListGroup>
 </template>
@@ -95,6 +97,8 @@ const props = defineProps({
       padding-left: var(--item-hijo-padding-left);
 
       svg {
+        color: var(--bs-success);
+
         &:first-child {
           top: -1px;
           left: 4px;

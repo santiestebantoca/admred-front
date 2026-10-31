@@ -54,7 +54,7 @@ provide('solicitud:solicitud', solicitud)
     </template>
     <BOverlay :show="isLoading" no-wrap :variant="white" :opacity=".3" :blur="5" />
     <!-- Body -->
-    <div :key="solicitud.id" class="container grid solicitud">
+    <div :key="solicitud.id" class="container grid solicitud-data">
       <div class="grid-header hstack gap-3">
         <h5>Solicitud</h5>
         <EvaluacionSubCard v-if="solicitud.evaluacion" :solicitud="solicitud" class="my-auto" />
@@ -235,5 +235,24 @@ provide('solicitud:solicitud', solicitud)
 
 .title-sin-respuesta {
   color: var(--bs-danger);
+}
+</style>
+
+<style lang="scss">
+// Para usar estas clases también en componentes hijos
+.solicitud-data {
+
+  --bs-list-group-bg: transparent;
+
+  .label {
+    font-size: small;
+    font-weight: 600;
+    line-height: 1.8;
+  }
+
+  .data {
+    color: var(--bs-gray-800);
+    margin-bottom: 4px;
+  }
 }
 </style>

@@ -28,11 +28,10 @@ const submit = () => eliminarTipo(props.tipoId)
     <h5 class="mb-5">Eliminar tipo</h5>
 
     <p>
-      Esta acción eliminará permanentemente el tipo seleccionado.
+      Se eliminará el tipo permanentemente.
     </p>
-    <p>
-      La acción es segura porque el tipo no está asociada a ninguna operación.
-      No obstante, debe tener en cuenta que esta acción no se puede deshacer.
+    <p class="text-danger fw-semibold">
+      Esta acción no se puede deshacer.
     </p>
     <BFormButtons class="py-4">
       <BButton variant="secondary" @click="back">

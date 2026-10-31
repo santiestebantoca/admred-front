@@ -14,14 +14,12 @@ export function useNavigationSolicitudes() {
         {
           id: 'nav-solicitudes-recibidas-pendientes',
           label: 'Pendientes',
-          icon: 'lucide-folder',
           count: notificaciones.value?.pendientes.recibidas.total,
           to: { params: { tray: 'recibidas', state: 'pendientes' } }
         },
         {
           id: 'nav-solicitudes-recibidas-terminadas',
           label: 'Terminadas',
-          icon: 'lucide-folder',
           to: { params: { tray: 'recibidas', state: 'terminadas' } }
         }
       ]
@@ -35,14 +33,12 @@ export function useNavigationSolicitudes() {
         {
           id: 'nav-solicitudes-enviadas-pendientes',
           label: 'Pendientes',
-          icon: 'lucide-folder',
           count: notificaciones.value?.pendientes.enviadas.total,
           to: { params: { tray: 'enviadas', state: 'pendientes' } }
         },
         {
           id: 'nav-solicitudes-enviadas-terminadas',
           label: 'Terminadas',
-          icon: 'lucide-folder',
           to: { params: { tray: 'enviadas', state: 'terminadas' } }
         }
       ]

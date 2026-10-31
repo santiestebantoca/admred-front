@@ -30,7 +30,7 @@ const submit = () => eliminarUsuario(props.usuarioId)
     <p>
       Se eliminará el usuario permanentemente.
     </p>
-    <p class="fw-semibold">
+    <p class="text-danger fw-semibold">
       Esta acción no se puede deshacer.
     </p>
     <BFormButtons class="py-4">

@@ -12,7 +12,7 @@ const { options } = useNavigationSolicitudes()
       <template #default="{ data, toggle, open, ident }">
         <BDropdownItem v-if="data.to" :to="data.to" @click="closeDropdown" class="highlight-active"
           :style="{ paddingLeft: ident }">
-          <UIcon :name="data.icon" />
+          <ILucideFolder />
           {{ data.label }}
           <span v-if="data.count" v-text="data.count" class="float-end text-secondary" />
         </BDropdownItem>

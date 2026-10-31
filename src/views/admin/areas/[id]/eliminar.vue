@@ -30,7 +30,7 @@ const submit = () => eliminarArea(props.areaId)
     <p>
       Se eliminará el área permanentemente.
     </p>
-    <p class="fw-semibold">
+    <p class="text-danger fw-semibold">
       Esta acción no se puede deshacer.
     </p>
     <BFormButtons class="py-4">
