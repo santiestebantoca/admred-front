@@ -24,7 +24,7 @@ const submit = () => eliminarUsuario(props.usuarioId)
 </script>
 
 <template>
-  <div class="max-w-700">
+  <div class="max-w-700 px-3">
     <h5 class="mb-5">Eliminar usuario</h5>
 
     <p>

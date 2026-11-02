@@ -12,8 +12,7 @@ const tippy = ref({
 <template>
   <BDropdown v-if="authUser" variant="flat wh-36" no-caret strategy="fixed" v-tippy="tippy">
     <template #button-content>
-      <!-- <img src="@/assets/images/user.png" width="22" class="center" /> -->
-      <ILucideUser class="center" />
+      <img src="@/assets/images/user.png" width="22" class="center" />
     </template>
     <div class="min-w-340 px-3 py-2 d-flex flex-column gap-3">
       <p v-if="isImpersonating" class="text-center text-danger fw-bold">

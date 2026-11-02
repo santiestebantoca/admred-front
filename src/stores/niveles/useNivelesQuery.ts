@@ -1,6 +1,7 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { nivelesApi as api } from '@/api/niveles'
+import { computed } from 'vue'
 
 export function useNivelesQuery() {
   const { data, isPending } = useQuery({
@@ -12,5 +13,10 @@ export function useNivelesQuery() {
   return {
     niveles: data,
     isPending,
+    options: computed(() => data.value?.map((d) => ({
+      ...d, // Se usan en la lógica del formulario
+      value: d.id,
+      text: d.nombre,
+    })))
   }
 }

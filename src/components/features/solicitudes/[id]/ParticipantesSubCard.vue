@@ -41,8 +41,8 @@ const props = defineProps({
       </template>
     </template>
   </BListGroup>
-  <BPopover target="remitente-popover" placement="bottom-start" offset="0" :delay="{ show: 1000, hide: 100 }"
-    class="no-arrow lg rounded-4 shadow ms-5" body-class="surface-3 rounded-4">
+  <BPopover target="remitente-popover" no-arrow placement="bottom-start" offset="0" :delay="{ show: 1000, hide: 100 }"
+    class="lg rounded-4 shadow ms-5" body-class="surface-3 rounded-4">
     <BRow gutter-x="3">
       <BCol cols="auto">
         <img src="@/assets/images/user-lg.png" width="70" />
@@ -66,8 +66,8 @@ const props = defineProps({
       </BCol>
     </BRow>
   </BPopover>
-  <BPopover target="supervisor-popover" placement="bottom-start" offset="0" lazy :delay="{ show: 1000, hide: 100 }"
-    class="no-arrow lg rounded-4 shadow ms-5" body-class="surface-3 rounded-4">
+  <BPopover target="supervisor-popover" no-arrow placement="bottom-start" offset="0" lazy
+    :delay="{ show: 1000, hide: 100 }" class="lg rounded-4 shadow ms-5" body-class="surface-3 rounded-4">
     <BRow gutter-x="3">
       <BCol cols="auto">
         <img src="@/assets/images/user-lg.png" width="70" />
@@ -91,8 +91,8 @@ const props = defineProps({
       </BCol>
     </BRow>
   </BPopover>
-  <BPopover target="tramitador-popover" placement="bottom-start" offset="0" lazy :delay="{ show: 1000, hide: 100 }"
-    class="no-arrow lg rounded-4 shadow ms-5" body-class="surface-3 rounded-4">
+  <BPopover target="tramitador-popover" no-arrow placement="bottom-start" offset="0" lazy
+    :delay="{ show: 1000, hide: 100 }" class="lg rounded-4 shadow ms-5" body-class="surface-3 rounded-4">
     <BRow gutter-x="3">
       <BCol cols="auto">
         <img src="@/assets/images/user-lg.png" width="70" />

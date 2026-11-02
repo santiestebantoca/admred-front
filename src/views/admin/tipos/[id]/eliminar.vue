@@ -24,7 +24,7 @@ const submit = () => eliminarTipo(props.tipoId)
 </script>
 
 <template>
-  <div class="max-w-700">
+  <div class="max-w-700 px-3">
     <h5 class="mb-5">Eliminar tipo</h5>
 
     <p>

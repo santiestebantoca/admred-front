@@ -24,7 +24,7 @@ const submit = () => eliminarArea(props.areaId)
 </script>
 
 <template>
-  <div class="max-w-700">
+  <div class="max-w-700 px-3">
     <h5 class="mb-5">Eliminar área</h5>
 
     <p>

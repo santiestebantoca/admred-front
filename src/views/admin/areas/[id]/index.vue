@@ -17,7 +17,7 @@ provide('area:area', area)
 </script>
 
 <template>
-  <div v-show="showDetalle" class="max-w-700">
+  <div v-show="showDetalle" class="max-w-700 px-3">
     <div class="hstack gap-2 mb-5">
       <BButton :to="back" variant="flat wh-34 ms-n2">
         <ILucideArrowLeft class="center" />

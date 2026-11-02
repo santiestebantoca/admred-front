@@ -38,11 +38,11 @@ const errorState = computed(() => ({
 }))
 const { mutateAsync: actualizarArea, asyncStatus } = useAreaUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
-const { niveles } = useNivelesQuery()
+const { options: niveles } = useNivelesQuery()
 const nivelPadre = computed(() => form.value.nivel
   ? niveles.value?.find((d) => d.id === form.value.nivel)?.padre_id
   : undefined)
-const { areas: padres, isPending: padresPending } = useAreasDelNivelQuery(nivelPadre)
+const { options: padres, isPending: padresPending } = useAreasDelNivelQuery(nivelPadre)
 
 watch(() => form.value.nivel, () => form.value.padre = null)
 
@@ -65,7 +65,7 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="max-w-500">
+  <div class="max-w-500 px-3">
     <h5 class="mb-5">Editar área</h5>
 
     <BForm @submit.prevent="submit" density="3">
@@ -73,11 +73,10 @@ const submit = () => {
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
       <BFormGroup label="Nivel" v-bind="errorState.nivel">
-        <BFormSelect v-model="form.nivel" :options="niveles" text-field="nombre" value-field="id" />
+        <BFormSelect v-model="form.nivel" :options="niveles" />
       </BFormGroup>
       <BFormGroup label="Pertenece a" v-bind="errorState.padre">
-        <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending"
-          text-field="nombre" value-field="id" />
+        <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending" />
       </BFormGroup>
       <BFormButtons class="py-4">
         <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>

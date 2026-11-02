@@ -1,7 +1,7 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { tramitadoresApi as api } from '@/api/tramitadores'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 export function useTramitadoresQuery() {
   const search = ref(undefined)
@@ -15,6 +15,10 @@ export function useTramitadoresQuery() {
   return {
     tramitadores: data,
     isPending,
-    search
+    search,
+    options: computed(() => data.value?.map((d) => ({
+      value: d.id,
+      text: d.name
+    })))
   }
 }

@@ -50,7 +50,7 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="max-w-500">
+  <div class="max-w-500 px-3">
     <h5 class="mb-5">Nuevo tipo</h5>
 
     <BForm @submit.prevent="submit" density="3">

@@ -43,6 +43,10 @@ export function useAreasDelNivelQuery(nivel) {
     areas: computed(() => toValue(nivel) ? data.value?.data : undefined),
     isPending,
     isLoading,
+    options: computed(() => data.value?.data.map((d) => ({
+      value: d.id,
+      text: d.nombre
+    })))
   }
 }
 

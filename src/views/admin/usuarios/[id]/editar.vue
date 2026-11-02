@@ -101,7 +101,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="max-w-500">
+  <div class="max-w-500 px-3">
     <h5 class="mb-5">Editar usuario</h5>
 
     <BForm @submit.prevent="submit" density="3">
@@ -134,13 +134,11 @@ const submit = async () => {
         <BFormSelect v-model="form.area" :options="areas" />
       </BFormGroup>
       <BFormGroup v-slot="{ ariaDescribedby }" label="Grupos">
-        <BFormCheckboxGroup v-model="form.grupos" :aria-describedby="ariaDescribedby">
-          <div class="border rounded-2 p-2">
-            <BFormCheckbox v-for="group in groups" :value="group.id" class="py-1">
-              <div class="text-capitalize"> {{ group.role }} </div>
-              <div class="small text-secondary"> {{ group.description }} </div>
-            </BFormCheckbox>
-          </div>
+        <BFormCheckboxGroup v-model="form.grupos" :aria-describedby="ariaDescribedby" class="form-control-border">
+          <BFormCheckbox v-for="group in groups" :value="group.id" class="mb-3">
+            <div class="text-capitalize"> {{ group.role }} </div>
+            <div class="small text-secondary"> {{ group.description }} </div>
+          </BFormCheckbox>
         </BFormCheckboxGroup>
       </BFormGroup>
       <BFormGroup label="Estado del registro">

@@ -25,7 +25,7 @@ const errorState = computed(() => ({
     onInput: () => errors.value.tramitador = null
   },
 }))
-const { tramitadores } = useTramitadoresQuery()
+const { options: tramitadores } = useTramitadoresQuery()
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -51,7 +51,7 @@ const submit = () => {
   <BModal v-model="model" @hidden="back" title="Asignar">
     <BForm id="form-asignar" @submit.prevent="submit" density="3">
       <BFormGroup label="Tramitador" v-bind="errorState.tramitador">
-        <BFormSelect v-model="form.tramitador" :options="tramitadores" value-field="id" text-field="name" />
+        <BFormSelect v-model="form.tramitador" :options="tramitadores" />
       </BFormGroup>
     </BForm>
     <template #footer>
