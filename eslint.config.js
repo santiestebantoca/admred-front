@@ -6,7 +6,12 @@ import { fileURLToPath } from 'node:url' //[cite: 1]
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**'], //[cite: 1]
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'components.d.ts',
+      'vite.config.d.ts',
+    ], //[cite: 1]
   },
   ...pluginVue.configs['flat/base'], //[cite: 1]
 

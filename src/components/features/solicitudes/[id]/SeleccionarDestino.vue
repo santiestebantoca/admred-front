@@ -125,7 +125,7 @@ const vInput = {
   }
 
   .dropdown-menu {
-    max-height: 318px;
+    max-height: 300px;
     // overflow-x: hidden;
     width: 100% !important;
     transform: none !important;
