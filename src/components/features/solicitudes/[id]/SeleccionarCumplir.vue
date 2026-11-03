@@ -28,7 +28,7 @@ const change = () => value.value = datepicker.value.getDate(options.value.format
 </script>
 
 <template>
-  <BDropdown auto-close="outside" no-caret v-tippy="'Fecha de cumplimiento'" variant="footer" :placement="placement"
+  <BDropdown auto-close="outside" no-caret v-tippy="'Fecha de cumplimiento'" variant="flat wh-34" :placement="placement"
     @hidden="view = 0">
     <template #button-content>
       <ILucideClock class="center" :class="{ 'text-primary': value }" />

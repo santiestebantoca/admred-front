@@ -65,7 +65,7 @@ const validate = () => {
     errors.value.objetivo = `El objetivo no puede superar los ${topeObjetivo.value} caracteres`
   return !Object.keys(errors.value).length
 }
-const submit =  () => {
+const submit = () => {
   if (!validate()) return
   crearSolicitud(form.value)
     .then(() => {
@@ -99,11 +99,10 @@ const submit =  () => {
       <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" />
     </BForm>
     <template #footer>
-      <BButton type="submit" form="form-solicitud-crear" :loading="loading" loading-fill class="w-90 me-3"
-        variant="primary">
+      <BButton type="submit" form="form-solicitud-crear" :loading="loading" loading-fill variant="primary w-90 me-3">
         Enviar
       </BButton>
-      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
+      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="flat wh-34">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
       <SeleccionarTipo v-model="form.tipo" />

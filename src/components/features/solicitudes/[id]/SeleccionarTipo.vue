@@ -25,7 +25,7 @@ const input = (id) => {
 </script>
 
 <template>
-  <BDropdown auto-close="outside" no-caret v-tippy="'Tipo de solicitud'" variant="footer" :placement="placement"
+  <BDropdown auto-close="outside" no-caret v-tippy="'Tipo de solicitud'" variant="flat wh-34" :placement="placement"
     :style="rootStyle" @hidden="view = 0">
     <template #button-content>
       <ILucideTag class="center" :class="{ 'text-primary': sel }" />

@@ -90,7 +90,7 @@ const submit = () => {
       <BButton type="submit" form="form-responder" :loading="loading" loading-fill variant="primary w-110 me-3">
         Responder
       </BButton>
-      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="footer">
+      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="flat wh-34">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
     </template>
