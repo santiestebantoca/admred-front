@@ -31,7 +31,7 @@ const validate = () => {
   if (!form.value.evaluacion) errors.value.evaluacion = 'Seleccione una calificación.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit =  () => {
   if (!validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)

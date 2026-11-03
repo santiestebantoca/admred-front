@@ -70,7 +70,7 @@ const validate = () => {
     errors.value.objetivo = `El objetivo no puede superar los ${topeObjetivo.value} caracteres`
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   crearSolicitud(form.value)
     .then(() => {

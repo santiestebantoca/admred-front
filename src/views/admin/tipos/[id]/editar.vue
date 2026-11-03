@@ -36,7 +36,7 @@ const validate = () => {
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   actualizarTipo(form.value)
     .then(() => { props.back() })

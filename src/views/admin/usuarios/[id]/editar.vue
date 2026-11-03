@@ -89,7 +89,7 @@ const validate = () => {
   if (showArea.value && !form.value.area) errors.value.area = 'Seleccione un valor.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   actualizarUsuario(form.value)
     .then(() => { props.back() })

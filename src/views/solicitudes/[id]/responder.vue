@@ -57,7 +57,7 @@ const validate = () => {
     errors.value.observaciones = `Las observaciones no pueden superar los ${topeObservaciones.value} caracteres`
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)

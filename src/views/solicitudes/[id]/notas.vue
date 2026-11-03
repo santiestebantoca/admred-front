@@ -28,7 +28,7 @@ const validate = () => {
   if (!form.value.texto) errors.value.destino = 'Este campo no puede estar vacío'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   crearNota(form.value)
     .then(() => {

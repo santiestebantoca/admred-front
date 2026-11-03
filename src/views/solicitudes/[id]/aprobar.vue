@@ -58,7 +58,7 @@ const validate = () => {
     errors.value.nota = `La nota no puede superar los ${topeNota.value} caracteres`
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)
