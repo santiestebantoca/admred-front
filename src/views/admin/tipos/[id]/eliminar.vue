@@ -34,7 +34,7 @@ const submit = () => eliminarTipo(props.tipoId)
       Esta acción no se puede deshacer.
     </p>
     <BFormButtons class="py-4">
-      <BButton variant="secondary" @click="back">
+      <BButton variant="emphasis" @click="back">
         Cancelar
       </BButton>
       <BButton variant="danger" @click="submit" :loading="loading" loading-fill class="w-90">

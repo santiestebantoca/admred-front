@@ -71,8 +71,11 @@ provide('usuario:usuario', usuario)
           {{usuario.grupos.map((grupo) => grupo.role).join(', ') || '-'}}
         </div>
       </div>
-      <div v-if="usuario.registration_key === 'blocked'" class="w-100 bg-danger-subtle text-center p-2">
-        <span class="text-danger small fw-semibold">Registro bloquedo</span>
+      <div class="w-100">
+        <label class="form-label">Clave de registro</label>
+        <div>
+          {{ usuario.registration_key === 'blocked' ? 'Bloqueado' : (usuario.registration_key || 'Activo') }}
+        </div>
       </div>
       <template v-if="usuario.modified_by">
         <div class="pt-3 border-top">
