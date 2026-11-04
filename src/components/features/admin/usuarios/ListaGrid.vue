@@ -27,7 +27,7 @@ const fields = [
   },
   {
     key: 'registration_key',
-    label: 'Estado de registro',
+    label: 'Clave de registro',
     formatter: ({ value }) => value
       ? value === 'blocked' ? 'Bloqueado' : value
       : '-'

@@ -38,14 +38,14 @@ provide('solicitud:solicitud', solicitud)
   <BModal v-model="model" fullscreen no-footer no-backdrop @hidden="back" :style="rootStyle"
     body-class="position-static" lazy @shown="shown = true">
     <template #header>
-      <BButton @click="model = false" class="rounded-5">
+      <BButton @click="model = false" variant="flat rounded-5">
         <ILucideArrowLeft class="center" />
       </BButton>
       <span class="mx-auto">
         {{ solicitud?.codigo || '#' }}
         <span v-if="solicitud?.root" class="mark rounded-3 px-2 fw-semibold">Inicial</span>
       </span>
-      <BDropdown v-if="xlDown" no-caret>
+      <BDropdown v-if="xlDown" no-caret variant="flat rounded-5">
         <template #button-content>
           <ILucideMenu class="center" />
         </template>

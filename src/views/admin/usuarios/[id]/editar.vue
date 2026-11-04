@@ -141,7 +141,7 @@ const submit = () => {
           </BFormCheckbox>
         </BFormCheckboxGroup>
       </BFormGroup>
-      <BFormGroup label="Estado del registro">
+      <BFormGroup label="Clave de registro">
         <BFormSelect v-model="form.registration_key" :options="REGISTRATION_KEY_OPTIONS" />
       </BFormGroup>
       <BFormButtons class="py-4">

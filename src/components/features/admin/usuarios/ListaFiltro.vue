@@ -109,7 +109,7 @@ const reset = () => {
         <BFormGroup label="Grupos" label-cols-md="2" content-cols-md="auto">
           <BFormSelect id="rol-select" v-model="form.rol" :options="ROLES_DEL_USUARIO" />
         </BFormGroup>
-        <BFormGroup label="Estado" label-cols-md="2" content-cols-md="auto">
+        <BFormGroup label="Clave de registro" label-cols-md="4" content-cols-md="auto">
           <BFormSelect id="rol-select" v-model="form.estado" :options="ESTADOS_DEL_USUARIO" />
         </BFormGroup>
         <BFormButtons>
