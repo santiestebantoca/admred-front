@@ -1,0 +1,29 @@
+/* Badge de estado de solicitud */
+.estado-badge {
+  --estado-bg: var(--bs-gray-200);
+  --estado-color: var(--bs-gray-800);
+  display: inline-block;
+  padding: 0 .45em;
+  border-radius: .625em;
+  font-size: .875em;
+  font-weight: 600;
+  line-height: 1.7;
+  white-space: nowrap;
+  background-color: var(--estado-bg);
+  color: var(--estado-color);
+
+  &[data-estado='Solicitado'] {
+    --estado-bg: var(--bs-estado-por-asignar-bg);
+    --estado-color: var(--bs-estado-por-asignar-color);
+  }
+
+  &[data-estado='En proceso'] {
+    --estado-bg: var(--bs-estado-por-responder-bg);
+    --estado-color: var(--bs-estado-por-responder-color);
+  }
+
+  &[data-estado='En evaluación'] {
+    --estado-bg: var(--bs-estado-por-aprobar-bg);
+    --estado-color: var(--bs-estado-por-aprobar-color);
+  }
+}
