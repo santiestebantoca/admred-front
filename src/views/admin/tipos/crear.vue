@@ -6,10 +6,10 @@ const props = defineProps({
 import { isValidationError } from '@/api/client'
 import { useTipoCreate } from '@/stores/tipos'
 import type { TipoCreate } from '@/types/models.js'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const form = ref<TipoCreate>({
   nombre: null,
   descripcion: null,
@@ -39,7 +39,7 @@ const submit = () => {
   if (!validate()) return
   crearTipo(form.value)
     .then(() => {
-      toast.create({ body: 'Nuevo tipo creado.', variant: 'success' })
+      exito('Nuevo tipo creado.')
       props.back()
     })
     .catch(err => {

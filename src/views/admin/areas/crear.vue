@@ -8,10 +8,10 @@ import { useNivelesQuery } from '@/stores/niveles'
 import { useAreasDelNivelQuery } from '@/stores/areas'
 import { useAreaCreate } from '@/stores/areas'
 import type { AreaCreate } from '@/types/models.js'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, watch } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const form = ref<AreaCreate>({
   nombre: null,
   nivel: null,
@@ -56,7 +56,7 @@ const submit = () => {
   if (!validate()) return
   crearArea(form.value)
     .then(() => {
-      toast.create({ body: 'Nueva área creada.', variant: 'success' })
+      exito('Nueva área creada.')
       props.back()
     })
     .catch(err => {

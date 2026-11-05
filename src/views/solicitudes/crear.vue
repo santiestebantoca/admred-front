@@ -11,11 +11,11 @@ import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudCreate } from '@/stores/solicitudes'
 import type { SolicitudCreate } from '@/types/models.js'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, onMounted, useTemplateRef } from 'vue'
 
 const model = ref(false)
-const toast = useToast()
+const { exito } = useNotificaciones()
 const adjuntos = useTemplateRef('adjuntosRef') // DOM
 const form = ref<SolicitudCreate>({
   destino: null,
@@ -69,7 +69,7 @@ const submit = () => {
   if (!validate()) return
   crearSolicitud(form.value)
     .then(() => {
-      toast.create({ body: 'Nueva solicitud creada.', variant: 'success' })
+      exito('Nueva solicitud creada.')
       model.value = false
     })
     .catch(err => {

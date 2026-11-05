@@ -6,20 +6,20 @@ const props = defineProps({
 })
 
 import { useAreaDelete } from '@/stores/areas'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { computed } from 'vue'
 
-const toast = useToast()
+const { exito, errorDeApi } = useNotificaciones()
 const { mutateAsync: eliminarArea, asyncStatus } = useAreaDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 const submit = () => eliminarArea(props.areaId)
   .then(() => {
-    toast.create({ body: 'Área eliminada.', variant: 'success' })
+    exito('Área eliminada.')
     props.backLista()
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    errorDeApi(err, 'No se pudo ejecutar la acción.')
   })
 </script>
 

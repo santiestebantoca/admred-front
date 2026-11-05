@@ -10,10 +10,10 @@ import { useAreasOpcionesQuery } from '@/stores/areas'
 import { useAuthGroupsQuery } from '@/stores/auth-groups'
 import { useUsuarioCreate } from '@/stores/usuarios'
 import type { UsuarioCreate } from '@/types/models.js'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, watchEffect } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const { authUser } = useAuthQuery()
 const form = ref<UsuarioCreate>({
   first_name: null,
@@ -90,7 +90,7 @@ const submit = () => {
   if (!validate()) return
   crearUsuario(form.value)
     .then(() => {
-      toast.create({ body: 'Nuevo usuario creado.', variant: 'success' })
+      exito('Nuevo usuario creado.')
       props.back()
     })
     .catch(err => {

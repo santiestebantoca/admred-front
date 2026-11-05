@@ -6,20 +6,20 @@ const props = defineProps({
 })
 
 import { useTipoDelete } from '@/stores/tipos'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { computed } from 'vue'
 
-const toast = useToast()
+const { exito, errorDeApi } = useNotificaciones()
 const { mutateAsync: eliminarTipo, asyncStatus } = useTipoDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 const submit = () => eliminarTipo(props.tipoId)
   .then(() => {
-    toast.create({ body: 'Tipo eliminado.', variant: 'success' })
+    exito('Tipo eliminado.')
     props.backLista()
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    errorDeApi(err, 'No se pudo ejecutar la acción.')
   })
 </script>
 

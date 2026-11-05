@@ -10,12 +10,12 @@ import SeleccionarCumplir from '@/components/features/solicitudes/[id]/Seleccion
 import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudCreate } from '@/stores/solicitudes'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import type { SolicitudCreateFromParent, SolicitudDetalle } from '@/types/models.js'
 import { ref, computed, onMounted, useTemplateRef, inject, Ref } from 'vue'
 
 const model = ref(false)
-const toast = useToast()
+const { exito } = useNotificaciones()
 const adjuntos = useTemplateRef('adjuntosRef')
 const solicitud = inject<Ref<SolicitudDetalle>>('solicitud:solicitud')
 const form = ref<SolicitudCreateFromParent>({
@@ -74,7 +74,7 @@ const submit = () => {
   if (!validate()) return
   crearSolicitud(form.value)
     .then(() => {
-      toast.create({ body: 'Nueva solicitud creada.', variant: 'success' })
+      exito('Nueva solicitud creada.')
       model.value = false
     })
     .catch(err => {

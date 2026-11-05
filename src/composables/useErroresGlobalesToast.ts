@@ -1,5 +1,5 @@
-import { useToast } from 'bootstrap-vue-next'
 import { events } from '@/api/client'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { onUnmounted, watch } from 'vue'
 
 type ErrorType = 'network' | 'server' | 'client' | 'unknown' | (string & {})
@@ -15,27 +15,22 @@ const VARIANTE_POR_TIPO: Record<string, 'danger' | 'warning' | 'info'> = {
 }
 
 export function useErroresGlobalesToast() {
-  const { create, _isOrchestratorInstalled } = useToast()
+  const { notificar, listo } = useNotificaciones()
   const pendientes: ErrorGlobal[] = []
 
   const mostrar = ({ message, type }: ErrorGlobal) => {
-    create({
-      body: message,
-      position: 'bottom-center',
-      modelValue: 5000,
-      variant: VARIANTE_POR_TIPO[type] ?? 'info'
-    })
+    notificar(message, VARIANTE_POR_TIPO[type] ?? 'info')
   }
 
   const handleError = (error: ErrorGlobal) => {
     // Si BApp todavía no ha montado su orchestrator, guardamos el error
     // y lo mostramos en cuanto esté disponible.
-    if (_isOrchestratorInstalled.value) mostrar(error)
+    if (listo.value) mostrar(error)
     else pendientes.push(error)
   }
 
   watch(
-    _isOrchestratorInstalled,
+    listo,
     (instalado) => {
       if (!instalado) return
       pendientes.splice(0).forEach(mostrar)

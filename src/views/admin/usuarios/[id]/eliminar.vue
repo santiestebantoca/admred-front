@@ -6,20 +6,20 @@ const props = defineProps({
 })
 
 import { useUsuarioDelete } from '@/stores/usuarios'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { computed } from 'vue'
 
-const toast = useToast()
+const { exito, errorDeApi } = useNotificaciones()
 const { mutateAsync: eliminarUsuario, asyncStatus } = useUsuarioDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 const submit = () => eliminarUsuario(props.usuarioId)
   .then(() => {
-    toast.create({ body: 'Usuario eliminado.', variant: 'success' })
+    exito('Usuario eliminado.')
     props.backLista()
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    errorDeApi(err, 'No se pudo ejecutar la acción.')
   })
 </script>
 
