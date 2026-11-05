@@ -40,7 +40,11 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  login(form.value).then(() => props.next())
+  login(form.value)
+    .then(() => props.next())
+    .catch(() => {
+      // El error se muestra en el BAlert mediante loginState.error.
+    })
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>
@@ -54,7 +58,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
         Usuario del dominio "etecsa.cu"
       </div>
       <BAlert v-model="alert" variant="danger" class="mb-3 small">
-        Credenciales no válidas
+        Credenciales no válidas.
       </BAlert>
       <BForm @submit.prevent="submit" density="3">
         <BFormGroup class="position-relative" v-bind="errorState.username">

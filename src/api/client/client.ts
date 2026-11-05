@@ -18,6 +18,13 @@ export const events = mitt()
 
 const notify = (type, message) => events.emit('error', { message, type })
 
+const LOGIN_PATH = '/auth/login'
+
+const esRutaLogin = (url?: string) => {
+  const path = url?.split('?')[0] ?? ''
+  return path.endsWith(LOGIN_PATH)
+}
+
 export const initAxiosInterceptors = () => {
   // No inyectamos el router aquí: solo registramos el interceptor.
 }
@@ -60,10 +67,19 @@ api.interceptors.response.use(
     else if (isHtml) message = ERROR_MESSAGES.htmlResponse
 
     switch (status) {
-      case 401:
-        notify('client', ERROR_MESSAGES.unauthorized)
-        events.emit('unauthorized', { next: config?.url })
+      case 401: {
+        const esLogin = esRutaLogin(config?.url)
+        const esIntentoLogin = esLogin && config?.method?.toLowerCase() === 'post'
+
+        // El login fallido se muestra inline en el formulario, no como toast global.
+        // El chequeo de sesión (GET /auth/login) tampoco necesita toast.
+        if (!esLogin) notify('client', ERROR_MESSAGES.unauthorized)
+
+        // En el intento de login no se redirige: ya estamos en la pantalla de login.
+        if (!esIntentoLogin) events.emit('unauthorized', { next: config?.url })
+
         throw new AuthenticationError(message, error)
+      }
 
       case 403:
         notify('client', ERROR_MESSAGES.forbidden)

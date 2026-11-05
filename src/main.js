@@ -46,9 +46,14 @@ app.use(VueTippy, {
 })
 
 events.on('unauthorized', () => {
+    const currentRoute = router.currentRoute.value
+
+    // Evita redirigir (y anidar el query `next`) si ya estamos en login.
+    if (currentRoute.name === 'auth-login') return
+
     router.push({
         name: 'auth-login',
-        query: { next: router.currentRoute.value.fullPath }
+        query: { next: currentRoute.fullPath }
     }).catch(() => {
         // Ignorar redirecciones duplicadas o bloqueos menores.
     })
