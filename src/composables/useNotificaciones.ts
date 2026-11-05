@@ -9,7 +9,13 @@ interface OpcionesToast {
 }
 
 const POSICION = 'bottom-center'
-const DURACION = 5000
+
+export const DURACION_POR_VARIANTE: Record<VarianteToast, number> = {
+  success: 3000,
+  info: 4000,
+  warning: 5000,
+  danger: 7000
+}
 
 function primerMensajeDeError(errors: unknown): string | null {
   if (typeof errors === 'string') return errors
@@ -35,13 +41,24 @@ function primerMensajeDeError(errors: unknown): string | null {
 export function useNotificaciones() {
   const { create, _isOrchestratorInstalled } = useToast()
 
-  const notificar = (body: string, variant: VarianteToast, opciones: OpcionesToast = {}) =>
-    create({
+  const notificar = (body: string, variant: VarianteToast, opciones: OpcionesToast = {}) => {
+    const modelValue = opciones.modelValue ?? DURACION_POR_VARIANTE[variant]
+
+    const controller = create({
       body,
       variant,
       position: opciones.position ?? POSICION,
-      modelValue: opciones.modelValue ?? DURACION
+      modelValue
     })
+
+    // BVN deja el toast montado después de ocultarse. Al resolverse el ciclo
+    // show/hide, destruimos el controller para liberar el store y el DOM.
+    if (modelValue > 0) {
+      controller.show().then(() => controller.destroy()).catch(() => {})
+    }
+
+    return controller
+  }
 
   const exito = (body: string, opciones?: OpcionesToast) => notificar(body, 'success', opciones)
   const error = (body: string, opciones?: OpcionesToast) => notificar(body, 'danger', opciones)
