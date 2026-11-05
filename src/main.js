@@ -10,10 +10,12 @@ import 'tippy.js/themes/light.css' // Tema claro (opcional)
 import App from './App.vue'
 import { router } from './router'
 import { events, initAxiosInterceptors } from '@/api/client'
+import { createBootstrap } from 'bootstrap-vue-next'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 const app = createApp(App)
+app.use(createBootstrap())
 const pinia = createPinia()
 
 pinia.use(piniaPluginPersistedstate)
