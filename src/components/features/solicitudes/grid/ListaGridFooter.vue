@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { PENDIENTE_STATUS, PERIODOS } from '@/constants'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useSolicitudesQuery, useSolicitudesFiltro } from '@/stores/solicitudes'
@@ -39,7 +39,7 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
       </BCol>
       <!--  -->
       <BCol cols="auto" class="text-danger" v-if="isStale">
-        <BButton variant="flat py-1 text-danger" @click="refresh" v-tippy="'Los datos pueden estar desactualizados'">
+        <BButton variant="flat py-1 text-danger" @click="refresh()" v-tippy="'Los datos pueden estar desactualizados'">
           <ILucideRefreshCcw class="small" />
           Actualizar
         </BButton>
@@ -52,5 +52,18 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
 .footer-row {
   height: 40px;
   color: var(--bs-warning-text-emphasis);
+
+  * {
+    line-height: 24px;
+  }
+
+  .indicador-carga {
+    display: inline;
+    vertical-align: baseline;
+
+    :nth-child(2) {
+      margin-left: 8px;
+    }
+  }
 }
 </style>

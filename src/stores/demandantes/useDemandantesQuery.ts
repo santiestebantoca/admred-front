@@ -1,20 +1,19 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { demandantesApi as api } from '@/api/demandantes'
+import type { DemandanteRow, DemandantesParams } from '@/types/api'
 import { computed, ref } from 'vue'
 
 export function useDemandantesQuery() {
-  const params = ref({
-    desde: undefined,
-    hasta: undefined,
-    destino_id: undefined,
-    origen_niveles: undefined
+  const params = ref<DemandantesParams>({
+    desde: '',
+    hasta: '',
   })
 
-  const { data, isPending } = useQuery({
+  const { data, isPending } = useQuery<DemandanteRow[]>({
     key: () => queryKeys.demandantes.lista(params.value),
     query: () => api.getAll(params.value),
-    enabled: () => Object.values(params.value).every(v => v != null),
+    enabled: () => Boolean(params.value.desde && params.value.hasta),
   })
 
   const formatted = computed(() => (data.value || []).map(d => ({ value: d.origen_id, text: d.origen })))

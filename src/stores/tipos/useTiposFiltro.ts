@@ -1,4 +1,5 @@
 import { ref, computed } from 'vue'
+import type { TiposParams } from '@/types/api'
 
 const SEARCH_IN = ['nombre', 'descripcion']
 
@@ -9,13 +10,14 @@ const SEARCH_IN = ['nombre', 'descripcion']
  * buscador de un widget no filtra la lista del admin ni al revés.
  */
 export function useTiposFiltro() {
-  const search = ref(undefined)
-  const nombre = ref(undefined)
-  const descripcion = ref(undefined)
-  const uso = ref(undefined)
+  const search = ref<string>()
+  const nombre = ref<string>()
+  const descripcion = ref<string>()
+  /** `'0'` (sin uso) o el máximo de usos para "poco uso". */
+  const uso = ref<string>()
 
   // Parámetros de filtrado que espera el API
-  const filtro = computed(() => ({
+  const filtro = computed<TiposParams>(() => ({
     ...nombre.value ? { nombre: nombre.value } : {},
     ...descripcion.value ? { descripcion: descripcion.value } : {},
     ...uso.value ? { uso: uso.value } : {},

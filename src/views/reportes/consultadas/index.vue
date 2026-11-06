@@ -1,17 +1,18 @@
-<script setup>
+<script lang="ts" setup>
 import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, CURSO_SOLICITUD } from '@/constants'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import useExportCSV from '@/composables/useExportCSV'
 import { useAreasConsultadasQuery } from '@/stores/reportes'
-import { ref, inject } from 'vue'
+import type { ReportesAreasConsultadasParams } from '@/types/api'
+import { ref, inject, type Ref } from 'vue'
 
-const title = inject('reportes:title')
+const title = inject<Ref<string>>('reportes:title')
 const { areas, isLoading, params } = useAreasConsultadasQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
-const form = ref({
-  desde: null,
-  hasta: null,
+const form = ref<ReportesAreasConsultadasParams>({
+  desde: undefined,
+  hasta: undefined,
   origen: DIRECCION_ADMINISTRACION_ID, // áreas AR u otras de la VPOR
   curso: 1
 })

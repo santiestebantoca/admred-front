@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   solicitudId: Number,
   back: Function
@@ -16,7 +16,7 @@ onMounted(() => model.value = true)
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Registro" no-footer size="lg">
+  <BModal v-model="model" @hidden="back()" title="Registro" no-footer size="lg">
     <IndicadorCarga v-if="isPending" texto="Cargando registro…" detalle="Consultando los movimientos de la solicitud." />
     <div v-else-if="!registros?.length" class="py-5 text-center text-muted">
       No hay movimientos registrados para esta solicitud.

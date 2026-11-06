@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import ListaNav from './ListaNavDrawer.vue'
 import AppsMenu from '@/components/features/AppsMenu.vue'
 import UserMenu from '@/components/features/UserMenu.vue'

@@ -3,16 +3,8 @@ import { useSolicitudesFiltro } from './useSolicitudesFiltro'
 import { useIntervalFn } from '@vueuse/core'
 import { queryKeys } from '@/lib/query-keys'
 import { solicitudesApi as api } from '@/api/solicitudes'
+import type { SolicitudesListaResponse } from '@/types/api'
 import { ref, computed, toRefs } from 'vue'
-
-// export interface SolicitudParams {
-//   tray?: string
-//   state?: string
-//   status?: string
-//   period?: string
-//   search?: string
-//   search_in?: string
-// }
 
 const STALE_TIME = 1000 * 60 * 5
 const ESTADOS_PENDIENTES = ['Solicitado', 'En proceso', 'En evaluación'] as const
@@ -24,7 +16,7 @@ export const useSolicitudesQuery = defineQuery(() => {
 
   const currentKey = computed(() => queryKeys.solicitudes.lista(params.value))
 
-  const { data, isPending, isLoading, refresh, refetch } = useQuery({
+  const { data, isPending, isLoading, refresh, refetch } = useQuery<SolicitudesListaResponse>({
     key: currentKey,
     query: () => api.getAll(params.value),
     enabled: () => Boolean(params.value),
@@ -42,7 +34,7 @@ export const useSolicitudesQuery = defineQuery(() => {
   })
 
   const conteoEstados = computed(() => {
-    if (params.value.state !== 'pendientes') return []
+    if (params.value?.state !== 'pendientes') return []
     const counts: Record<string, number> = {}
     for (const item of data.value?.data ?? []) {
       const estado = item?.[3]

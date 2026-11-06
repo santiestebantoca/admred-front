@@ -1,4 +1,4 @@
 declare module '~icons/*' {
-  const component: any
+  const component: import('vue').DefineComponent
   export default component
 }

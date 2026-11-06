@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 /**
  * BModalPlus — un `BModal` que además se puede minimizar, dejando una
  * cápsula flotante (como una ventana minimizada).
@@ -40,7 +40,7 @@ const props = defineProps({
   noTrap: { type: Boolean, default: false }
 })
 
-const modal = useTemplateRef('modal')
+const modal = useTemplateRef<{ hide: () => void }>('modal')
 
 // --- Minimizar -------------------------------------------------------------
 const minimized = ref(false)

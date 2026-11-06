@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import SeleccionarDestino from '@/components/features/solicitudes/[id]/SeleccionarDestino.vue'
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
@@ -28,7 +29,7 @@ const form = ref<SolicitudCreateFromParent>({
   cumplir_en: solicitud.value.cumplir_en?.slice(0, 10)
 })
 const adjuntosHeredados = ref(solicitud.value.adjuntos_solicitud)
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   destino: {
     state: errors.value.destino ? false : null,
@@ -88,7 +89,7 @@ const submit = () => {
 </script>
 
 <template>
-  <BModalPlus v-model="model" title="Nueva solicitud (Reenviada)" capsule-title="Nueva solicitud" @hidden="back"
+  <BModalPlus v-model="model" title="Nueva solicitud (Reenviada)" capsule-title="Nueva solicitud" @hidden="back()"
     size="lg" fullscreen="sm" :scrollable="false" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <BForm id="form-reenviar" @submit.prevent="submit" density="3" :aria-busy="enviando">
       <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />

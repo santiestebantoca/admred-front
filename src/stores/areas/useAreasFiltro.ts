@@ -9,11 +9,11 @@ const SEARCH_IN = ['nombre', 'padre', 'nivel']
  * buscador de un widget no filtra la lista del admin ni al revés.
  */
 export function useAreasFiltro() {
-  const search = ref(undefined)
-  const nombre = ref(undefined)
-  const padre = ref(undefined)
-  const nivel = ref(undefined)
-  const rol_key = ref(undefined)
+  const search = ref<string>()
+  const nombre = ref<string>()
+  const padre = ref<number>()
+  const nivel = ref<number>()
+  const rol_key = ref<boolean>()
 
   // Parámetros de filtrado que espera el API
   const filtro = computed(() => ({

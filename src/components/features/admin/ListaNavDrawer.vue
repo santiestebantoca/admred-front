@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useNavigationAdmin } from '@/composables/useNavigation'
 import { useToggle } from 'bootstrap-vue-next'
 

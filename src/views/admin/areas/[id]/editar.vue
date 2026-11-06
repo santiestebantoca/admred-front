@@ -4,6 +4,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
@@ -20,7 +21,7 @@ const form = ref<AreaUpdate>({
   nivel: area.value.nivel.id,
   padre: area.value.padre?.id // se reinicia cuando cambia 'nivel'
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   nombre: {
     state: errors.value.nombre ? false : null,
@@ -86,7 +87,7 @@ const submit = () => {
           texto-cargando="Guardando cambios…">
           Guardar
         </BotonEnvio>
-        <BButton @click="back" variant="emphasis w-90" :disabled="loading">
+        <BButton @click="back()" variant="emphasis w-90" :disabled="loading">
           Cancelar
         </BButton>
       </BFormButtons>

@@ -1,8 +1,4 @@
-<script setup>
-const props = defineProps({
-  linkSolicitud: Function
-})
-
+<script lang="ts" setup>
 import { DIRECCION_ADMINISTRACION_ID, PENDIENTE_TERMINADA } from '@/constants'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
@@ -11,22 +7,29 @@ import { useNivelesQuery } from '@/stores/niveles'
 import { formatTime } from '@/composables/useDates'
 import useExportCSV from '@/composables/useExportCSV'
 import { useSolicitudesExternasQuery } from '@/stores/reportes'
-import { ref, computed, inject, watchEffect } from 'vue'
+import type { ReporteSolicitudRow, ReportesSolicitudesExternasParams } from '@/types/api'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import type { RouteLocationRaw } from 'vue-router'
+import { ref, computed, inject, watchEffect, type Ref } from 'vue'
 
-const title = inject('reportes:title')
+const props = defineProps<{
+  linkSolicitud?: (solicitudId: number) => RouteLocationRaw
+}>()
+
+const title = inject<Ref<string>>('reportes:title')
 const { origenes, params: origenesParams } = useDemandantesQuery()
 const { niveles } = useNivelesQuery()
 const { solicitudes, isLoading, refresh, params } = useSolicitudesExternasQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
-const form = ref({
-  desde: null,
-  hasta: null,
-  origen: null, // áreas externas
-  estado: null,
-  codigo: null,
-  objetivo: null
+const form = ref<ReportesSolicitudesExternasParams>({
+  desde: undefined,
+  hasta: undefined,
+  origen: undefined, // áreas externas
+  estado: undefined,
+  codigo: undefined,
+  objetivo: undefined
 })
-const fields = ref([
+const fields: TableFieldRaw<ReporteSolicitudRow>[] = [
   { key: 'codigo', label: 'Código', tdClass: 'td-codigo' },
   { key: 'origen', label: 'De' },
   { key: 'objetivo', label: 'Objetivo' },
@@ -34,7 +37,7 @@ const fields = ref([
   { key: 'terminado_en', label: 'Terminada', formatter: fechaformatter },
   { key: 'estado', label: 'Estado' },
   { key: 'related', label: 'Solicitudes hijas' },
-])
+]
 
 title.value = 'Solicitudes a la VPOR'
 watchEffect(() => origenesParams.value = {
@@ -44,7 +47,7 @@ watchEffect(() => origenesParams.value = {
   origen_nivel: niveles.value?.filter((d) => d.alcance === 'externo').map((d) => d.id)
 })
 
-function fechaformatter({ value }) { return formatTime(value) || '-' }
+function fechaformatter({ value }: { value: unknown }) { return formatTime(value as string) || '-' }
 const submit = () => params.value = { ...form.value }
 const exportar = () => {
   const toString = val =>

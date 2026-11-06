@@ -1,8 +1,15 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { areasApi as api } from '@/api/areas'
+import type {
+  AreaListaItem,
+  AreasParams,
+  Id,
+  ListResponse,
+  MetaListado,
+} from '@/types/api'
 import { tidy, arrange } from '@tidyjs/tidy'
-import { ref, computed, toValue } from 'vue'
+import { ref, computed, toValue, type MaybeRefOrGetter } from 'vue'
 
 /**
  * Consulta de areas del sistema.
@@ -12,8 +19,10 @@ import { ref, computed, toValue } from 'vue'
  *   opcionalmente, `page` y `limit`). Acepta un objeto plano, un `ref` o un
  *   `computed`.
  */
-export function useAreasQuery(params = {}) {
-  const { data, isPending, isLoading } = useQuery({
+export function useAreasQuery(params: MaybeRefOrGetter<AreasParams> = {}) {
+  const { data, isPending, isLoading } = useQuery<
+    ListResponse<AreaListaItem>
+  >({
     key: () => queryKeys.areas.lista(toValue(params)),
     query: () => api.getAll(toValue(params)),
     // Mientras se carga otra página o búsqueda se conserva el resultado
@@ -23,19 +32,21 @@ export function useAreasQuery(params = {}) {
 
   return {
     areas: computed(() => data.value?.data),
-    meta: computed(() => data.value?.meta),
+    meta: computed<MetaListado | undefined>(() => data.value?.meta),
     isPending,
     isLoading,
   }
 }
 
-export function useAreasDelNivelQuery(nivel) {
-  const params = computed(() => ({ nivel: toValue(nivel) }))
+export function useAreasDelNivelQuery(nivel: MaybeRefOrGetter<Id | null | undefined>) {
+  const params = computed<AreasParams>(() => ({ nivel: toValue(nivel) }))
 
-  const { data, isPending, isLoading } = useQuery({
+  const { data, isPending, isLoading } = useQuery<
+    ListResponse<AreaListaItem>
+  >({
     key: () => queryKeys.areas.lista(toValue(params)),
     query: () => api.getAll(toValue(params)),
-    enabled: () => toValue(nivel),
+    enabled: () => !!toValue(nivel),
     staleTime: Infinity
   })
 
@@ -50,14 +61,16 @@ export function useAreasDelNivelQuery(nivel) {
   }
 }
 
-export function useAreasOpcionesQuery(enabled) {
-  const search = ref(undefined)
-  const params = computed(() => ({
+export function useAreasOpcionesQuery(enabled: MaybeRefOrGetter<boolean>) {
+  const search = ref<string>()
+  const params = computed<AreasParams>(() => ({
     search: search.value,
     search_in: search.value && ['nombre']
   }))
 
-  const { data, isPending, isLoading } = useQuery({
+  const { data, isPending, isLoading } = useQuery<
+    ListResponse<AreaListaItem>
+  >({
     key: () => queryKeys.areas.lista(params.value),
     query: () => api.getAll(params.value),
     enabled: () => toValue(enabled),

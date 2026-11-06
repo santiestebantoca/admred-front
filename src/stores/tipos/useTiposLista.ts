@@ -1,5 +1,6 @@
 import { useTiposFiltro } from './useTiposFiltro'
 import { useTiposQuery } from './useTiposQuery'
+import type { TiposParams } from '@/types/api'
 import { computed, ref, watch } from 'vue'
 
 const LIMIT_DEFAULT = 10
@@ -24,7 +25,7 @@ export function useTiposLista() {
   watch(filtro, () => (page.value = 1), { flush: 'sync' })
 
   // Filtros + paginación: es lo que espera el API (`page`, `limit`)
-  const params = computed(() => ({
+  const params = computed<TiposParams>(() => ({
     ...filtro.value,
     page: page.value,
     limit: limit.value,

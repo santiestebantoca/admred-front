@@ -1,5 +1,7 @@
 import { api } from './client'
+import type { DemandanteRow, DemandantesParams } from '@/types/api'
 
 export const demandantesApi = {
-  getAll: (params = {}) => api.get('/demandantes/demandantes', { params }).then(res => res.data),
+  getAll: (params: DemandantesParams) =>
+    api.get<DemandanteRow[]>('/demandantes/demandantes', { params }).then(res => res.data),
 }

@@ -24,6 +24,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "bootstrap-vue-next/types/ColorTypes": [
+        "./node_modules/bootstrap-vue-next/dist/types/ColorTypes.d.ts"
       ]
     }
   },

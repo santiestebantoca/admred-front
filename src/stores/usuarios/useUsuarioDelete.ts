@@ -1,12 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { usuariosApi as api } from '@/api/usuarios'
+import type { Id } from '@/types/api'
 
 export function useUsuarioDelete() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, number | string>({
-    mutation: (deletedId: number | string) => api.delete(deletedId),
+  return useMutation<number, Id>({
+    mutation: (deletedId) => api.delete(deletedId),
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.usuarios.listas() })

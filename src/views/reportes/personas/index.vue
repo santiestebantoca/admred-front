@@ -1,15 +1,15 @@
-<script setup>
-const props = defineProps({
-  personaId: Number,
-  setPersonaId: Function
-})
-
+<script lang="ts" setup>
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useTramitadoresQuery } from '@/stores/tramitadores'
-import { inject } from 'vue'
+import { inject, type Ref } from 'vue'
+
+const props = defineProps<{
+  personaId?: number
+  setPersonaId?: (personaId: number) => void
+}>()
 
 const { tramitadores, isPending } = useTramitadoresQuery()
-const title = inject('reportes:title')
+const title = inject<Ref<string>>('reportes:title')
 
 title.value = 'Desempeño personal'
 </script>

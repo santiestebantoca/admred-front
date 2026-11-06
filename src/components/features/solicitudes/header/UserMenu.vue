@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import useAuthUserMenu from '@/composables/useAuthUserMenu'
 import { ref } from 'vue'
 

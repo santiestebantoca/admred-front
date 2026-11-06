@@ -1,29 +1,34 @@
-<script setup>
-const props = defineProps({
-  linkSolicitud: Function
-})
-
+<script lang="ts" setup>
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { formatTime } from '@/composables/useDates'
 import { useCodigosQuery } from '@/stores/reportes'
-import { ref, inject } from 'vue'
+import type { ReporteCodigoRow } from '@/types/api'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import type { RouteLocationRaw } from 'vue-router'
+import { ref, inject, type Ref } from 'vue'
 
-const value = ref(undefined)
+const props = defineProps<{
+  linkSolicitud?: (solicitudId: number) => RouteLocationRaw
+}>()
+
+const value = ref<string>()
 const { solicitudes, isPending, isLoading, codigo } = useCodigosQuery()
-const title = inject('reportes:title')
-const fields = ref([
+const title = inject<Ref<string>>('reportes:title')
+const fields: TableFieldRaw<ReporteCodigoRow>[] = [
   { key: 'codigo', label: 'Código', tdClass: 'td-codigo' },
   { key: 'solicitado_en', label: 'Presentada', formatter: fechaformatter },
   { key: 'objetivo', label: 'Objetivo' },
   { key: 'origen', label: 'De' },
   { key: 'destino', label: 'A' },
-])
+]
 
 title.value = 'Buscar código'
 
 const submit = () => codigo.value = value.value
-function fechaformatter({ value }) { return formatTime(value) || '-' }
+function fechaformatter({ value }: { value: unknown }) {
+  return formatTime(value as string) || '-'
+}
 </script>
 
 <template>

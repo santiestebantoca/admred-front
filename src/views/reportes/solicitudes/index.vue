@@ -1,21 +1,24 @@
-<script setup>
+<script lang="ts" setup>
 import { AREAS_AR } from '@/constants'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { formatTime } from '@/composables/useDates'
 import useExportCSV from '@/composables/useExportCSV'
 import { useSolicitudesRawQuery } from '@/stores/reportes'
-import { ref, computed, inject } from 'vue'
+import type { ReportesSolicitudesRawParams } from '@/types/api'
+import type { SolicitudRawRow } from '@/types/backend'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import { ref, computed, inject, type Ref } from 'vue'
 
-const title = inject('reportes:title')
+const title = inject<Ref<string>>('reportes:title')
 const { solicitudes, isLoading, refresh, params } = useSolicitudesRawQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
-const form = ref({
+const form = ref<ReportesSolicitudesRawParams>({
   desde: undefined,
   hasta: undefined,
   destino_id: undefined
 })
-const fields = ref([
+const fields: TableFieldRaw<SolicitudRawRow>[] = [
   { key: 'origen', label: 'De' },
   { key: 'objetivo', label: 'Objetivo' },
   { key: 'solicitado_en', label: 'Presentada', formatter: fechaformatter },
@@ -23,11 +26,11 @@ const fields = ref([
   { key: 'h_objetivo', label: 'H_Objetivo' },
   { key: 'h_solicitado_en', label: 'H_Presentada', formatter: fechaformatter },
   { key: 'h_terminado_en', label: 'H_Terminada', formatter: fechaformatter },
-])
+]
 
 title.value = 'Solicitudes en bruto'
 
-function fechaformatter({ value }) { return formatTime(value) || '-' }
+function fechaformatter({ value }: { value: unknown }) { return formatTime(value as string) || '-' }
 const submit = () => params.value = { ...form.value }
 const exportar = () => {
   const toSave = computed(() => (solicitudes.value || []).map(d => ({

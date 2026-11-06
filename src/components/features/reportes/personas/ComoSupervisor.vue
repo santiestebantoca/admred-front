@@ -1,13 +1,35 @@
-<script setup>
-const props = defineProps({
-  data: Object,
-  linkSolicitud: Function
-})
-
+<script lang="ts" setup>
 import { formatTime } from '@/composables/useDates'
-import { ref, computed } from 'vue'
+import type { ReportePersonaRow } from '@/types/api'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import type { RouteLocationRaw } from 'vue-router'
+import { ref, computed, type Ref } from 'vue'
 
-const fields = ref([
+type FilaSupervisor = ReportePersonaRow & {
+  demoraAsignacion: number
+  demoraEvaluacion: number
+  demoraSupervisor: number
+  demoraAsignacionDH: string
+  demoraEvaluacionDH: string
+  demoraSupervisorDH: string
+}
+
+type ResumenSupervisor = {
+  supervisadas: number
+  terminadas: number
+  demora: number
+  demoraDH: string
+}
+
+const props = defineProps<{
+  data: {
+    data: Ref<FilaSupervisor[]>
+    resumen: Ref<ResumenSupervisor>
+  }
+  linkSolicitud?: (solicitudId: number) => RouteLocationRaw
+}>()
+
+const fields: TableFieldRaw<FilaSupervisor>[] = [
   { key: 'codigo', label: '', tdClass: 'td-codigo' },
   { key: 'solicitado_en', label: 'Presentada', formatter: fechaformatter },
   { key: 'tramitador_en', label: 'Asignada', formatter: fechaformatter },
@@ -16,14 +38,16 @@ const fields = ref([
   { key: 'terminado_en', label: 'Evaluada', formatter: fechaformatter },
   { key: 'demoraEvaluacionDH', label: 'Demora Evaluación' },
   { key: 'demoraSupervisorDH', label: 'Demora del supervisor', variant: 'danger' },
-])
+]
 const resumen = computed(() => ([
   { text: 'Supervisadas', value: props.data.resumen.value.supervisadas },
   { text: 'Terminadas', value: props.data.resumen.value.terminadas },
   { text: 'Demora promedio del supervisor', value: props.data.resumen.value.demoraDH },
 ]))
 
-function fechaformatter({ value }) { return formatTime(value) || '-' }
+function fechaformatter({ value }: { value: unknown }) {
+  return formatTime(value as string) || '-'
+}
 </script>
 
 <template>

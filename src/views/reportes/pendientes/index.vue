@@ -1,15 +1,16 @@
-<script setup>
-const props = defineProps({
-  linkSolicitud: Function,
-})
-
+<script lang="ts" setup>
 import Nodo from '@/components/features/reportes/pendientes/Nodo.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { usePendientesQuery } from '@/stores/reportes'
 import { useAuthQuery } from '@/stores/auth'
-import { computed, inject, provide } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
+import { computed, inject, provide, type Ref } from 'vue'
 
-const title = inject('reportes:title')
+const props = defineProps<{
+  linkSolicitud?: (solicitudId: number) => RouteLocationRaw
+}>()
+
+const title = inject<Ref<string>>('reportes:title')
 provide('reportes:linkSolicitud', props.linkSolicitud) // para Nodo
 const { pendientes, isPending } = usePendientesQuery()
 const { authUser } = useAuthQuery()

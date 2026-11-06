@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ROLES_DEL_USUARIO, ESTADOS_DEL_USUARIO } from '@/constants'
 import { useAuthQuery } from '@/stores/auth'
 import { useAreasOpcionesQuery } from '@/stores/areas'
@@ -11,10 +11,18 @@ import { ref, computed } from 'vue'
 const search = defineModel('search', { type: String })
 const nombre = defineModel('nombre', { type: String })
 const area = defineModel('area', { type: Number })
-const rol = defineModel('rol', { type: Number })
-const estado = defineModel('estado', { type: Number })
+const rol = defineModel('rol', { type: String })
+const estado = defineModel('estado', { type: String })
+/** Valores que viajan entre el input de texto, el formulario y los modelos. */
+type FiltroUsuarios = {
+  search?: string
+  nombre?: string
+  area?: number
+  rol?: string
+  estado?: string
+}
 // Para el filtro
-const form = ref({
+const form = ref<FiltroUsuarios>({
   search: undefined,
   nombre: undefined,
   area: undefined,
@@ -46,18 +54,18 @@ const updateInputFromForm = () => {
   inputValue.value = text.join(' ')
   submit()
 }
-function getValuesFromInput() {
+function getValuesFromInput(): FiltroUsuarios {
   if (!inputValue.value) return {}
   const arrayBloques = inputValue.value.split(' ')
   if (!arrayBloques.length) return {}
-  const obj = {}
+  const obj: FiltroUsuarios = {}
   arrayBloques.forEach((bloque) => {
     const arrayValores = bloque.split(':')
     if (arrayValores.length) {
       if (arrayValores.length === 1) obj.search = arrayValores[0]
       else {
         if (arrayValores[0] === 'nombre') obj.nombre = arrayValores[1]
-        if (arrayValores[0] === 'area') obj.area = arrayValores[1]
+        if (arrayValores[0] === 'area') obj.area = parseInt(arrayValores[1])
         if (arrayValores[0] === 'rol') obj.rol = arrayValores[1]
         if (arrayValores[0] === 'estado') obj.estado = arrayValores[1]
       }
@@ -81,7 +89,7 @@ const reset = () => {
 </script>
 
 <template>
-  <div class="root" v-resize-observer="onResizeObserver">
+  <div class="root">
     <BButton variant="link link-dark wh-34 ms-1" @click="submit">
       <ILucideSearch class="center" />
     </BButton>

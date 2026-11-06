@@ -1,10 +1,16 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import { useAuthQuery, useLogout } from '@/stores/auth'
 import { until } from '@vueuse/core'
 import { useStorage } from '@vueuse/core'
 
-const folderDefault = () => {
-  const folders = [
+/** Normaliza un parámetro de ruta a id numérico (vue-router lo tipa `string | string[]`). */
+const idDeRuta = (valor: string | string[] | undefined) => parseInt(String(valor))
+
+/** Normaliza un valor de `query` a texto. */
+const textoDeQuery = (valor: string | string[] | undefined) => String(valor ?? '')
+
+const folderDefault = () => {  const folders = [
     'recibidas/pendientes',
     'recibidas/terminadas',
     'enviadas/pendientes',
@@ -16,13 +22,13 @@ const folderDefault = () => {
     : '/solicitudes/enviadas/pendientes'
 }
 
-const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
+const rutasSolicitud = (rutaBase: string, rutaPadre: string, prefijo?: string): RouteRecordRaw => {
   return {
     path: prefijo ? prefijo + '/:solicitudId' : ':solicitudId',
     name: rutaBase,
     component: () => import('@/views/solicitudes/[id]/index.vue'),
     props: route => ({
-      solicitudId: parseInt(route.params.solicitudId),
+      solicitudId: idDeRuta(route.params.solicitudId),
       linkSolicitud: (solicitudId) => ({ params: { solicitudId } }),
       setSolicitudId: (solicitudId) => router.push({ params: { solicitudId } }),
       back: () => router.push({ name: rutaPadre }),
@@ -34,7 +40,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-asignar',
         component: () => import('@/views/solicitudes/[id]/asignar.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       },
@@ -43,7 +49,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-reenviar',
         component: () => import('@/views/solicitudes/[id]/reenviar.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       },
@@ -52,7 +58,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-responder',
         component: () => import('@/views/solicitudes/[id]/responder.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       },
@@ -61,7 +67,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-aprobar',
         component: () => import('@/views/solicitudes/[id]/aprobar.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       },
@@ -70,7 +76,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-evaluar',
         component: () => import('@/views/solicitudes/[id]/evaluar.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       },
@@ -79,7 +85,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-registro',
         component: () => import('@/views/solicitudes/[id]/registro.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       },
@@ -88,7 +94,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
         name: rutaBase + '-notas',
         component: () => import('@/views/solicitudes/[id]/notas.vue'),
         props: route => ({
-          solicitudId: parseInt(route.params.solicitudId),
+          solicitudId: idDeRuta(route.params.solicitudId),
           back: () => router.push({ name: rutaBase })
         })
       }
@@ -96,7 +102,7 @@ const rutasSolicitud = (rutaBase, rutaPadre, prefijo) => {
   }
 }
 
-const routesAuth = [
+const routesAuth: RouteRecordRaw[] = [
   {
     path: '/auth',
     name: 'auth',
@@ -108,7 +114,7 @@ const routesAuth = [
         component: () => import('@/views/auth/login.vue'),
         meta: { logout: true },
         props: route => ({
-          next: () => router.push(route.query.next || '/home')
+          next: () => router.push(textoDeQuery(route.query.next) || '/home')
         })
       },
       {
@@ -130,14 +136,14 @@ const routesAuth = [
         meta: { logout: true },
         beforeEnter: (to, from) => replaceQuery(to, 'next', from ? from.fullPath : '/'),
         props: route => ({
-          next: () => router.push(route.query.next)
+          next: () => router.push(textoDeQuery(route.query.next))
         }),
       }
     ]
   }
 ]
 
-const routesSolicitudes = [
+const routesSolicitudes: RouteRecordRaw[] = [
   {
     path: '/solicitudes',
     redirect: folderDefault,
@@ -151,7 +157,7 @@ const routesSolicitudes = [
           tray: route.params.tray,
           state: route.params.state,
           linkCrear: { name: 'solicitudes-crear' },
-          solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+          solicitudId: route.params.solicitudId ? idDeRuta(route.params.solicitudId) : undefined,
           linkSolicitud: (solicitudId) => ({
             name: 'solicitudes-solicitud',
             params: { solicitudId }
@@ -177,7 +183,7 @@ const routesSolicitudes = [
   }
 ]
 
-const routesReportes = [
+const routesReportes: RouteRecordRaw[] = [
   {
     path: '/reportes',
     name: 'reportes',
@@ -194,7 +200,7 @@ const routesReportes = [
         name: 'reportes-pendientes',
         component: () => import('@/views/reportes/pendientes/index.vue'),
         props: (route) => ({
-          // solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+          // solicitudId: route.params.solicitudId ? idDeRuta(route.params.solicitudId) : undefined,
           linkSolicitud: (solicitudId) => ({
             name: 'reportes-pendientes-solicitud',
             params: { solicitudId }
@@ -209,7 +215,7 @@ const routesReportes = [
         name: 'reportes-personas',
         component: () => import('@/views/reportes/personas/index.vue'),
         props: (route) => ({
-          personaId: route.params.personaId && parseInt(route.params.personaId),
+          personaId: route.params.personaId && idDeRuta(route.params.personaId),
           setPersonaId: (personaId) => router.push({ name: 'reportes-persona', params: { personaId } }),
         }),
         children: [
@@ -218,9 +224,9 @@ const routesReportes = [
             name: 'reportes-persona',
             component: () => import('@/views/reportes/personas/[id]/index.vue'),
             props: (route) => ({
-              personaId: route.params.personaId && parseInt(route.params.personaId),
+              personaId: route.params.personaId && idDeRuta(route.params.personaId),
               back: () => router.push({ name: 'reportes-personas' }),
-              // solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+              // solicitudId: route.params.solicitudId ? idDeRuta(route.params.solicitudId) : undefined,
               linkSolicitud: (solicitudId) => ({
                 name: 'reportes-persona-solicitud',
                 params: { solicitudId }
@@ -237,7 +243,7 @@ const routesReportes = [
         name: 'reportes-externas',
         component: () => import('@/views/reportes/externas/index.vue'),
         props: (route) => ({
-          // solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+          // solicitudId: route.params.solicitudId ? idDeRuta(route.params.solicitudId) : undefined,
           linkSolicitud: (solicitudId) => ({
             name: 'reportes-externas-solicitud',
             params: { solicitudId }
@@ -252,7 +258,7 @@ const routesReportes = [
         name: 'reportes-internas',
         component: () => import('@/views/reportes/internas/index.vue'),
         props: (route) => ({
-          // solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+          // solicitudId: route.params.solicitudId ? idDeRuta(route.params.solicitudId) : undefined,
           linkSolicitud: (solicitudId) => ({
             name: 'reportes-internas-solicitud',
             params: { solicitudId }
@@ -272,7 +278,7 @@ const routesReportes = [
         name: 'reportes-buscar',
         component: () => import('@/views/reportes/buscar/index.vue'),
         props: (route) => ({
-          // solicitudId: route.params.solicitudId ? parseInt(route.params.solicitudId) : undefined,
+          // solicitudId: route.params.solicitudId ? idDeRuta(route.params.solicitudId) : undefined,
           linkSolicitud: (solicitudId) => ({
             name: 'reportes-buscar-solicitud',
             params: { solicitudId }
@@ -291,7 +297,7 @@ const routesReportes = [
   }
 ]
 
-const routesAdmin = [
+const routesAdmin: RouteRecordRaw[] = [
   {
     path: '/admin',
     name: 'admin',
@@ -309,7 +315,7 @@ const routesAdmin = [
         component: () => import('@/views/admin/usuarios/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-usuarios',
-          usuarioId: parseInt(route.params.usuarioId),
+          usuarioId: idDeRuta(route.params.usuarioId),
           linkCrear: { name: 'admin-usuarios-crear' },
           setUsuarioId: (usuarioId) => usuarioId && router.push({
             name: 'admin-usuario',
@@ -331,7 +337,7 @@ const routesAdmin = [
             component: () => import('@/views/admin/usuarios/[id]/index.vue'),
             props: route => ({
               showDetalle: route.name === 'admin-usuario',
-              usuarioId: parseInt(route.params.usuarioId),
+              usuarioId: idDeRuta(route.params.usuarioId),
               back: { name: 'admin-usuarios' },
               editar: { name: 'admin-usuario-editar' },
               eliminar: { name: 'admin-usuario-eliminar' },
@@ -342,7 +348,7 @@ const routesAdmin = [
                 name: 'admin-usuario-editar',
                 component: () => import('@/views/admin/usuarios/[id]/editar.vue'),
                 props: (route) => ({
-                  usuarioId: parseInt(route.params.usuarioId),
+                  usuarioId: idDeRuta(route.params.usuarioId),
                   back: () => router.push({ name: 'admin-usuario' }),
                 })
               },
@@ -351,7 +357,7 @@ const routesAdmin = [
                 name: 'admin-usuario-eliminar',
                 component: () => import('@/views/admin/usuarios/[id]/eliminar.vue'),
                 props: (route) => ({
-                  usuarioId: parseInt(route.params.usuarioId),
+                  usuarioId: idDeRuta(route.params.usuarioId),
                   back: () => router.push({ name: 'admin-usuario' }),
                   backLista: () => router.push({ name: 'admin-usuarios' }),
                 })
@@ -366,7 +372,7 @@ const routesAdmin = [
         component: () => import('@/views/admin/areas/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-areas',
-          areaId: parseInt(route.params.areaId),
+          areaId: idDeRuta(route.params.areaId),
           linkCrear: { name: 'admin-areas-crear' },
           setAreaId: (areaId) => areaId && router.push({
             name: 'admin-area',
@@ -388,7 +394,7 @@ const routesAdmin = [
             component: () => import('@/views/admin/areas/[id]/index.vue'),
             props: route => ({
               showDetalle: route.name === 'admin-area',
-              areaId: parseInt(route.params.areaId),
+              areaId: idDeRuta(route.params.areaId),
               back: { name: 'admin-areas' },
               editar: { name: 'admin-area-editar' },
               eliminar: { name: 'admin-area-eliminar' },
@@ -399,7 +405,7 @@ const routesAdmin = [
                 name: 'admin-area-editar',
                 component: () => import('@/views/admin/areas/[id]/editar.vue'),
                 props: (route) => ({
-                  areaId: parseInt(route.params.areaId),
+                  areaId: idDeRuta(route.params.areaId),
                   back: () => router.push({ name: 'admin-area' }),
                 })
               },
@@ -408,7 +414,7 @@ const routesAdmin = [
                 name: 'admin-area-eliminar',
                 component: () => import('@/views/admin/areas/[id]/eliminar.vue'),
                 props: (route) => ({
-                  areaId: parseInt(route.params.areaId),
+                  areaId: idDeRuta(route.params.areaId),
                   back: () => router.push({ name: 'admin-area' }),
                   backLista: () => router.push({ name: 'admin-areas' }),
                 })
@@ -423,7 +429,7 @@ const routesAdmin = [
         component: () => import('@/views/admin/tipos/index.vue'),
         props: (route) => ({
           showLista: route.name === 'admin-tipos',
-          tipoId: parseInt(route.params.tipoId),
+          tipoId: idDeRuta(route.params.tipoId),
           linkCrear: { name: 'admin-tipos-crear' },
           setTipoId: (tipoId) => tipoId && router.push({
             name: 'admin-tipo',
@@ -445,7 +451,7 @@ const routesAdmin = [
             component: () => import('@/views/admin/tipos/[id]/index.vue'),
             props: route => ({
               showDetalle: route.name === 'admin-tipo',
-              tipoId: parseInt(route.params.tipoId),
+              tipoId: idDeRuta(route.params.tipoId),
               back: { name: 'admin-tipos' },
               editar: { name: 'admin-tipo-editar' },
               eliminar: { name: 'admin-tipo-eliminar' },
@@ -456,7 +462,7 @@ const routesAdmin = [
                 name: 'admin-tipo-editar',
                 component: () => import('@/views/admin/tipos/[id]/editar.vue'),
                 props: (route) => ({
-                  tipoId: parseInt(route.params.tipoId),
+                  tipoId: idDeRuta(route.params.tipoId),
                   back: () => router.push({ name: 'admin-tipo' }),
                 })
               },
@@ -465,7 +471,7 @@ const routesAdmin = [
                 name: 'admin-tipo-eliminar',
                 component: () => import('@/views/admin/tipos/[id]/eliminar.vue'),
                 props: (route) => ({
-                  tipoId: parseInt(route.params.tipoId),
+                  tipoId: idDeRuta(route.params.tipoId),
                   back: () => router.push({ name: 'admin-tipo' }),
                   backLista: () => router.push({ name: 'admin-tipos' }),
                 })
@@ -505,7 +511,7 @@ router.afterEach((to) => {
   if (to.matched.some((record) => record.meta.logout) && authUser.value)
     logout()
   if (to.matched.some((record) => record.meta.saveFolder)) {
-    const folder = useStorage('admred_router_folder')
+    const folder = useStorage('admred_router_folder', '')
     folder.value = `${to.params.tray}/${to.params.state}`
   }
 })

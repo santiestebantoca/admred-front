@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useSolicitudesFiltro } from '@/stores/solicitudes'
 import { toRefs } from 'vue'
 

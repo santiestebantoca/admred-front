@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 /**
  * BModalNext — `BModal` que al minimizarse **no desaparece ni deja un elemento
  * aparte**: el propio modal se queda en pantalla, sin backdrop y con el cuerpo y

@@ -1,23 +1,26 @@
-<script setup>
+<script lang="ts" setup>
 import { shorterTime } from '@/composables/useDates'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import { useFields } from './table-fields'
 import { useSolicitudesQuery } from '@/stores/solicitudes'
+import { useSelectedItems } from '@/composables/useSelectedItems'
+import type { EstadoLista, SolicitudListaTupla, Tray } from '@/types/api'
 import { useResizeObserver } from '@vueuse/core'
-import { ref, computed, inject, useTemplateRef, watchEffect } from 'vue'
+import { ref, computed, inject, useTemplateRef, watchEffect, type Ref } from 'vue'
 
-const mobile = inject('app:mobile')
-const tray = inject('solicitudes:tray')
-const state = inject('solicitudes:state')
-const solicitudId = inject('solicitudes:solicitudId')
-const setSolicitudId = inject('solicitudes:setSolicitudId')
-const filaExpandida = inject('solicitudes:filaExpandida')
+const mobile = inject<Ref<boolean>>('app:mobile')
+const tray = inject<Ref<Tray>>('solicitudes:tray')
+const state = inject<Ref<EstadoLista>>('solicitudes:state')
+const solicitudId = inject<Ref<number | undefined>>('solicitudes:solicitudId')
+const setSolicitudId = inject<Ref<(solicitudId?: number) => void>>('solicitudes:setSolicitudId')
+const filaExpandida = inject<Ref<boolean>>('solicitudes:filaExpandida')
 const { fields } = useFields(tray, state)
 const { solicitudes, total, isPending, isLoading, isFiltered } = useSolicitudesQuery()
-const height = ref(null)
-const container = useTemplateRef('container')
-const active = ref(undefined) // Mantener marcada la fila
+const height = ref<string>()
+const container = useTemplateRef<HTMLElement>('container')
+const active = ref<number[]>([]) // Mantener marcada la fila
+const selectedItems = useSelectedItems<SolicitudListaTupla>(active, (ids) => ids.length && setSolicitudId.value(ids[0]))
 const rootStyle = computed(() => ({
   '--td-white-space': filaExpandida.value ? 'unset' : 'nowrap'
 }))
@@ -28,7 +31,7 @@ useResizeObserver(container, entries => {
   height.value = `${containerHeight - containerHeight % 41}px`
 })
 
-const onSelectedItem = (val) => setSolicitudId.value(val[0])
+const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0])
 </script>
 
 <template>
@@ -60,7 +63,7 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
       </BContainer>
       <div v-else class="table-large-container" ref="container" :style="rootStyle" v-bind="$attrs">
         <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0" selectable
-          select-mode="single" hover @update:selected-items="onSelectedItem" v-model:selected-items="active">
+          select-mode="single" hover v-model:selected-items="selectedItems">
           <template #table-colgroup>
             <!-- <col style="width:80px" /> -->
             <col style="width:110px" />

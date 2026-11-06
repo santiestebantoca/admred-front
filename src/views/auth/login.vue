@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps({ next: Function })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import AcercaDe from '@/components/features/AcercaDe.vue'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useLogin } from '@/stores/auth'
@@ -13,7 +14,7 @@ const formDefault = {
   password: null,
 }
 const form = ref<LoginCredentials>({ ...formDefault })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   username: {
     state: errors.value.username ? false : null,

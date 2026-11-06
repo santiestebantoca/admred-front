@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { computed, inject } from 'vue'
 
 const linkSolicitud = inject('reportes:linkSolicitud')

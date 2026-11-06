@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   areaId: Number,
   back: Function,
@@ -38,7 +38,7 @@ const submit = () => {
       Esta acción no se puede deshacer.
     </p>
     <BFormButtons class="py-4">
-      <BButton variant="emphasis" :disabled="loading" @click="back">
+      <BButton variant="emphasis" :disabled="loading" @click="back()">
         Cancelar
       </BButton>
       <BotonEnvio variant="danger" class="w-90" :loading="loading" loading-fill texto-cargando="Eliminando…"

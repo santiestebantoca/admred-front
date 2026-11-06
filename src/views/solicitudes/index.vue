@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-const props = defineProps({
-  tray: String,
-  state: String,
-  solicitudId: Number,
-  linkSolicitud: Function,
-  setSolicitudId: Function,
-  linkCrear: Object
-})
+import type { EstadoLista, Tray } from '@/types/api'
+import type { RouteLocationRaw } from 'vue-router'
+
+const props = defineProps<{
+  tray?: Tray
+  state?: EstadoLista
+  solicitudId?: number
+  linkSolicitud?: (solicitudId: number) => RouteLocationRaw
+  setSolicitudId?: (solicitudId?: number) => unknown
+  linkCrear?: RouteLocationRaw
+}>()
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import DrawerContent from '@/components/features/solicitudes/DrawerContent.vue'

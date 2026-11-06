@@ -2,24 +2,24 @@ import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { notasApi as api } from '@/api/notas'
 import { formatHM, formatDate } from '@/composables/useDates'
-import { Nota } from '@/types/models'
+import type { Id } from '@/types/api'
+import type { Nota } from '@/types/models'
 import { computed, toValue } from 'vue'
 
 type NotaConHora = Nota & {
   hora: string,
 }
 
-export function useNotasQuery(solicitudId?: number | string) {
+export function useNotasQuery(solicitudId?: Id) {
 
   const { data: _data, isPending } = useQuery<Nota[]>({
     key: () => queryKeys.notas.lista({ solicitudId: toValue(solicitudId) }),
     query: () => api.getAll({ solicitudId: toValue(solicitudId) }),
     enabled: () => !!toValue(solicitudId),
-    // staleTime: Infinity
   })
 
   const notas = computed(() => {
-    const items = (_data.value || []) as Nota[]
+    const items = _data.value || []
     const out: Record<string, NotaConHora[]> = {}
     for (const it of items) {
       const key = formatDate(it.fecha) ?? ''

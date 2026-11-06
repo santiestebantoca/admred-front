@@ -1,11 +1,19 @@
-import { useQuery, defineQuery } from '@pinia/colada'
+import { useQuery } from '@pinia/colada'
 import { solicitudesApi as api } from '@/api/solicitudes'
-import { SolicitudDetalle } from '@/types/models'
+import type { SolicitudDetalle } from '@/types/models'
+import type { Id } from '@/types/api'
 import { queryKeys } from '@/lib/query-keys'
 import { timeDeltaDH, timeDeltaWDH } from '@/composables/useTimeDelta'
-import { computed, toValue } from 'vue'
+import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 
-export function useSolicitudQuery(solicitudId?: number | string) {
+/** Detalle de la solicitud más los tiempos calculados en el frontend. */
+export type SolicitudConTiempos = SolicitudDetalle & {
+  acumulado: string
+  laborable: string
+  root: boolean
+}
+
+export function useSolicitudQuery(solicitudId?: MaybeRefOrGetter<Id>) {
 
   const { data: _data, isPending, isLoading } = useQuery<SolicitudDetalle>({
     key: () => queryKeys.solicitudes.detalle(toValue(solicitudId)),
@@ -14,8 +22,8 @@ export function useSolicitudQuery(solicitudId?: number | string) {
     placeholderData: (previousData) => previousData,
   })
 
-  const data = computed(() => {
-    if (!_data.value) return _data.value
+  const data = computed<SolicitudConTiempos | undefined>(() => {
+    if (!_data.value) return undefined
     return {
       ..._data.value,
       acumulado: timeDeltaDH(_data.value.solicitado_en, _data.value.terminado_en),

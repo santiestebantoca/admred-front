@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   solicitudId: Number,
   linkSolicitud: Function,
@@ -35,7 +35,7 @@ provide('solicitud:solicitud', solicitud)
 </script>
 
 <template>
-  <BModal v-model="model" fullscreen no-footer no-backdrop @hidden="back" :style="rootStyle"
+  <BModal v-model="model" fullscreen no-footer no-backdrop @hidden="back()" :style="rootStyle"
     body-class="position-static" lazy @shown="shown = true">
     <template #header>
       <BButton @click="model = false" variant="flat rounded-5">
@@ -52,7 +52,7 @@ provide('solicitud:solicitud', solicitud)
         <AccionesMenu :user="authUser" :solicitud="solicitud" :rutaBase="rutaBase" />
       </BDropdown>
     </template>
-    <BOverlay :show="isLoading" no-wrap :variant="white" :opacity=".3" :blur="5" />
+    <BOverlay :show="isLoading" no-wrap variant="white" :opacity=".3" blur="5px" />
     <!-- Body -->
     <div :key="solicitud.id" class="container grid solicitud-data" :aria-busy="isLoading">
       <div class="grid-header hstack gap-3">

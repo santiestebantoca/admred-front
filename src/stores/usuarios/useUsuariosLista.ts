@@ -1,12 +1,13 @@
 import { useUsuariosFiltro } from './useUsuariosFiltro'
 import { useUsuariosQuery } from './useUsuariosQuery'
+import type { UsuariosParams } from '@/types/api'
 import { computed, ref, watch } from 'vue'
 
 const LIMIT_DEFAULT = 10
 const LIMITS = [10, 25, 50, 100]
 
 /**
- * Estado de la lista de tipos del admin: filtros + paginación del servidor.
+ * Estado de la lista de usuarios del admin: filtros + paginación del servidor.
  *
  * Es el estado local de la interfaz (no un store): se crea al montar la lista,
  * de modo que montar otra lista no lo comparte ni lo pisa.
@@ -24,7 +25,7 @@ export function useUsuariosLista() {
   watch(filtro, () => (page.value = 1), { flush: 'sync' })
 
   // Filtros + paginación: es lo que espera el API (`page`, `limit`)
-  const params = computed(() => ({
+  const params = computed<UsuariosParams>(() => ({
     ...filtro.value,
     page: page.value,
     limit: limit.value,

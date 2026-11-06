@@ -4,8 +4,8 @@
   the user types space.
 -->
 
-<script setup>
-const value = defineModel()
+<script lang="ts" setup>
+const value = defineModel<number | null>()
 const props = defineProps({
   state: Boolean,
   invalidFeedback: String
@@ -17,11 +17,11 @@ import { vOnClickOutside } from '@vueuse/components'
 import { ref, computed, watch, onMounted } from 'vue'
 
 const { destinos, historial, singleOption, search, isPending } = useDestinosSelectQuery()
-const focus = ref(null) // input focus
-const dropdown = ref(null)
+const focus = ref<boolean>(false) // input focus
+const dropdown = ref<boolean>(false)
 const attrs = computed(() => ({
   value: search.value,
-  readonly: singleOption.value || isPending.value,
+  readonly: Boolean(singleOption.value || isPending.value),
   placeholder: active.value ? '' : (isPending.value ? 'Cargando áreas…' : 'Área consultada'),
 }))
 const active = computed(() => focus.value || dropdown.value)
@@ -38,15 +38,15 @@ watch(active, active => {
   }
 })
 watch(value, () => emit('input'))
-onMounted(() => search.value = null)
+onMounted(() => search.value = undefined)
 
-const select = (id, nombre) => {
+const select = (id: number, nombre: string) => {
   search.value = nombre
   value.value = id
   historial.add(id)
   dropdown.value = false
 }
-const input = val => {
+const input = (val: string) => {
   value.value = null
   search.value = val
 }

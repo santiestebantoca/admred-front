@@ -1,16 +1,17 @@
-<script setup>
+<script lang="ts" setup>
 import ListaSearch from './ListaGridHeaderSearch.vue'
 import ListaPeriod from './ListaGridHeaderPeriod.vue'
 import ListaStatus from './ListaGridHeaderStatus.vue'
 import { useSolicitudesQuery } from '@/stores/solicitudes'
 import useExportCSV from '@/composables/useExportCSV.js'
 import { formatTime } from '@/composables/useDates'
-import { inject } from 'vue'
+import type { EstadoLista, Tray } from '@/types/api'
+import { inject, type Ref } from 'vue'
 
-const mobile = inject('app:mobile')
-const tray = inject('solicitudes:tray')
-const state = inject('solicitudes:state')
-const filaExpandida = inject('solicitudes:filaExpandida')
+const mobile = inject<Ref<boolean>>('app:mobile')
+const tray = inject<Ref<Tray>>('solicitudes:tray')
+const state = inject<Ref<EstadoLista>>('solicitudes:state')
+const filaExpandida = inject<Ref<boolean>>('solicitudes:filaExpandida')
 const { solicitudes, refetch } = useSolicitudesQuery()
 const { exportCSVTuplas } = useExportCSV({ excelReady: true })
 
@@ -45,7 +46,7 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
         <ListaSearch />
       </BCol>
       <BCol v-if="!mobile" cols="auto">
-        <BButton @click="refetch" variant="flat wh-36" v-tippy="'Actualizar'">
+        <BButton @click="refetch()" variant="flat wh-36" v-tippy="'Actualizar'">
           <ILucideRefreshCcw class="center" />
         </BButton>
       </BCol>

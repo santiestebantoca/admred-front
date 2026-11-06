@@ -2,6 +2,7 @@ import { useQuery, defineQuery } from '@pinia/colada'
 import { authApi as api } from '@/api/auth'
 import { queryKeys } from '@/lib/query-keys'
 import { useAuthQuery } from '@/stores/auth'
+import type { UsuarioOpcion } from '@/types/api'
 import { ref, computed } from 'vue'
 
 export const useImpersonateQuery = defineQuery(() => {
@@ -9,7 +10,7 @@ export const useImpersonateQuery = defineQuery(() => {
   const search = ref('')
   const isFiltered = computed(() => search.value?.length >= 2)
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<UsuarioOpcion[]>({
     key: () => [...queryKeys.usuarios.lista({ search: search.value })],
     query: () => api.getImpersonateables({ search: search.value }),
     enabled: () => search.value?.length >= 2,

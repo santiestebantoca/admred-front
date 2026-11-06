@@ -1,13 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { notasApi as api } from '@/api/notas'
-import { NotaCreate } from '@/types/models'
+import type { NotaCreate } from '@/types/models'
 
 export function useNotaCreate() {
   const queryCache = useQueryCache()
 
-  return useMutation({
-    mutation: (newData: NotaCreate) => api.create(newData),
+  return useMutation<number, NotaCreate>({
+    mutation: (newData) => api.create(newData),
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.notas.listas() })

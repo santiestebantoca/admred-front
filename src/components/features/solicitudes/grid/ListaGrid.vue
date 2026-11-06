@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import ListaGridHeader from './ListaGridHeader.vue'
 import ListaGridTable from './ListaGridTable.vue'
 import ListaHeader from '@/components/features/solicitudes/ListaHeader.vue'

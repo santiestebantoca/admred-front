@@ -1,27 +1,19 @@
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
-
-// export interface SolicitudParams {
-//   tray?: string
-//   state?: string
-//   status?: string
-//   period?: string
-//   search?: string
-//   search_in?: string
-// }
+import type { EstadoId, EstadoLista, Periodo, SolicitudesParams, Tray } from '@/types/api'
 
 export const useSolicitudesFiltro = defineStore('solicitudes-filtro', () => {
-  const tray = ref(undefined) // Filtro base - requerido, va en la ruta, resetea filtros complementarios
-  const state = ref(undefined) // Filtro base - requerido, va en la ruta, resetea filtros complementarios
-  const status = ref(undefined) // Filtro complementario
-  const period = ref(undefined) // Filtro complementario
-  const search = ref(undefined) // Filtro complementario de search (toma valor si search y tray)
+  const tray = ref<Tray>() // Filtro base - requerido, va en la ruta, resetea filtros complementarios
+  const state = ref<EstadoLista>() // Filtro base - requerido, va en la ruta, resetea filtros complementarios
+  const status = ref<EstadoId>() // Filtro complementario
+  const period = ref<Periodo>() // Filtro complementario
+  const search = ref<string>() // Filtro complementario de search (toma valor si search y tray)
 
   const search_in = computed(() => search.value && tray.value
     ? ['codigo', 'objetivo', tray.value === 'recibidas' ? 'origen' : 'destino']
     : undefined)
 
-  const filtro = computed(() => {
+  const filtro = computed<SolicitudesParams | undefined>(() => {
     if (tray.value === undefined || state.value === undefined) return undefined
     return {
       tray: tray.value,
@@ -35,9 +27,9 @@ export const useSolicitudesFiltro = defineStore('solicitudes-filtro', () => {
 
   watchEffect(() => period.value = state.value === 'terminadas' ? 1 : undefined)
 
-  const isFiltered = computed(() => filtro.value && Object.keys(filtro.value).length > 2)
+  const isFiltered = computed(() => Boolean(filtro.value && Object.keys(filtro.value).length > 2))
 
-  const setFiltroBase = (newTray, newState) => {
+  const setFiltroBase = (newTray: Tray, newState: EstadoLista) => {
     // Si ya existía un filtro base previo (no es undefined), es un cambio de contexto real -> Resetear
     if (tray.value !== undefined || state.value !== undefined) {
       // Y además, si los valores son realmente distintos

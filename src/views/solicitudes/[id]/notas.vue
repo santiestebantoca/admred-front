@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
@@ -19,7 +20,7 @@ const form = ref<NotaCreate>({
   texto: null,
   solicitud: solicitud.value.id
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const { notas, isPending } = useNotasQuery(solicitud.value.id)
 const { mutateAsync: crearNota, asyncStatus } = useNotaCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -47,7 +48,7 @@ const submit = () => {
 </script>
 
 <template>
-  <BModal v-model="model" @shown="scroll" @hidden="back" title="Notas" size="lg" body-class="p-0 bg-light"
+  <BModal v-model="model" @shown="scroll" @hidden="back()" title="Notas" size="lg" body-class="p-0 bg-light"
     footer-class="p--0 border-top-0 bg-light" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <div ref="modalBody" class="db px-3">
       <IndicadorCarga v-if="isPending" texto="Cargando notas…" class="py-5" />

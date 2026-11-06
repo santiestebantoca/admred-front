@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
@@ -18,7 +19,7 @@ const form = ref<SolicitudAsignada>({
   tramitador: solicitud.value.tramitador?.id,
   tipo: solicitud.value.tipo?.id
 })
-const errors = ref<any>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   tramitador: {
     state: errors.value.tramitador ? false : null,
@@ -49,7 +50,7 @@ const submit = () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Asignar"
+  <BModal v-model="model" @hidden="back()" title="Asignar"
     :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <BForm id="form-asignar" @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Tramitador" v-bind="errorState.tramitador">

@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
@@ -19,7 +20,7 @@ const form = ref<SolicitudRespondida>({
   observaciones: solicitud.value.observaciones,
   adjuntos: [],
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   observaciones: {
     state: errors.value.observaciones ? false : null,
@@ -72,7 +73,7 @@ const submit = () => {
 </script>
 
 <template>
-  <BModalPlus v-model="model" @hidden="back" title="Responder solicitud" capsule-title="Responder solicitud" size="lg"
+  <BModalPlus v-model="model" @hidden="back()" title="Responder solicitud" capsule-title="Responder solicitud" size="lg"
     fullscreen="sm" :scrollable="false" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <BForm id="form-responder" @submit.prevent="submit" density="3" :aria-busy="enviando">
       <BFormGroup v-bind="errorState.observaciones">

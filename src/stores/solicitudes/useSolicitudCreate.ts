@@ -1,12 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { solicitudesApi as api } from '@/api/solicitudes'
-import type { SolicitudCreate } from '@/types/models'
+import type { InsertResult } from '@/types/api'
+import type { SolicitudCreate, SolicitudCreateFromParent } from '@/types/models'
 
 export function useSolicitudCreate() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, SolicitudCreate>({
+  return useMutation<InsertResult, SolicitudCreate | SolicitudCreateFromParent>({
     mutation: (newData) => api.create(newData),
 
     onMutate: () => {

@@ -1,14 +1,21 @@
-<script setup>
-const value = defineModel()
-const props = defineProps({
-  placement: { type: Boolean, default: 'top-start' }
-})
-
+<script lang="ts" setup>
 import { Datepicker } from 'vanillajs-datepicker'
 import { formatDate } from '@/composables/useDates'
-import { ref } from 'vue'
+import { ref, type PropType } from 'vue'
 
-const datepicker = ref(null)
+/** Posición que acepta `BDropdown` (Placement de floating-ui). */
+type Placement =
+  | 'top' | 'top-start' | 'top-end'
+  | 'right' | 'right-start' | 'right-end'
+  | 'bottom' | 'bottom-start' | 'bottom-end'
+  | 'left' | 'left-start' | 'left-end'
+
+const value = defineModel<string>()
+const props = defineProps({
+  placement: { type: String as PropType<Placement>, default: 'top-start' }
+})
+
+const datepicker = ref<Datepicker | null>(null)
 const options = ref({
   format: 'yyyy-mm-dd',
   language: 'es'

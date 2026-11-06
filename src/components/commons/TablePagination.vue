@@ -1,5 +1,5 @@
-<script setup>
-import { computed, useId } from 'vue'
+<script lang="ts" setup>
+import { computed, useId, type PropType } from 'vue'
 
 /**
  * Barra de paginación para tablas paginadas en el servidor.
@@ -14,7 +14,7 @@ const props = defineProps({
   // Total de registros de todas las páginas
   totalRows: { type: Number, default: 0 },
   // Tamaños de página disponibles
-  perPageOptions: { type: Array, default: () => [10, 25, 50, 100] },
+  perPageOptions: { type: Array as PropType<number[]>, default: () => [10, 25, 50, 100] },
   // Cantidad máxima de botones de página visibles
   limit: { type: Number, default: 5 },
   disabled: { type: Boolean, default: false },

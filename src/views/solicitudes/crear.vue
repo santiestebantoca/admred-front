@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import SeleccionarDestino from '@/components/features/solicitudes/[id]/SeleccionarDestino.vue'
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
@@ -25,7 +26,7 @@ const form = ref<SolicitudCreate>({
   tipo: null,
   cumplir_en: null
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   destino: {
     state: errors.value.destino ? false : null,
@@ -83,7 +84,7 @@ const submit = () => {
 </script>
 
 <template>
-  <BModalPlus v-model="model" title="Nueva solicitud" capsule-title="Nueva solicitud" @hidden="back" size="lg"
+  <BModalPlus v-model="model" title="Nueva solicitud" capsule-title="Nueva solicitud" @hidden="back()" size="lg"
     fullscreen="sm" :scrollable="false" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3" :aria-busy="enviando">
       <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />

@@ -1,9 +1,10 @@
 import { useQuery } from '@pinia/colada'
 import { notificacionesApi as api } from '@/api/notificaciones'
 import { queryKeys } from '@/lib/query-keys'
+import type { NotificacionesResponse } from '@/types/api'
 
 export const useNotificacionesQuery = () => {
-  const { data, isPending, refresh } = useQuery({
+  const { data, isPending, refresh } = useQuery<NotificacionesResponse>({
     key: () => queryKeys.notificaciones.listas(),
     query: () => api.getAll(),
     autoRefetch: true,

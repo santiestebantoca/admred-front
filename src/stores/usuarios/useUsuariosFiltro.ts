@@ -1,4 +1,5 @@
 import { ref, computed } from 'vue'
+import type { UsuariosParams } from '@/types/api'
 
 const SEARCH_IN = ['name', 'username']
 
@@ -9,14 +10,14 @@ const SEARCH_IN = ['name', 'username']
  * buscador de un widget no filtra la lista del admin ni al revés.
  */
 export function useUsuariosFiltro() {
-  const search = ref(undefined)
-  const nombre = ref(undefined)
-  const area = ref(undefined)
-  const rol = ref(undefined)
-  const estado = ref(undefined)
+  const search = ref<string>()
+  const nombre = ref<string>()
+  const area = ref<number>()
+  const rol = ref<string>()
+  const estado = ref<string>()
 
   // Parámetros de filtrado que espera el API
-  const filtro = computed(() => ({
+  const filtro = computed<UsuariosParams>(() => ({
     ...nombre.value ? { nombre: nombre.value } : {},
     ...area.value ? { area: area.value } : {},
     ...rol.value ? { rol: rol.value } : {},

@@ -1,7 +1,13 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { tiposApi as api } from '@/api/tipos'
-import { computed, toValue } from 'vue'
+import type {
+  ListResponse,
+  MetaListado,
+  TipoListaItem,
+  TiposParams,
+} from '@/types/api'
+import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 
 /**
  * Consulta de tipos de solicitud.
@@ -11,8 +17,8 @@ import { computed, toValue } from 'vue'
  *   opcionalmente, `page` y `limit`). Acepta un objeto plano, un `ref` o un
  *   `computed`.
  */
-export function useTiposQuery(params = {}) {
-  const { data, isPending, isLoading } = useQuery({
+export function useTiposQuery(params: MaybeRefOrGetter<TiposParams> = {}) {
+  const { data, isPending, isLoading } = useQuery<ListResponse<TipoListaItem>>({
     key: () => queryKeys.tipos.lista(toValue(params)),
     query: () => api.getAll(toValue(params)),
     staleTime: Infinity,
@@ -23,7 +29,7 @@ export function useTiposQuery(params = {}) {
 
   return {
     tipos: computed(() => data.value?.data),
-    meta: computed(() => data.value?.meta),
+    meta: computed<MetaListado | undefined>(() => data.value?.meta),
     isPending,
     isLoading,
   }

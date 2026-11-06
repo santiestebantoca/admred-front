@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTipoCreate } from '@/stores/tipos'
@@ -15,7 +16,7 @@ const form = ref<TipoCreate>({
   nombre: null,
   descripcion: null,
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   nombre: {
     state: errors.value.nombre ? false : null,
@@ -66,7 +67,7 @@ const submit = () => {
           texto-cargando="Creando tipo…">
           Crear
         </BotonEnvio>
-        <BButton variant="emphasis w-90" :disabled="loading" @click="back">
+        <BButton variant="emphasis w-90" :disabled="loading" @click="back()">
           Cancelar
         </BButton>
       </BFormButtons>

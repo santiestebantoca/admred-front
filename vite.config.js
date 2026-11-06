@@ -28,6 +28,20 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  server: {
+    // El backend web2py de desarrollo usa un certificado autofirmado que el
+    // navegador rechaza. Con este proxy el navegador solo habla con el dev
+    // server (mkcert) y es Vite quien se conecta a web2py ignorando su
+    // certificado (`secure: false`). Requiere VITE_API_URL="/admred" en
+    // .env.local; además deja las peticiones en el mismo origen (sin CORS).
+    proxy: {
+      '/admred': {
+        target: 'https://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   optimizeDeps: {
     noDiscovery: true,
     include: undefined

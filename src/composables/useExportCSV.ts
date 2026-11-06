@@ -70,9 +70,9 @@ export default function useExportCSV(options: UseExportCSVOptions = {}) {
   };
 
   /**
-   * Exporta a CSV una lista de objetos (Record<string, any>).
+   * Exporta a CSV una lista de objetos.
    */
-  const exportCSV = <T extends Record<string, any>>(
+  const exportCSV = <T extends object>(
     fields: string,
     data: T[],
     filename = 'admred.csv'
@@ -104,7 +104,7 @@ export default function useExportCSV(options: UseExportCSVOptions = {}) {
 
     const filas = data.map((fila) => {
       return camposExtraer.map((campo) => {
-        const valorOriginal = fila[campo as keyof T];
+        const valorOriginal = (fila as Record<string, unknown>)[campo];
         let valorTexto = valorOriginal !== null && valorOriginal !== undefined ? String(valorOriginal) : '';
         valorTexto = procesarTexto(valorTexto); // Sanitizamos primero
         valorTexto = escaparCelda(valorTexto);  // Escapamos después

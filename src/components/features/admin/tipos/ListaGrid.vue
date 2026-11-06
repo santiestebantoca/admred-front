@@ -1,15 +1,20 @@
-<script setup>
+<script lang="ts" setup>
 import Filtro from './ListaFiltro.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useTiposLista } from '@/stores/tipos'
-import { ref, computed, inject, watchEffect } from 'vue'
+import { useSelectedItems } from '@/composables/useSelectedItems'
+import type { TipoListaItem } from '@/types/api'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import type { RouteLocationRaw } from 'vue-router'
+import { ref, computed, inject, watchEffect, type Ref } from 'vue'
 
-const tipoId = inject('admin:tipos:tipoId')
-const linkCrear = inject('admin:tipos:linkCrear')
-const setTipoId = inject('admin:tipos:setTipoId')
-const active = ref([])
+const tipoId = inject<Ref<number | undefined>>('admin:tipos:tipoId')
+const linkCrear = inject<RouteLocationRaw>('admin:tipos:linkCrear')
+const setTipoId = inject<Ref<(tipoId: number) => void>>('admin:tipos:setTipoId')
+const active = ref<number[]>([])
+const selectedItems = useSelectedItems<TipoListaItem>(active, (ids) => ids.length && setTipoId.value(ids[0]))
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -18,7 +23,12 @@ const {
   tipos, isPending, isLoading, total,
   reset,
 } = useTiposLista()
-const fields = [
+/**
+ * La columna `uso` se mantiene por compatibilidad visual, aunque el listado
+ * del backend sólo devuelve `id`, `nombre` y `descripcion`.
+ */
+type FilaTipo = TipoListaItem & { uso?: number }
+const fields: TableFieldRaw<FilaTipo>[] = [
   {
     key: 'nombre',
     label: 'Nombre',
@@ -26,7 +36,7 @@ const fields = [
   {
     key: 'descripcion',
     label: 'Descripcion',
-    formatter: ({ value }) => value || '-'
+    formatter: ({ value }) => String(value ?? '-')
   },
   {
     key: 'uso',
@@ -39,8 +49,6 @@ const emptyText = computed(() => isFiltered.value
   : 'Todavía no hay tipos registrados.')
 
 watchEffect(() => tipoId.value && (active.value = [tipoId.value]))
-
-const onSelectedItem = (val) => setTipoId.value(val[0])
 </script>
 
 <template>
@@ -62,8 +70,7 @@ const onSelectedItem = (val) => setTipoId.value(val[0])
       </div>
       <TablaEsqueleto v-if="isPending" :columnas="fields.length" :filas="5" texto="Cargando tipos…" />
       <BTable v-else :id="tableId" :items="tipos" :fields="fields" :empty-text="emptyText" show-empty hover
-        primary-key="id" selectable select-mode="single" @update:selected-items="onSelectedItem"
-        v-model:selected-items="active">
+        primary-key="id" selectable select-mode="single" v-model:selected-items="selectedItems">
         <template #table-colgroup>
           <col style="width:40%" />
           <col style="width:40%" />

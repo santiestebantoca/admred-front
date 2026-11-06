@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.mts --fix",
+    "typecheck": "vue-tsc --noEmit",
     "build_admred": "vite build --base=/admred/static/",
     "dev": "vite",
     "dev_corp": "vite --host 172.17.48.90 --mode corp",
-    "format": "prettier --write src/",
     "preview": "vite preview"
   },
   "dependencies": {

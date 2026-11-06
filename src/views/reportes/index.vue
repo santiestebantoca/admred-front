@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import AltLayout from '@/layouts/AltLayout.vue'
 import DrawerContent from '@/components/features/reportes/DrawerContent.vue'
 import HeaderContent from '@/components/features/reportes/HeaderContent.vue'

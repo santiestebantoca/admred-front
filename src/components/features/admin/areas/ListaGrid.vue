@@ -1,15 +1,20 @@
-<script setup>
+<script lang="ts" setup>
 import Filtro from './ListaFiltro.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useAreasLista } from '@/stores/areas'
-import { ref, computed, inject, watchEffect } from 'vue'
+import { useSelectedItems } from '@/composables/useSelectedItems'
+import type { AreaListaItem } from '@/types/api'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import type { RouteLocationRaw } from 'vue-router'
+import { ref, computed, inject, watchEffect, type Ref } from 'vue'
 
-const areaId = inject('admin:areas:areaId')
-const linkCrear = inject('admin:areas:linkCrear')
-const setAreaId = inject('admin:areas:setAreaId')
-const active = ref([])
+const areaId = inject<Ref<number | undefined>>('admin:areas:areaId')
+const linkCrear = inject<RouteLocationRaw>('admin:areas:linkCrear')
+const setAreaId = inject<Ref<(areaId: number) => void>>('admin:areas:setAreaId')
+const active = ref<number[]>([])
+const selectedItems = useSelectedItems<AreaListaItem>(active, (ids) => ids.length && setAreaId.value(ids[0]))
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -18,7 +23,7 @@ const {
   areas, isPending, isLoading, total,
   reset,
 } = useAreasLista()
-const fields = [
+const fields: TableFieldRaw<AreaListaItem>[] = [
   {
     key: 'nombre',
     label: 'Nombre',
@@ -30,7 +35,7 @@ const fields = [
   {
     key: 'padre',
     label: 'Pertenece a',
-    formatter: ({ value }) => value || '-'
+    formatter: ({ value }) => String(value ?? '-')
   },
 ]
 const tableId = 'admin-areas-tabla'
@@ -39,8 +44,6 @@ const emptyText = computed(() => isFiltered.value
   : 'Todavía no hay areas registradas.')
 
 watchEffect(() => areaId.value && (active.value = [areaId.value]))
-
-const onSelectedItem = (val) => setAreaId.value(val[0])
 </script>
 
 <template>
@@ -62,8 +65,7 @@ const onSelectedItem = (val) => setAreaId.value(val[0])
       </div>
       <TablaEsqueleto v-if="isPending" :columnas="fields.length" :filas="6" texto="Cargando áreas…" />
       <BTable v-else :id="tableId" :items="areas" :fields="fields" :empty-text="emptyText" show-empty hover
-        primary-key="id" selectable select-mode="single" @update:selected-items="onSelectedItem"
-        v-model:selected-items="active">
+        primary-key="id" selectable select-mode="single" v-model:selected-items="selectedItems">
         <template #table-colgroup>
           <col style="width:35%" />
           <col style="width:35%" />

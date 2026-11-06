@@ -1,28 +1,24 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { reportesApi as api } from '@/api/reportes'
+import type {
+  ReporteAreaConsultadaRow,
+  ReportesAreasConsultadasParams,
+} from '@/types/api'
 import { tidy, mutate, groupBy, summarize, mean } from '@tidyjs/tidy'
 import { timeDeltaW, timeDeltaWToDH } from '@/composables/useTimeDelta'
 import { ref, computed } from 'vue'
 
-type RegistroDelReporte = {
-  destino: string,
-  solicitado_en: string,
-  terminado_en: string,
-}
-
 export const useAreasConsultadasQuery = () => {
-  const params = ref({
-    desde: undefined,
-    hasta: undefined,
-    origen: undefined,
-    curso: undefined,
+  const params = ref<ReportesAreasConsultadasParams>({
+    desde: '',
+    hasta: '',
   })
 
-  const { data: _data, isPending, isLoading, refresh } = useQuery<RegistroDelReporte[]>({
+  const { data: _data, isPending, isLoading, refresh } = useQuery<ReporteAreaConsultadaRow[]>({
     key: () => queryKeys.reportes.consultadas.lista(params.value),
     query: () => api.consultadas.getAll(params.value),
-    enabled: () => params.value.desde && params.value.hasta,
+    enabled: () => Boolean(params.value.desde && params.value.hasta),
     // Al cambiar los filtros se conserva el reporte anterior hasta que llega el
     // nuevo: así no desaparecen los resultados ni salta el layout.
     placeholderData: (previousData) => previousData,

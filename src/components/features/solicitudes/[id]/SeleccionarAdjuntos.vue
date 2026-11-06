@@ -13,21 +13,36 @@ Se recibe la propiedad adjuntosHeredados Array[{id, solicitud_id, upload_id, {..
 2. Delete
    / update id de adjuntosHeredados
 -->
-<script setup>
-const uploadedIds = defineModel()
-const adjuntosHeredados = defineModel('adjuntosHeredados')
-
-import useFileSize from '@/composables/useFileSize.js'
+<script lang="ts" setup>
+import useFileSize from '@/composables/useFileSize'
 import { useUploadCreate, useUploadDelete } from '@/stores/uploads'
+import type { AdjuntoSolicitud } from '@/types/models'
 import { reactive, ref, computed, watchEffect, useTemplateRef } from 'vue'
+
+/** Adjunto en cola de subida o ya subido en esta sesión del formulario. */
+type AdjuntoSubiendo = {
+  id?: number
+  key: string
+  filename: string
+  filesize: number
+  file?: string
+  archivo?: File
+  estado: 'subiendo' | 'listo' | 'error'
+  progreso: number
+  error?: string
+  eliminando?: boolean
+}
+
+const uploadedIds = defineModel<number[]>()
+const adjuntosHeredados = defineModel<AdjuntoSolicitud[]>('adjuntosHeredados')
 
 const { fileSize } = useFileSize()
 const { mutateAsync: crearUpload } = useUploadCreate()
 const { mutateAsync: eliminarUpload } = useUploadDelete()
-const input = useTemplateRef('input')
+const input = useTemplateRef<HTMLInputElement>('input')
 
 let secuencia = 0
-const uploaded = ref([])
+const uploaded = ref<AdjuntoSubiendo[]>([])
 const heredados = computed(() => adjuntosHeredados.value ?? [])
 const heredadosPintables = computed(() => {
   // Este filtro se aplica porque, al enviar el formulario, se actualiza la query de la solicitud y
@@ -55,18 +70,19 @@ watchEffect(() => uploadedIds.value = uploaded.value.map(d => d.id).filter(d => 
 
 const select = () => input.value.click()
 // Thunderbird, checks file path... allowing files with same name
-const check = name => !uploaded.value.some(v => v.filename === name)
+const check = (name: string) => !uploaded.value.some(v => v.filename === name)
 
-function change({ target }) {
-  if (target.files.length) {
-    [...target.files].forEach((file) => check(file.name) && subir(file))
+function change({ target }: Event) {
+  const el = target as HTMLInputElement
+  if (el.files.length) {
+    [...el.files].forEach((file) => check(file.name) && subir(file))
   }
   // Permite volver a seleccionar el mismo archivo (por ejemplo, después de un error).
-  target.value = ''
+  el.value = ''
 }
 
-function subir(file, existente = null) {
-  const item = existente ?? reactive({
+function subir(file: File, existente: AdjuntoSubiendo | null = null) {
+  const item = existente ?? reactive<AdjuntoSubiendo>({
     key: `archivo-${++secuencia}`,
     filename: file.name,
     filesize: file.size,
@@ -83,8 +99,8 @@ function subir(file, existente = null) {
   const data = new FormData()
   data.append('upload', file)
   data.append('filename', file.name)
-  data.append('filesize', file.size)
-  data.append('filemodified', file.lastModified)
+  data.append('filesize', String(file.size))
+  data.append('filemodified', String(file.lastModified))
 
   crearUpload({
     data,
@@ -104,12 +120,12 @@ function subir(file, existente = null) {
     })
 }
 
-const reintentar = (item) => {
+const reintentar = (item: AdjuntoSubiendo) => {
   if (item.estado === 'subiendo') return
   item.archivo && subir(item.archivo, item)
 }
 
-const eliminar = (item) => {
+const eliminar = (item: AdjuntoSubiendo) => {
   if (item.eliminando) return
   item.eliminando = true
   eliminarUpload(item.id)
@@ -117,7 +133,7 @@ const eliminar = (item) => {
     .catch(() => { item.eliminando = false })
 }
 
-const delAdjuntoHeredado = (adjuntoId) => {
+const delAdjuntoHeredado = (adjuntoId: number) => {
   adjuntosHeredados.value = adjuntosHeredados.value.filter(adjunto => adjunto.id !== adjuntoId)
 }
 

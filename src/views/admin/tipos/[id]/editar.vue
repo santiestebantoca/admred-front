@@ -4,6 +4,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTipoUpdate } from '@/stores/tipos'
@@ -16,7 +17,7 @@ const form = ref<TipoUpdate>({
   nombre: tipo.value.nombre,
   descripcion: tipo.value.descripcion,
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   nombre: {
     state: errors.value.nombre ? false : null,
@@ -64,7 +65,7 @@ const submit = () => {
           texto-cargando="Guardando cambios…">
           Guardar
         </BotonEnvio>
-        <BButton @click="back" variant="emphasis w-90" :disabled="loading">
+        <BButton @click="back()" variant="emphasis w-90" :disabled="loading">
           Cancelar
         </BButton>
       </BFormButtons>

@@ -1,12 +1,19 @@
-<script setup>
-const value = defineModel()
-const props = defineProps({
-  placement: { type: String, default: 'top-start' }
-})
-
+<script lang="ts" setup>
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useTiposFiltro, useTiposQuery } from '@/stores/tipos'
-import { ref, computed } from 'vue'
+import { ref, computed, type PropType } from 'vue'
+
+/** Posición que acepta `BDropdown` (Placement de floating-ui). */
+type Placement =
+  | 'top' | 'top-start' | 'top-end'
+  | 'right' | 'right-start' | 'right-end'
+  | 'bottom' | 'bottom-start' | 'bottom-end'
+  | 'left' | 'left-start' | 'left-end'
+
+const value = defineModel<number | null>()
+const props = defineProps({
+  placement: { type: String as PropType<Placement>, default: 'top-start' }
+})
 
 // Filtro propio del widget (estado local): no comparte búsqueda ni página con
 // la lista del admin.

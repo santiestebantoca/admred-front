@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useNotificacionesQuery } from '@/stores/notificaciones'
 import { ref, computed, inject } from 'vue'
 

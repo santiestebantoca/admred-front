@@ -1,7 +1,7 @@
-<script setup>
-const props = defineProps({ closeDropdown: Function })
-
+<script lang="ts" setup>
 import { useNavigationSolicitudes } from '@/composables/useNavigation'
+
+const props = defineProps<{ closeDropdown?: () => void }>()
 
 const { options } = useNavigationSolicitudes()
 </script>
@@ -10,7 +10,7 @@ const { options } = useNavigationSolicitudes()
   <RootTree style="width: 270px;">
     <TreeNode v-for="data in options" :data="data" :key="data.id">
       <template #default="{ data, toggle, open, ident }">
-        <BDropdownItem v-if="data.to" :to="data.to" @click="closeDropdown" class="highlight-active"
+        <BDropdownItem v-if="data.to" :to="data.to" @click="closeDropdown?.()" class="highlight-active"
           :style="{ paddingLeft: ident }">
           <ILucideFolder />
           {{ data.label }}

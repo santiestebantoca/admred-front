@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import ListaNav from './ListaNav.vue'
 import { inject, ref } from 'vue'
 

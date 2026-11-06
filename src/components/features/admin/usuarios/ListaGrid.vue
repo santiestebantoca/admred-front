@@ -1,15 +1,20 @@
-<script setup>
+<script lang="ts" setup>
 import Filtro from './ListaFiltro.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useUsuariosLista } from '@/stores/usuarios'
-import { ref, computed, inject, watchEffect } from 'vue'
+import { useSelectedItems } from '@/composables/useSelectedItems'
+import type { UsuarioListaItem } from '@/types/api'
+import type { TableFieldRaw } from 'bootstrap-vue-next'
+import type { RouteLocationRaw } from 'vue-router'
+import { ref, computed, inject, watchEffect, type Ref } from 'vue'
 
-const usuarioId = inject('admin:usuarios:usuarioId')
-const linkCrear = inject('admin:usuarios:linkCrear')
-const setUsuarioId = inject('admin:usuarios:setUsuarioId')
-const active = ref([])
+const usuarioId = inject<Ref<number | undefined>>('admin:usuarios:usuarioId')
+const linkCrear = inject<RouteLocationRaw>('admin:usuarios:linkCrear')
+const setUsuarioId = inject<Ref<(usuarioId: number) => void>>('admin:usuarios:setUsuarioId')
+const active = ref<number[]>([])
+const selectedItems = useSelectedItems<UsuarioListaItem>(active, (ids) => ids.length && setUsuarioId.value(ids[0]))
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -18,7 +23,7 @@ const {
   usuarios, isPending, isLoading, total,
   reset,
 } = useUsuariosLista()
-const fields = [
+const fields: TableFieldRaw<UsuarioListaItem>[] = [
   {
     key: 'name',
     label: 'Nombre',
@@ -32,7 +37,7 @@ const fields = [
     label: 'Clave de registro',
     formatter: ({ value }) => value === 'blocked'
       ? 'Bloqueado'
-      : value || 'Activo'
+      : String(value || 'Activo')
   },
 ]
 const tableId = 'admin-usuarios-tabla'
@@ -41,8 +46,6 @@ const emptyText = computed(() => isFiltered.value
   : 'Todavía no hay usuarios registrados.')
 
 watchEffect(() => usuarioId.value && (active.value = [usuarioId.value]))
-
-const onSelectedItem = (val) => setUsuarioId.value(val[0])
 </script>
 
 <template>
@@ -64,8 +67,7 @@ const onSelectedItem = (val) => setUsuarioId.value(val[0])
       </div>
       <TablaEsqueleto v-if="isPending" :columnas="fields.length" :filas="6" texto="Cargando usuarios…" />
       <BTable v-else :id="tableId" :items="usuarios" :fields="fields" :empty-text="emptyText" show-empty hover
-        primary-key="id" selectable select-mode="single" @update:selected-items="onSelectedItem"
-        v-model:selected-items="active">
+        primary-key="id" selectable select-mode="single" v-model:selected-items="selectedItems">
         <template #table-colgroup>
           <col style="width:40%" />
           <col style="width:40%" />

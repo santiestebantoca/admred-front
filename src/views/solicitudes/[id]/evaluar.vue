@@ -4,6 +4,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
@@ -15,7 +16,7 @@ const form = ref<SolicitudEvaluada>({
   id: props.solicitudId,
   evaluacion: 0,
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   evaluacion: {
     state: errors.value.evaluacion ? false : null,
@@ -44,7 +45,7 @@ const submit =  () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Evaluar" fullscreen="sm" :scrollable="false"
+  <BModal v-model="model" @hidden="back()" title="Evaluar" fullscreen="sm" :scrollable="false"
     :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <div class="min-height-110">
       <p>Evaluación de la respuesta recibida.</p>

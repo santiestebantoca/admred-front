@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useNivelesQuery } from '@/stores/niveles'
 import { useAreasDelNivelQuery } from '@/stores/areas'
 import { computed, ref } from 'vue'
@@ -12,8 +12,16 @@ const nombre = defineModel('nombre', { type: String })
 const nivel = defineModel('nivel', { type: Number })
 const padre = defineModel('padre', { type: Number })
 const rol_key = defineModel('rol_key', { type: Boolean })
+/** Valores que viajan entre el input de texto, el formulario y los modelos. */
+type FiltroAreas = {
+  search?: string
+  nombre?: string
+  nivel?: number
+  padre?: number
+  rol_key?: boolean
+}
 // Para el filtro
-const form = ref({
+const form = ref<FiltroAreas>({
   search: undefined,
   nombre: undefined,
   nivel: undefined, // id de nivel
@@ -47,11 +55,11 @@ const updateInputFromForm = () => {
   inputValue.value = text.join(' ')
   submit()
 }
-function getValuesFromInput() {
+function getValuesFromInput(): FiltroAreas {
   if (!inputValue.value) return {}
   const arrayBloques = inputValue.value.split(' ')
   if (!arrayBloques.length) return {}
-  const obj = {}
+  const obj: FiltroAreas = {}
   arrayBloques.forEach((bloque) => {
     const arrayValores = bloque.split(':')
     if (arrayValores.length) {
@@ -82,7 +90,7 @@ const reset = () => {
 </script>
 
 <template>
-  <div class="root" v-resize-observer="onResizeObserver">
+  <div class="root">
     <BButton variant="link link-dark wh-34 ms-1" @click="submit">
       <ILucideSearch class="center" />
     </BButton>

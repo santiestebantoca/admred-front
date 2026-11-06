@@ -1,11 +1,13 @@
-export const PENDIENTE_STATUS = [
+import type { EstadoId, Periodo } from '@/types/api'
+
+export const PENDIENTE_STATUS: { text: string; value: EstadoId | undefined }[] = [
   { text: 'Todas', value: undefined },
   { text: 'No atendidas', value: 1 },
   { text: 'En proceso', value: 2 },
   { text: 'En evaluación', value: 3 },
 ]
 
-export const PERIODOS = [
+export const PERIODOS: { text: string; value: Periodo }[] = [
   { text: '2 semanas', value: 1 },
   { text: '1 mes', value: 2 },
   { text: '6 meses', value: 3 },
@@ -18,12 +20,12 @@ export const AREAS_AR = [
   { text: 'Departamento de Planificación y Provisión', value: 47 }
 ]
 
-export const PENDIENTE_TERMINADA = [
+export const PENDIENTE_TERMINADA: { text: string; value: EstadoId | EstadoId[] }[] = [
   { text: 'Pendientes', value: [1, 2, 3] },
   { text: 'Terminadas', value: 4 },
 ]
 
-export const CURSO_SOLICITUD = [
+export const CURSO_SOLICITUD: { text: string; value: 1 | 2 }[] = [
   { text: 'Original', value: 1 },
   { text: 'Reenviada', value: 2 }
 ]

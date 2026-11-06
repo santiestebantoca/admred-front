@@ -4,6 +4,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTextLimit } from '@/composables/useTextLimit'
@@ -17,7 +18,7 @@ const form = ref<SolicitudAprobada>({
   aprobado: null,
   nota: null,
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   aprobado: {
     state: errors.value.aprobado ? false : null,
@@ -72,7 +73,7 @@ const submit = () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Aprobar respuesta" size="lg" fullscreen="sm" :scrollable="false"
+  <BModal v-model="model" @hidden="back()" title="Aprobar respuesta" size="lg" fullscreen="sm" :scrollable="false"
     :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <div class="min-height-120">
       <p>Aprobar o desaprobar la respuesta del tramitador.</p>

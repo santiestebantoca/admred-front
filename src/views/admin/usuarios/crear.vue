@@ -3,6 +3,7 @@ const props = defineProps({
   back: Function
 })
 
+import type { ErroresDeValidacion } from '@/types/api'
 import { EMAIL_PATRON, TELEFONO_PATRON } from '@/constants'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
@@ -26,7 +27,7 @@ const form = ref<UsuarioCreate>({
   movil: null,
   grupos: [],
 })
-const errors = ref<Record<string, any>>({})
+const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
   first_name: {
     state: errors.value.first_name ? false : null,
@@ -146,7 +147,7 @@ const submit = () => {
           texto-cargando="Creando usuario…">
           Crear
         </BotonEnvio>
-        <BButton variant="emphasis w-90" :disabled="loading" @click="back">
+        <BButton variant="emphasis w-90" :disabled="loading" @click="back()">
           Cancelar
         </BButton>
       </BFormButtons>

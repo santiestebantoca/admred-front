@@ -1,10 +1,10 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   adjuntos: Object,
 })
 
 import FileIcon from '@/components/commons/FileIcon.vue'
-import useFileSize from '@/composables/useFileSize.js'
+import useFileSize from '@/composables/useFileSize'
 import { ref, useId } from 'vue'
 
 const { fileSize } = useFileSize()

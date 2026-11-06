@@ -1,3 +1,5 @@
+import type { ErroresDeValidacion } from '@/types/api'
+
 export class ApiError extends Error {
   statusCode: number | null
   data: unknown
@@ -41,13 +43,14 @@ export class NotFoundError extends ApiError {
 }
 
 export class ValidationError extends ApiError {
-  errors: unknown
+  errors: ErroresDeValidacion
 
   constructor(message: string, data: unknown, originalError: unknown) {
     super(message, 422, data, originalError)
     this.name = 'ValidationError'
     // Normaliza estructuras comunes: { errors: { field: ["msg"] } } o { field: ["msg"] }
-    this.errors = (data as any)?.errors || data
+    const payload = data as { errors?: ErroresDeValidacion } | null
+    this.errors = payload?.errors || (data as ErroresDeValidacion)
   }
 }
 

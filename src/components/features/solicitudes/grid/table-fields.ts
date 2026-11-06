@@ -24,6 +24,12 @@ type SolicitudEnviada = [
   number | null        // 7 - root
 ]
 
+// BTable aplica `unref` al resultado del formatter, así que puede recibir el
+// Ref reactivo de `listTime` (se actualiza a medianoche), pero su tipo
+// declarado exige un string.
+const formatearFecha = ({ value }: { value: unknown }) =>
+  listTime(value as string) as unknown as string
+
 const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
   {
     key: '1',
@@ -47,7 +53,7 @@ const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
     label: 'Presentada',
     sortable: true,
     tdClass: 'td-fecha',
-    formatter: ({ value }) => listTime(value)
+    formatter: formatearFecha
   },
   {
     key: '3',
@@ -79,7 +85,7 @@ const fieldsRecibidasTerminadas: TableFieldRaw<SolicitudRecibida>[] = [
     label: 'Terminada',
     sortable: true,
     tdClass: 'td-fecha',
-    formatter: ({ value }) => listTime(value)
+    formatter: formatearFecha
   },
 ]
 
@@ -106,7 +112,7 @@ const fieldsEnviadasPendientes: TableFieldRaw<SolicitudEnviada>[] = [
     label: 'Presentada',
     sortable: true,
     tdClass: 'td-fecha',
-    formatter: ({ value }) => listTime(value)
+    formatter: formatearFecha
   },
   {
     key: '3',
@@ -138,7 +144,7 @@ const fieldsEnviadasTerminadas: TableFieldRaw<SolicitudEnviada>[] = [
     label: 'Terminada',
     sortable: true,
     tdClass: 'td-fecha',
-    formatter: ({ value }) => listTime(value)
+    formatter: formatearFecha
   },
 ]
 

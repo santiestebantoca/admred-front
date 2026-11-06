@@ -3,12 +3,17 @@ import { isApiError, isValidationError } from '@/api/client'
 
 type VarianteToast = 'success' | 'danger' | 'warning' | 'info'
 
+type PosicionToast =
+  | 'top-start' | 'top-center' | 'top-end'
+  | 'middle-start' | 'middle-center' | 'middle-end'
+  | 'bottom-start' | 'bottom-center' | 'bottom-end'
+
 interface OpcionesToast {
-  position?: string
+  position?: PosicionToast
   modelValue?: number
 }
 
-const POSICION = 'bottom-center'
+const POSICION: PosicionToast = 'bottom-center'
 
 export const DURACION_POR_VARIANTE: Record<VarianteToast, number> = {
   success: 3000,

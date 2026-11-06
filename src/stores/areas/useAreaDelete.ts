@@ -1,12 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { areasApi as api } from '@/api/areas'
+import type { Id } from '@/types/api'
 
 export function useAreaDelete() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, number | string>({
-    mutation: (deletedId: number | string) => api.delete(deletedId),
+  return useMutation<number, Id>({
+    mutation: (deletedId: Id) => api.delete(deletedId),
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.areas.listas() })

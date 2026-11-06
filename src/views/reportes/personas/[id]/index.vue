@@ -1,16 +1,17 @@
-<script setup>
-const props = defineProps({
-  personaId: Number,
-  back: Function,
-  linkSolicitud: Function
-})
-
+<script lang="ts" setup>
 import ComoSupervisor from '@/components/features/reportes/personas/ComoSupervisor.vue'
 import ComoTramitador from '@/components/features/reportes/personas/ComoTramitador.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useTramitadoresQuery } from '@/stores/tramitadores'
 import { usePersonasQuery } from '@/stores/reportes'
-import { computed, ref } from 'vue';
+import type { RouteLocationRaw } from 'vue-router'
+import { computed } from 'vue'
+
+const props = defineProps<{
+  personaId: number
+  back?: () => unknown
+  linkSolicitud?: (solicitudId: number) => RouteLocationRaw
+}>()
 
 const { tramitadores, isPending: tramitadoresPending } = useTramitadoresQuery()
 const persona = computed(() => tramitadores.value?.find(d => d.id === props.personaId))
@@ -19,7 +20,7 @@ const { comoTramitador, comoSupervisor, isPending, isLoading, periodo, enabled, 
 
 <template>
   <div class="position-relative vstack align-items-center p-3 mb-3 border rounded-3 surface-1">
-    <BButton @click="back" class="position-absolute start-0 top-0 m-2 p-3 h-50" variant="flat">
+    <BButton @click="back()" class="position-absolute start-0 top-0 m-2 p-3 h-50" variant="flat">
       <IBiChevronCompactLeft class="center fs-4" />
     </BButton>
     <IndicadorCarga v-if="tramitadoresPending" texto="Cargando persona…" />

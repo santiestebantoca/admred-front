@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useNavigationAdmin } from '@/composables/useNavigation'
 
 const { options } = useNavigationAdmin()
