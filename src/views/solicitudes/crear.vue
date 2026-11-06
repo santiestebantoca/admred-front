@@ -7,6 +7,7 @@ import SeleccionarDestino from '@/components/features/solicitudes/[id]/Seleccion
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
 import SeleccionarCumplir from '@/components/features/solicitudes/[id]/SeleccionarCumplir.vue'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudCreate } from '@/stores/solicitudes'
@@ -39,6 +40,8 @@ const errorState = computed(() => ({
 }))
 const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
+const adjuntosSubiendo = computed(() => Boolean(adjuntos.value?.subiendo))
+const enviando = computed(() => loading.value || adjuntosSubiendo.value)
 
 const objetivo = computed({
   get: () => form.value.objetivo,
@@ -66,7 +69,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (enviando.value || !validate()) return
   crearSolicitud(form.value)
     .then(() => {
       exito('Nueva solicitud creada.')
@@ -81,8 +84,8 @@ const submit = () => {
 
 <template>
   <BModalPlus v-model="model" title="Nueva solicitud" capsule-title="Nueva solicitud" @hidden="back" size="lg"
-    fullscreen="sm" :scrollable="false">
-    <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3">
+    fullscreen="sm" :scrollable="false" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
+    <BForm id="form-solicitud-crear" @submit.prevent="submit" density="3" :aria-busy="enviando">
       <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
       <BFormGroup v-bind="errorState.objetivo">
         <BFormTextarea v-model="form.objetivo" no-resize :placeholder="PLACEHOLDER_OBJETIVO"
@@ -99,10 +102,12 @@ const submit = () => {
       <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" />
     </BForm>
     <template #footer>
-      <BButton type="submit" form="form-solicitud-crear" :loading="loading" loading-fill variant="primary w-90 me-3">
+      <BotonEnvio type="submit" form="form-solicitud-crear" :loading="enviando" loading-fill
+        :texto-cargando="adjuntosSubiendo && !loading ? 'Subiendo adjuntos…' : 'Enviando solicitud…'"
+        variant="primary w-90 me-3">
         Enviar
-      </BButton>
-      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="flat wh-34">
+      </BotonEnvio>
+      <BButton @click="adjuntos.select()" :disabled="enviando" v-tippy="'Adjuntar documento'" variant="flat wh-34">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
       <SeleccionarTipo v-model="form.tipo" />

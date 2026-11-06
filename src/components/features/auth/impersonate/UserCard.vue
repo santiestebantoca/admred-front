@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useAuthQuery, useImpersonate } from '@/stores/auth'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTeleportTarget } from '@/composables/useTeleportTarget'
 import { computed, inject } from 'vue'
 
@@ -7,6 +8,7 @@ const { authUser } = useAuthQuery()
 const { mutateAsync: impersonate, asyncStatus: status } = useImpersonate()
 const mobile = inject('app:mobile')
 const target = useTeleportTarget('#app-footer-content')
+const loading = computed(() => status.value === 'loading')
 const items = computed(() => [
   { label: 'Id', value: authUser.value.id },
   { label: 'Nombre', value: authUser.value.name },
@@ -38,10 +40,11 @@ const items = computed(() => [
     </template>
 <template v-else> -->
     <div class="mt-4">
-      <BButton @click="impersonate(0)" variant="success">
+      <BotonEnvio @click="impersonate(0)" :loading="loading" texto-cargando="Cambiando usuario…"
+        variant="success">
         <ILucideCornerDownLeft />
         <span class="ms-2">Usuario anterior</span>
-      </BButton>
+      </BotonEnvio>
     </div>
     <!-- </template> -->
   </template>

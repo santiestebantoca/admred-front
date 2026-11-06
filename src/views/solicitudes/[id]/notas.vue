@@ -4,12 +4,16 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useNotasQuery, useNotaCreate } from '@/stores/notas'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import type { NotaCreate, SolicitudDetalle } from '@/types/models.js'
-import { ref, useTemplateRef, watch, onMounted, nextTick, inject, Ref } from 'vue'
+import { ref, computed, useTemplateRef, watch, onMounted, nextTick, inject, Ref } from 'vue'
 
 const model = ref(false)
 const modalBody = useTemplateRef('modalBody')
+const { errorDeApi } = useNotificaciones()
 const solicitud = inject<Ref<SolicitudDetalle>>('solicitud:solicitud')
 const form = ref<NotaCreate>({
   texto: null,
@@ -18,6 +22,7 @@ const form = ref<NotaCreate>({
 const errors = ref<Record<string, any>>({})
 const { notas, isPending } = useNotasQuery(solicitud.value.id)
 const { mutateAsync: crearNota, asyncStatus } = useNotaCreate()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 watch(notas, () => nextTick(() => scroll()))
@@ -29,54 +34,58 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   crearNota(form.value)
     .then(() => {
       form.value.texto = null
     })
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)
-      // errors.value.form = 'Error al crear la nota.'
-      // TODO: poner un toast indicando el fallo
+      errorDeApi(err, 'No se pudo enviar la nota.')
     })
 }
 </script>
 
 <template>
   <BModal v-model="model" @shown="scroll" @hidden="back" title="Notas" size="lg" body-class="p-0 bg-light"
-    footer-class="p--0 border-top-0 bg-light">
+    footer-class="p--0 border-top-0 bg-light" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <div ref="modalBody" class="db px-3">
-      <div v-for="fecha in Object.keys(notas)" :key="fecha">
-        <div class="fecha">
-          {{ fecha }}
-        </div>
-        <div v-for="nota in notas[fecha]" :key="nota.id" class="renglon" :class="[nota.como]">
-          <div class="avatar d-none d-sm-inline" v-tippy="nota.autor.name">
-            {{ nota.autor.name.slice(0, 1).toUpperCase() }}
+      <IndicadorCarga v-if="isPending" texto="Cargando notas…" class="py-5" />
+      <template v-else>
+        <div v-for="fecha in Object.keys(notas)" :key="fecha">
+          <div class="fecha">
+            {{ fecha }}
           </div>
-          <div class="nota">
-            <div>
-              <div class="mb-1 small hstack d-sm-none">
-                <span class=" fw-bold text-truncate" v-text="nota.autor" />
-                <span class="text-no-wrap ms-3"> {{ nota.hora }} </span>
-              </div>
-              <div class="mb-3 text-danger" v-if="nota.evento">[{{ nota.evento }}]</div>
-              <div class="lh-sm" v-text="nota.texto" />
+          <div v-for="nota in notas[fecha]" :key="nota.id" class="renglon" :class="[nota.como]">
+            <div class="avatar d-none d-sm-inline" v-tippy="nota.autor.name">
+              {{ nota.autor.name.slice(0, 1).toUpperCase() }}
             </div>
+            <div class="nota">
+              <div>
+                <div class="mb-1 small hstack d-sm-none">
+                  <span class=" fw-bold text-truncate" v-text="nota.autor" />
+                  <span class="text-no-wrap ms-3"> {{ nota.hora }} </span>
+                </div>
+                <div class="mb-3 text-danger" v-if="nota.evento">[{{ nota.evento }}]</div>
+                <div class="lh-sm" v-text="nota.texto" />
+              </div>
+            </div>
+            <span class="hora d-none d-sm-inline">
+              {{ nota.hora }}
+            </span>
           </div>
-          <span class="hora d-none d-sm-inline">
-            {{ nota.hora }}
-          </span>
         </div>
-      </div>
+      </template>
     </div>
     <template #footer data-class="bg-light">
-      <BForm v-if="solicitud.permisos.comentar" @submit.prevent="submit" class="w-100">
+      <BForm v-if="solicitud.permisos.comentar" @submit.prevent="submit" class="w-100" :aria-busy="loading">
         <div class="position-relative">
-          <BFormTextarea placeholder="Escribe una nota" no-resize max-rows="4" v-model="form.texto" class="pe-5" />
-          <BButton type="submit" :disabled="!form.texto" variant="flat btn-enviar" v-tippy="'Enviar nota'">
+          <BFormTextarea placeholder="Escribe una nota" no-resize max-rows="4" v-model="form.texto" class="pe-5"
+            :disabled="loading" />
+          <BotonEnvio type="submit" :loading="loading" :disabled="!form.texto" variant="flat btn-enviar"
+            texto-cargando="Enviando nota" loading-fill v-tippy="'Enviar nota'">
             <IBiSendFill class="center" />
-          </BButton>
+          </BotonEnvio>
         </div>
       </BForm>
       <div v-else class="solo-lectura">Solo lectura</div>

@@ -106,6 +106,13 @@
   border-right-color: var(--bs-gray-600) !important;
 }
 
+// Dentro de un botón el spinner debe contrastar con el color del botón
+// (blanco sobre primary/danger, oscuro sobre variant link, etc.).
+.btn .spinner-border {
+  border-color: currentcolor !important;
+  border-right-color: transparent !important;
+}
+
 .modal-footer {
   justify-content: flex-start !important;
   // border-top: unset !important;

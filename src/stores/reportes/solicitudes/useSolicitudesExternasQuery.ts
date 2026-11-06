@@ -17,7 +17,9 @@ export const useSolicitudesExternasQuery = () => {
     key: () => queryKeys.reportes.solicitudes.externas.lista(params.value),
     query: () => api.solicitudes.externas.getAll(params.value),
     enabled: () => params.value.desde && params.value.hasta,
-    // staleTime: Infinity
+    // Al cambiar los filtros se conserva el reporte anterior hasta que llega el
+    // nuevo: así no desaparecen los resultados ni salta el layout.
+    placeholderData: (previousData) => previousData,
   })
 
   return {

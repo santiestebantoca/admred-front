@@ -5,6 +5,7 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
 import type { SolicitudAprobada } from '@/types/models.js'
@@ -32,6 +33,7 @@ const errorState = computed(() => ({
 const requiresNota = computed(() => form.value.aprobado === '0')
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
+const textoCargando = computed(() => form.value.aprobado === '0' ? 'Desaprobando…' : 'Aprobando…')
 
 const nota = computed({
   get: () => form.value.nota,
@@ -59,7 +61,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
@@ -70,10 +72,11 @@ const submit = () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Aprobar respuesta" size="lg" fullscreen="sm" :scrollable="false">
+  <BModal v-model="model" @hidden="back" title="Aprobar respuesta" size="lg" fullscreen="sm" :scrollable="false"
+    :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <div class="min-height-120">
       <p>Aprobar o desaprobar la respuesta del tramitador.</p>
-      <BForm id="form-aprobar" @submit.prevent="submit" density="3">
+      <BForm id="form-aprobar" @submit.prevent="submit" density="3" :aria-busy="loading">
         <BFormRadioGroup v-model="form.aprobado" stacked density="2" :options="[
           { text: 'Aprobar respuesta del tramitador', value: '1' },
           { text: 'Desaprobar respuesta del tramitador', value: '0' },
@@ -92,9 +95,10 @@ const submit = () => {
       </BForm>
     </div>
     <template #footer>
-      <BButton type="submit" form="form-aprobar" :loading="loading" loading-fill variant="primary w-110 me-3">
+      <BotonEnvio type="submit" form="form-aprobar" :loading="loading" loading-fill :texto-cargando="textoCargando"
+        variant="primary w-110 me-3">
         {{ form.aprobado === '0' ? 'Desaprobar' : 'Aprobar' }}
-      </BButton>
+      </BotonEnvio>
     </template>
   </BModal>
 </template>

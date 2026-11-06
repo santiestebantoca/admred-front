@@ -17,11 +17,13 @@ export const usePersonasQuery = (_personaId: number) => {
   }))
   const enabled = computed(() => Object.values(params.value).every(v => v != null))
 
-  const { data, isPending, refetch } = useQuery({
+  const { data, isPending, isLoading, refetch } = useQuery({
     key: () => queryKeys.reportes.personas.lista(params.value),
     query: () => api.personas.getAll(params.value),
     enabled: () => enabled.value,
-    // staleTime: Infinity
+    // Al cambiar el período se conserva el reporte anterior hasta que llega el
+    // nuevo: así no desaparecen los datos ni salta el layout.
+    placeholderData: (previousData) => previousData,
   })
 
   watchEffect(() => {
@@ -35,6 +37,7 @@ export const usePersonasQuery = (_personaId: number) => {
     comoTramitador,
     total: computed(() => data.value?.length),
     isPending,
+    isLoading,
     enabled,
     personaId,
     periodo,

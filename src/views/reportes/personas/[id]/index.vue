@@ -7,13 +7,14 @@ const props = defineProps({
 
 import ComoSupervisor from '@/components/features/reportes/personas/ComoSupervisor.vue'
 import ComoTramitador from '@/components/features/reportes/personas/ComoTramitador.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useTramitadoresQuery } from '@/stores/tramitadores'
 import { usePersonasQuery } from '@/stores/reportes'
 import { computed, ref } from 'vue';
 
-const { tramitadores } = useTramitadoresQuery()
+const { tramitadores, isPending: tramitadoresPending } = useTramitadoresQuery()
 const persona = computed(() => tramitadores.value?.find(d => d.id === props.personaId))
-const { comoTramitador, comoSupervisor, isPending, periodo, enabled, total } = usePersonasQuery(props.personaId)
+const { comoTramitador, comoSupervisor, isPending, isLoading, periodo, enabled, total } = usePersonasQuery(props.personaId)
 </script>
 
 <template>
@@ -21,8 +22,9 @@ const { comoTramitador, comoSupervisor, isPending, periodo, enabled, total } = u
     <BButton @click="back" class="position-absolute start-0 top-0 m-2 p-3 h-50" variant="flat">
       <IBiChevronCompactLeft class="center fs-4" />
     </BButton>
-    <div v-if="!persona" class="py-5 text-center">
-      <BSpinner />
+    <IndicadorCarga v-if="tramitadoresPending" texto="Cargando persona…" />
+    <div v-else-if="!persona" class="py-5 text-center text-muted">
+      No se encontró la persona solicitada.
     </div>
     <template v-else>
       <ILucideUserSearch class="fs-3 text-success" />
@@ -34,10 +36,9 @@ const { comoTramitador, comoSupervisor, isPending, periodo, enabled, total } = u
     </template>
   </div>
   <div v-if="enabled" class="mb-4 p-3 border rounded-3">
-    <div v-if="isPending" class="py-5 text-center">
-      <BSpinner />
-    </div>
+    <IndicadorCarga v-if="isPending" texto="Generando reporte…" detalle="Calculando los datos del período." />
     <template v-else-if="total">
+      <IndicadorCarga v-if="isLoading" inline texto="Actualizando…" class="mb-2" />
       <BTabs>
         <BTab title="Como supervisor">
           <ComoSupervisor :data="comoSupervisor" :linkSolicitud="linkSolicitud" />

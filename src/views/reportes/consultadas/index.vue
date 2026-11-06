@@ -1,11 +1,13 @@
 <script setup>
 import { DIRECCION_ADMINISTRACION_ID, AREAS_AR, CURSO_SOLICITUD } from '@/constants'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import useExportCSV from '@/composables/useExportCSV'
 import { useAreasConsultadasQuery } from '@/stores/reportes'
 import { ref, inject } from 'vue'
 
 const title = inject('reportes:title')
-const { areas, isLoading, isPending, params } = useAreasConsultadasQuery()
+const { areas, isLoading, params } = useAreasConsultadasQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
 const form = ref({
   desde: null,
@@ -42,7 +44,7 @@ const exportar = () => {
   <div class="pt-3">
     <p>Resumen de efectividad de las áreas consultadas.</p>
     <div class="p-3 mb-3 border rounded-3 surface-1">
-      <BForm @submit.prevent="submit" class="d-flex flex-wrap gap-3">
+      <BForm @submit.prevent="submit" class="d-flex flex-wrap gap-3" :aria-busy="isLoading">
         <div>
           <label class="form-label">Origen de la solicitud</label>
           <BFormSelect v-model="form.origen" :options="AREAS_AR" class="w-auto">
@@ -62,19 +64,23 @@ const exportar = () => {
         </div>
         <div>
           <label class="form-label invisible">Generar reporte</label>
-          <BButton type="submit" variant="primary d-block" :loading="isLoading">
+          <BotonEnvio type="submit" variant="primary d-block" :loading="isLoading" texto-cargando="Generando…">
             Generar reporte
-          </BButton>
+          </BotonEnvio>
         </div>
       </BForm>
     </div>
-    <div v-if="!isLoading && !isPending" class="mb-4 p-3 border rounded-3">
+    <IndicadorCarga v-if="isLoading && !areas" texto="Generando reporte…"
+      detalle="Calculando la efectividad de las áreas consultadas." />
+    <div v-else-if="areas" class="mb-4 p-3 border rounded-3">
       <p class="fw-semibold resultados">
         Resultados
+        <IndicadorCarga v-if="isLoading" inline texto="Actualizando…" class="ms-2" />
         <span class="text-secondary">
-          ({{ areas?.length }})
+          ({{ areas.length }})
         </span>
-        <BButton variant="link" @click="exportar" v-tippy="'Guardar todo como (*.csv)'">
+        <BButton variant="link" :disabled="!areas.length" @click="exportar"
+          v-tippy="'Guardar todo como (*.csv)'">
           <ILucideDownload /> *CSV
         </BButton>
       </p>

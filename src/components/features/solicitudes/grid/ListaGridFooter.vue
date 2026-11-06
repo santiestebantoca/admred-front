@@ -1,9 +1,10 @@
 <script setup>
 import { PENDIENTE_STATUS, PERIODOS } from '@/constants'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useSolicitudesQuery, useSolicitudesFiltro } from '@/stores/solicitudes'
 import { toRefs } from 'vue';
 
-const { total, isPending, isStale, conteoEstados, refresh } = useSolicitudesQuery()
+const { total, isPending, isLoading, isStale, conteoEstados, refresh } = useSolicitudesQuery()
 const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
 </script>
 
@@ -11,10 +12,13 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
   <BContainer fluid>
     <BRow v-if="isPending" class="footer-row" align-v="center">
       <BCol cols="auto">
-        Cargando...
+        <IndicadorCarga inline texto="Cargando…" />
       </BCol>
     </BRow>
     <BRow v-else class="footer-row" align-v="center">
+      <BCol v-if="isLoading" cols="auto">
+        <IndicadorCarga inline texto="Actualizando…" />
+      </BCol>
       <BCol cols="auto">
         {{ total }} {{ total === 1 ? 'elemento' : 'elementos' }}
       </BCol>

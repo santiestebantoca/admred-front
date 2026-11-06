@@ -5,6 +5,7 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
 import type { SolicitudEvaluada } from '@/types/models.js'
 import { ref, computed, onMounted } from 'vue'
@@ -32,7 +33,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit =  () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
@@ -43,19 +44,21 @@ const submit =  () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Evaluar" fullscreen="sm" :scrollable="false">
+  <BModal v-model="model" @hidden="back" title="Evaluar" fullscreen="sm" :scrollable="false"
+    :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <div class="min-height-110">
       <p>Evaluación de la respuesta recibida.</p>
-      <BForm id="form-evaluar" @submit.prevent="submit" density="3">
+      <BForm id="form-evaluar" @submit.prevent="submit" density="3" :aria-busy="loading">
         <BFormGroup v-bind="errorState.evaluacion">
           <BFormRating v-model="form.evaluacion" variant="warning" @update:modelValue="errors.evaluacion = null" />
         </BFormGroup>
       </BForm>
     </div>
     <template #footer>
-      <BButton type="submit" form="form-evaluar" :loading="loading" loading-fill variant="primary w-90 me-3">
+      <BotonEnvio type="submit" form="form-evaluar" :loading="loading" loading-fill texto-cargando="Evaluando…"
+        variant="primary w-90 me-3">
         Evaluar
-      </BButton>
+      </BotonEnvio>
     </template>
   </BModal>
 </template>

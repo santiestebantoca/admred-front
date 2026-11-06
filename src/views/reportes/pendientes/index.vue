@@ -4,6 +4,7 @@ const props = defineProps({
 })
 
 import Nodo from '@/components/features/reportes/pendientes/Nodo.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { usePendientesQuery } from '@/stores/reportes'
 import { useAuthQuery } from '@/stores/auth'
 import { computed, inject, provide } from 'vue'
@@ -28,10 +29,8 @@ title.value = 'Mis pendientes'
 <template>
   <div class="pt-3">
     <p>Esquema de solicitudes pendientes enviadas por mi área.</p>
-    <div v-if="isPending" class="my-5 py-5 text-center">
-      <BSpinner />
-    </div>
-    <em v-else-if="!pendientes.length" class="text-muted">
+    <IndicadorCarga v-if="isPending" texto="Cargando pendientes…" detalle="Un momento por favor." />
+    <em v-else-if="!pendientes?.length" class="text-muted">
       No hay pendientes
     </em>
     <div v-else class="esquema">

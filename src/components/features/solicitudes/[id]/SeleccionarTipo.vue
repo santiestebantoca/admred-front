@@ -4,13 +4,14 @@ const props = defineProps({
   placement: { type: String, default: 'top-start' }
 })
 
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useTiposFiltro, useTiposQuery } from '@/stores/tipos'
 import { ref, computed } from 'vue'
 
 // Filtro propio del widget (estado local): no comparte búsqueda ni página con
 // la lista del admin.
 const { search, filtro } = useTiposFiltro()
-const { tipos, isPending } = useTiposQuery(filtro)
+const { tipos, isPending, isLoading } = useTiposQuery(filtro)
 const sel = computed(() => tipos.value?.find(d => d.id === value.value))
 const view = ref(0)
 const rootStyle = computed(() => ({
@@ -43,9 +44,15 @@ const input = (id) => {
       <BDropdownText>
         <BSearchInput searchIcon v-model="search" class="rounded-4" />
       </BDropdownText>
+      <BDropdownText v-if="isPending || isLoading">
+        <IndicadorCarga inline texto="Cargando tipos…" />
+      </BDropdownText>
       <BDropdownItemButton v-for="{ id, nombre } in tipos" :key="id" @click="input(id)">
         {{ nombre }}
       </BDropdownItemButton>
+      <BDropdownText v-if="!isPending && !isLoading && !tipos?.length">
+        <span class="blockquote-footer"><em>No hay tipos que coincidan.</em></span>
+      </BDropdownText>
     </template>
   </BDropdown>
 </template>

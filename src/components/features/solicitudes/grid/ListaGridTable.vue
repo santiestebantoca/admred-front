@@ -1,5 +1,7 @@
 <script setup>
 import { shorterTime } from '@/composables/useDates'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
+import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import { useFields } from './table-fields'
 import { useSolicitudesQuery } from '@/stores/solicitudes'
 import { useResizeObserver } from '@vueuse/core'
@@ -30,15 +32,18 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
 </script>
 
 <template>
-  <div v-if="isPending" class="text-center py-5">
-    <BSpinner />
+  <div v-if="isPending" class="py-3">
+    <TablaEsqueleto :filas="7" :columnas="4" texto="Cargando solicitudes…" />
   </div>
   <template v-else>
     <div v-if="!total" class="text-center py-5">
       No hay elementos que mostrar.<br>
       <span v-if="isFiltered">(Revise los filtros aplicados)</span>
     </div>
-    <template v-else>
+    <div v-else class="table-wrapper position-relative" :aria-busy="isLoading">
+      <div v-if="isLoading" class="indicador-actualizacion">
+        <IndicadorCarga inline texto="Actualizando…" />
+      </div>
       <BContainer v-if="mobile" class="table-mobile-container" :style="rootStyle">
         <BRow v-for="d in solicitudes" :key="d[0]" @click="onSelectedItem(d)">
           <BCol class="presentacion-de-para">
@@ -54,8 +59,8 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
         </BRow>
       </BContainer>
       <div v-else class="table-large-container" ref="container" :style="rootStyle" v-bind="$attrs">
-        <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0" :busy="isLoading"
-          selectable select-mode="single" hover @update:selected-items="onSelectedItem" v-model:selected-items="active">
+        <BTable fixed :sticky-header="height" :items="solicitudes" :fields="fields" primary-key="0" selectable
+          select-mode="single" hover @update:selected-items="onSelectedItem" v-model:selected-items="active">
           <template #table-colgroup>
             <!-- <col style="width:80px" /> -->
             <col style="width:110px" />
@@ -67,7 +72,7 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
           </template>
         </BTable>
       </div>
-    </template>
+    </div>
   </template>
 </template>
 
@@ -112,7 +117,19 @@ const onSelectedItem = (val) => setSolicitudId.value(val[0])
   }
 }
 
+.table-wrapper {
+  // El contenedor de la tabla se estira al alto que le da la fila `1fr` de
+  // ListaGrid.vue. Este wrapper debe transmitir ese alto, no calcularlo a
+  // partir del contenido: `min-height: 0` evita que su tamaño mínimo lo
+  // empuje a crecer con la tabla, y el flex hace que el hijo lo ocupe entero.
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .table-large-container {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
   padding-top: 8px;
   padding-bottom: 8px;

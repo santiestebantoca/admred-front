@@ -10,6 +10,7 @@ import {
 } from './errors'
 import mitt from 'mitt'
 import { shallowRef } from 'vue'
+import { finalizarPeticion, iniciarPeticion } from '@/composables/useActividadRed'
 
 // Importar los mensajes externalizados
 import { ERROR_MESSAGES } from '@/constants/errorMessages'
@@ -44,12 +45,25 @@ export const api = axios.create({
 export const lastServerAccess = shallowRef(new Date())
 const touchLastServerAccess = () => lastServerAccess.value = new Date()
 
+// Cada petición que sale se contabiliza para que los indicadores globales
+// (por ejemplo, la barra de progreso superior) sepan cuándo hay trabajo en
+// curso, sin que las vistas tengan que coordinarse entre sí.
+api.interceptors.request.use(
+  config => {
+    iniciarPeticion()
+    return config
+  },
+  error => Promise.reject(error)
+)
+
 api.interceptors.response.use(
   response => {
+    finalizarPeticion()
     touchLastServerAccess()
     return response
   },
   error => {
+    finalizarPeticion()
     if (axios.isCancel(error)) throw error
     if (error instanceof ApiError) throw error
 

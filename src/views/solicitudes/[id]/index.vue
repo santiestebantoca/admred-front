@@ -54,7 +54,7 @@ provide('solicitud:solicitud', solicitud)
     </template>
     <BOverlay :show="isLoading" no-wrap :variant="white" :opacity=".3" :blur="5" />
     <!-- Body -->
-    <div :key="solicitud.id" class="container grid solicitud-data">
+    <div :key="solicitud.id" class="container grid solicitud-data" :aria-busy="isLoading">
       <div class="grid-header hstack gap-3">
         <h5>Solicitud</h5>
         <EvaluacionSubCard v-if="solicitud.evaluacion" :solicitud="solicitud" class="my-auto" />

@@ -4,6 +4,7 @@ const props = defineProps({
 })
 
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
@@ -29,6 +30,8 @@ const errorState = computed(() => ({
 const adjuntosHeredados = ref(solicitud.value.adjuntos_respuesta)
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
+const adjuntosSubiendo = computed(() => Boolean(adjuntos.value?.subiendo))
+const enviando = computed(() => loading.value || adjuntosSubiendo.value)
 
 const observaciones = computed({
   get: () => form.value.observaciones,
@@ -58,7 +61,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (enviando.value || !validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
@@ -70,8 +73,8 @@ const submit = () => {
 
 <template>
   <BModalPlus v-model="model" @hidden="back" title="Responder solicitud" capsule-title="Responder solicitud" size="lg"
-    fullscreen="sm" :scrollable="false">
-    <BForm id="form-responder" @submit.prevent="submit" density="3">
+    fullscreen="sm" :scrollable="false" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
+    <BForm id="form-responder" @submit.prevent="submit" density="3" :aria-busy="enviando">
       <BFormGroup v-bind="errorState.observaciones">
         <BFormTextarea v-model="form.observaciones" no-resize :placeholder="PLACEHOLDER_OBSERVACIONES"
           :formatter="formatearObservaciones" @compositionend="alTerminarComposicionObservaciones"
@@ -87,10 +90,12 @@ const submit = () => {
       <SeleccionarAdjuntos ref="adjuntosRef" v-model="form.adjuntos" v-model:adjuntosHeredados="adjuntosHeredados" />
     </BForm>
     <template #footer>
-      <BButton type="submit" form="form-responder" :loading="loading" loading-fill variant="primary w-110 me-3">
+      <BotonEnvio type="submit" form="form-responder" :loading="enviando" loading-fill
+        :texto-cargando="adjuntosSubiendo && !loading ? 'Subiendo adjuntos…' : 'Enviando respuesta…'"
+        variant="primary w-110 me-3">
         Responder
-      </BButton>
-      <BButton @click="adjuntos.select()" v-tippy="'Adjuntar documento'" variant="flat wh-34">
+      </BotonEnvio>
+      <BButton @click="adjuntos.select()" :disabled="enviando" v-tippy="'Adjuntar documento'" variant="flat wh-34">
         <ILucidePaperclip class="center" :class="{ 'text-primary': form.adjuntos?.length }" />
       </BButton>
     </template>

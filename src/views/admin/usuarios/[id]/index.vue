@@ -7,6 +7,7 @@ const props = defineProps({
   eliminar: Object,
 })
 
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { formatTime } from '@/composables/useDates'
 import { useUsuarioQuery } from '@/stores/usuarios'
 import { provide } from 'vue';
@@ -22,7 +23,7 @@ provide('usuario:usuario', usuario)
         <ILucideArrowLeft class="center" />
       </BButton>
       <h5 class="mb-1">Detalles del usuario</h5>
-      <template v-if="!isPending">
+      <template v-if="usuario">
         <BButton :to="editar" variant="flat ms-auto">
           <ILucidePenLine /> Editar
         </BButton>
@@ -31,8 +32,9 @@ provide('usuario:usuario', usuario)
         </BButton>
       </template>
     </div>
-    <div v-if="isPending" class="py-5 text-center">
-      <BSpinner />
+    <IndicadorCarga v-if="isPending" texto="Cargando usuario…" />
+    <div v-else-if="!usuario" class="py-5 text-center text-muted">
+      No se pudo cargar la información del usuario.
     </div>
     <div v-else class="vstack gap-4 mb-4">
       <div class="w-100">

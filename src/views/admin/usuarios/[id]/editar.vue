@@ -5,6 +5,7 @@ const props = defineProps({
 })
 
 import { EMAIL_PATRON, TELEFONO_PATRON, REGISTRATION_KEY_OPTIONS } from '@/constants'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
 import { useAuthQuery } from '@/stores/auth'
 import { useAreasOpcionesQuery } from '@/stores/areas'
@@ -90,7 +91,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   actualizarUsuario(form.value)
     .then(() => { props.back() })
     .catch(err => {
@@ -104,7 +105,7 @@ const submit = () => {
   <div class="max-w-500 px-3">
     <h5 class="mb-5">Editar usuario</h5>
 
-    <BForm @submit.prevent="submit" density="3">
+    <BForm @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Nombre" v-bind="errorState.first_name">
         <BFormInput v-model="form.first_name" trim />
       </BFormGroup>
@@ -145,10 +146,11 @@ const submit = () => {
         <BFormSelect v-model="form.registration_key" :options="REGISTRATION_KEY_OPTIONS" />
       </BFormGroup>
       <BFormButtons class="py-4">
-        <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
+        <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill
+          texto-cargando="Guardando cambios…">
           Guardar
-        </BButton>
-        <BButton @click="back" variant="emphasis w-90">
+        </BotonEnvio>
+        <BButton @click="back" variant="emphasis w-90" :disabled="loading">
           Cancelar
         </BButton>
       </BFormButtons>

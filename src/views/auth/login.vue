@@ -2,6 +2,7 @@
 const props = defineProps({ next: Function })
 
 import AcercaDe from '@/components/features/AcercaDe.vue'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useLogin } from '@/stores/auth'
 import type { LoginCredentials } from '@/types/models'
 import { ref, computed, watchEffect } from 'vue'
@@ -39,7 +40,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   login(form.value)
     .then(() => props.next())
     .catch(() => {
@@ -60,7 +61,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       <BAlert v-model="alert" variant="danger" class="mb-3 small">
         Credenciales no válidas.
       </BAlert>
-      <BForm @submit.prevent="submit" density="3">
+      <BForm @submit.prevent="submit" density="3" :aria-busy="loading">
         <BFormGroup class="position-relative" v-bind="errorState.username">
           <ILucideUser class="p-icon" />
           <BFormInput v-model="form.username" name="username" placeholder="Nombre de usuario" />
@@ -76,9 +77,10 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           </BButton>
         </BFormGroup>
         <BFormButtons class="py-2">
-          <BButton type="submit" variant="primary w-100 lh-lg" :disabled="loading">
-            {{ loading ? 'Autenticando' : 'Iniciar sesión' }}
-          </BButton>
+          <BotonEnvio type="submit" variant="primary w-100 lh-lg" :loading="loading"
+            texto-cargando="Iniciando sesión…">
+            Iniciar sesión
+          </BotonEnvio>
         </BFormButtons>
       </BForm>
       <BAlert show variant="light" class="small mt-4 text-dark">

@@ -23,7 +23,9 @@ export const useAreasConsultadasQuery = () => {
     key: () => queryKeys.reportes.consultadas.lista(params.value),
     query: () => api.consultadas.getAll(params.value),
     enabled: () => params.value.desde && params.value.hasta,
-    // staleTime: Infinity
+    // Al cambiar los filtros se conserva el reporte anterior hasta que llega el
+    // nuevo: así no desaparecen los resultados ni salta el layout.
+    placeholderData: (previousData) => previousData,
   })
 
   const data = computed(() => {

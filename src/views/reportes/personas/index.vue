@@ -4,6 +4,7 @@ const props = defineProps({
   setPersonaId: Function
 })
 
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useTramitadoresQuery } from '@/stores/tramitadores'
 import { inject } from 'vue'
 
@@ -18,16 +19,15 @@ title.value = 'Desempeño personal'
     <p>
       Desempeño personal del trabajador como supervisor y como tramitador.
     </p>
-    <div v-if="isPending" class="my-5 py-5 text-center">
-      <BSpinner />
-    </div>
+    <IndicadorCarga v-if="isPending" texto="Cargando personas…" detalle="Un momento por favor." />
     <template v-else-if="!personaId">
-      <BListGroup class="custom">
+      <BListGroup v-if="tramitadores?.length" class="custom">
         <BListGroupItem v-for="{ id, name } in tramitadores" :key="id" button @click="setPersonaId(id)">
           <ILucideUserSearch class="text-success" />
           {{ name }}
         </BListGroupItem>
       </BListGroup>
+      <p v-else class="text-center text-muted">No hay personas disponibles para consultar.</p>
     </template>
     <RouterView />
   </div>

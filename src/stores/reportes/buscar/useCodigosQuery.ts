@@ -9,7 +9,10 @@ export const useCodigosQuery = () => {
   const { data, isPending, isLoading, refresh } = useQuery({
     key: () => queryKeys.reportes.codigos.lista({ codigo: codigo.value }),
     query: () => api.codigos.getAll({ codigo: codigo.value }),
-    enabled: () => codigo.value
+    enabled: () => codigo.value,
+    // Al buscar otro código se conservan los resultados anteriores hasta que
+    // llega la nueva búsqueda.
+    placeholderData: (previousData) => previousData,
   })
 
   return {

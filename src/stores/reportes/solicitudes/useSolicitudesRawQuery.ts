@@ -14,7 +14,9 @@ export const useSolicitudesRawQuery = () => {
     key: () => queryKeys.reportes.solicitudes.raw.lista(params.value),
     query: () => api.solicitudes.raw.getAll(params.value),
     enabled: () => Object.values(params.value).every(v => v != null),
-    // staleTime: Infinity
+    // Al cambiar los filtros se conserva el reporte anterior hasta que llega el
+    // nuevo: así no desaparecen los resultados ni salta el layout.
+    placeholderData: (previousData) => previousData,
   })
 
   return {

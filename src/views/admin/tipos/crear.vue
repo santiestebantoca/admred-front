@@ -4,6 +4,7 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTipoCreate } from '@/stores/tipos'
 import type { TipoCreate } from '@/types/models.js'
 import { useNotificaciones } from '@/composables/useNotificaciones'
@@ -36,7 +37,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   crearTipo(form.value)
     .then(() => {
       exito('Nuevo tipo creado.')
@@ -53,7 +54,7 @@ const submit = () => {
   <div class="max-w-500 px-3">
     <h5 class="mb-5">Nuevo tipo</h5>
 
-    <BForm @submit.prevent="submit" density="3">
+    <BForm @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
@@ -61,10 +62,11 @@ const submit = () => {
         <BFormTextarea v-model="form.descripcion" trim no-resize />
       </BFormGroup>
       <BFormButtons class="py-4">
-        <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
+        <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill
+          texto-cargando="Creando tipo…">
           Crear
-        </BButton>
-        <BButton variant="emphasis w-90" @click="back">
+        </BotonEnvio>
+        <BButton variant="emphasis w-90" :disabled="loading" @click="back">
           Cancelar
         </BButton>
       </BFormButtons>

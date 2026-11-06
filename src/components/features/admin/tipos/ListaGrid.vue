@@ -1,5 +1,7 @@
 <script setup>
 import Filtro from './ListaFiltro.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
+import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useTiposLista } from '@/stores/tipos'
 import { ref, computed, inject, watchEffect } from 'vue'
@@ -54,19 +56,20 @@ const onSelectedItem = (val) => setTipoId.value(val[0])
     </div>
     <TablePagination v-model:page="page" v-model:per-page="limit" :total-rows="total" :per-page-options="limits"
       :disabled="isLoading" :aria-controls="tableId" />
-    <BTable :id="tableId" :items="tipos" :fields="fields" :busy="isLoading" :show-empty="!isPending"
-      :empty-text="emptyText" hover primary-key="id" selectable select-mode="single"
-      @update:selected-items="onSelectedItem" v-model:selected-items="active">
-      <template #table-colgroup>
-        <col style="width:40%" />
-        <col style="width:40%" />
-      </template>
-      <template #table-busy>
-        <div class="py-5 text-center text-muted">
-          <BSpinner /> Cargando tipos...
-        </div>
-      </template>
-    </BTable>
+    <div class="position-relative" :aria-busy="isLoading">
+      <div v-if="isLoading && !isPending" class="indicador-actualizacion">
+        <IndicadorCarga inline texto="Actualizando…" />
+      </div>
+      <TablaEsqueleto v-if="isPending" :columnas="fields.length" :filas="5" texto="Cargando tipos…" />
+      <BTable v-else :id="tableId" :items="tipos" :fields="fields" :empty-text="emptyText" show-empty hover
+        primary-key="id" selectable select-mode="single" @update:selected-items="onSelectedItem"
+        v-model:selected-items="active">
+        <template #table-colgroup>
+          <col style="width:40%" />
+          <col style="width:40%" />
+        </template>
+      </BTable>
+    </div>
   </div>
 </template>
 

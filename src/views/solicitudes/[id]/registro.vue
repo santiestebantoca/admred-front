@@ -4,6 +4,7 @@ const props = defineProps({
   back: Function
 })
 
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useBitacorasQuery } from '@/stores/bitacoras'
 import { formatTime } from '@/composables/useDates'
 import { ref, onMounted } from 'vue'
@@ -16,28 +17,27 @@ onMounted(() => model.value = true)
 
 <template>
   <BModal v-model="model" @hidden="back" title="Registro" no-footer size="lg">
-    <div v-if="isPending" class="py-5 my-5 text-center">
-      <BSpinner />
+    <IndicadorCarga v-if="isPending" texto="Cargando registro…" detalle="Consultando los movimientos de la solicitud." />
+    <div v-else-if="!registros?.length" class="py-5 text-center text-muted">
+      No hay movimientos registrados para esta solicitud.
     </div>
-    <template v-else>
-      <BTableSimple>
-        <BTbody>
-          <BTr v-for="{ id, fecha, by, accion, argumentos } in registros" :key="id">
-            <BTd class="text-nowrap text-success">
-              {{ formatTime(fecha) }}
-            </BTd>
-            <BTd class="text-warning-emphasis">
-              {{ by.username }}
-            </BTd>
-            <BTd class="fw-semibold">
-              {{ accion }}
-            </BTd>
-            <BTd class="w-100">
-              {{ argumentos }}
-            </BTd>
-          </BTr>
-        </BTbody>
-      </BTableSimple>
-    </template>
+    <BTableSimple v-else>
+      <BTbody>
+        <BTr v-for="{ id, fecha, by, accion, argumentos } in registros" :key="id">
+          <BTd class="text-nowrap text-success">
+            {{ formatTime(fecha) }}
+          </BTd>
+          <BTd class="text-warning-emphasis">
+            {{ by.username }}
+          </BTd>
+          <BTd class="fw-semibold">
+            {{ accion }}
+          </BTd>
+          <BTd class="w-100">
+            {{ argumentos }}
+          </BTd>
+        </BTr>
+      </BTbody>
+    </BTableSimple>
   </BModal>
 </template>

@@ -5,6 +5,7 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { useTipoUpdate } from '@/stores/tipos'
 import type { TipoUpdate } from '@/types/models.js'
 import { ref, computed, inject, Ref } from 'vue'
@@ -37,7 +38,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   actualizarTipo(form.value)
     .then(() => { props.back() })
     .catch(err => {
@@ -51,7 +52,7 @@ const submit = () => {
   <div class="max-w-500 px-3">
     <h5 class="mb-5">Editar tipo</h5>
 
-    <BForm @submit.prevent="submit" density="3">
+    <BForm @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
@@ -59,10 +60,11 @@ const submit = () => {
         <BFormTextarea v-model="form.descripcion" trim no-resize />
       </BFormGroup>
       <BFormButtons class="py-4">
-        <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
+        <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill
+          texto-cargando="Guardando cambios…">
           Guardar
-        </BButton>
-        <BButton @click="back" variant="emphasis w-90">
+        </BotonEnvio>
+        <BButton @click="back" variant="emphasis w-90" :disabled="loading">
           Cancelar
         </BButton>
       </BFormButtons>

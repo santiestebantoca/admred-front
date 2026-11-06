@@ -1,12 +1,14 @@
 <script setup>
 import { AREAS_AR } from '@/constants'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { formatTime } from '@/composables/useDates'
 import useExportCSV from '@/composables/useExportCSV'
 import { useSolicitudesRawQuery } from '@/stores/reportes'
 import { ref, computed, inject } from 'vue'
 
 const title = inject('reportes:title')
-const { solicitudes, isPending, isLoading, refresh, params } = useSolicitudesRawQuery()
+const { solicitudes, isLoading, refresh, params } = useSolicitudesRawQuery()
 const { exportCSV } = useExportCSV({ excelReady: true })
 const form = ref({
   desde: undefined,
@@ -55,7 +57,7 @@ const exportar = () => {
   <div class="pt-3">
     <p>Registros brutos de solicitudes con sus solicitudes hijas.</p>
     <div class="p-3 mb-3 border rounded-3 surface-1">
-      <BForm @submit.prevent="submit" class="d-flex flex-wrap gap-3">
+      <BForm @submit.prevent="submit" class="d-flex flex-wrap gap-3" :aria-busy="isLoading">
         <div>
           <label class="form-label">Presentadas en</label>
           <DateRangePicker v-model:start="form.desde" v-model:end="form.hasta" required />
@@ -65,22 +67,26 @@ const exportar = () => {
           <BFormSelect v-model="form.destino_id" :options="AREAS_AR" required />
         </div>
         <div class="w-100">
-          <BButton type="submit" variant="primary" :loading="isLoading">
+          <BotonEnvio type="submit" variant="primary" :loading="isLoading" texto-cargando="Generando…">
             Generar reporte
-          </BButton>
+          </BotonEnvio>
         </div>
       </BForm>
     </div>
-    <div v-if="!isPending" class="mb-4 p-3 border rounded-3">
+    <IndicadorCarga v-if="isLoading && !solicitudes" texto="Generando reporte…"
+      detalle="Consultando los datos del período." />
+    <div v-else-if="solicitudes" class="mb-4 p-3 border rounded-3">
       <p class="fw-semibold">
         Resultados
+        <IndicadorCarga v-if="isLoading" inline texto="Actualizando…" class="ms-2" />
         <span class="text-secondary">
           ({{ solicitudes.length }})
         </span>
         <span class="fw-normal mark bg-light px-1 rounded-3 small text-secondary">
           mostrando 10 resultados.
         </span>
-        <BButton variant="link" @click="exportar" v-tippy="'Guardar todo como (*.csv)'">
+        <BButton variant="link" :disabled="!solicitudes.length" @click="exportar"
+          v-tippy="'Guardar todo como (*.csv)'">
           <ILucideDownload /> *CSV
         </BButton>
       </p>

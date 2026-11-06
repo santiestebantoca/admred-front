@@ -3,6 +3,8 @@ const props = defineProps({
   linkSolicitud: Function
 })
 
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { formatTime } from '@/composables/useDates'
 import { useCodigosQuery } from '@/stores/reportes'
 import { ref, inject } from 'vue'
@@ -28,16 +30,20 @@ function fechaformatter({ value }) { return formatTime(value) || '-' }
   <div class="pt-3">
     <p>Búsqueda de solicitudes por código — se muestran hasta 10 coincidencias. </p>
     <div class="p-3 mb-3 border rounded-3 surface-1">
-      <BForm @submit.prevent="submit" class="hstack">
+      <BForm @submit.prevent="submit" class="hstack" :aria-busy="isLoading">
         <BFormInput v-model="value" placeholder="Código" required class="w-auto me-3" />
-        <BButton type="submit" variant="primary" :loading="isLoading">
+        <BotonEnvio type="submit" variant="primary" :loading="isLoading" :disabled="!value"
+          texto-cargando="Buscando…">
           Buscar
-        </BButton>
+        </BotonEnvio>
       </BForm>
     </div>
-    <div v-if="!isPending" class="mb-4 p-3 border rounded-3">
+    <IndicadorCarga v-if="isPending && codigo" texto="Buscando coincidencias…"
+      detalle="Consultando las solicitudes con ese código." />
+    <div v-else-if="codigo && solicitudes" class="mb-4 p-3 border rounded-3">
       <p class="fw-semibold">
         Resultados
+        <IndicadorCarga v-if="isLoading" inline texto="Actualizando…" class="ms-2" />
         <span class="text-secondary">
           ({{ solicitudes.length }})
         </span>

@@ -14,7 +14,7 @@ export function useNavigationSolicitudes() {
         {
           id: 'nav-solicitudes-recibidas-pendientes',
           label: 'Pendientes',
-          count: notificaciones.value?.pendientes.recibidas.total,
+          count: notificaciones.value?.pendientes.recibidas?.total,
           to: { params: { tray: 'recibidas', state: 'pendientes' } }
         },
         {
@@ -33,7 +33,7 @@ export function useNavigationSolicitudes() {
         {
           id: 'nav-solicitudes-enviadas-pendientes',
           label: 'Pendientes',
-          count: notificaciones.value?.pendientes.enviadas.total,
+          count: notificaciones.value?.pendientes.enviadas?.total,
           to: { params: { tray: 'enviadas', state: 'pendientes' } }
         },
         {

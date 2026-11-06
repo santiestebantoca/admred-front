@@ -4,6 +4,7 @@ const props = defineProps({
 })
 
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
 import { useTramitadoresQuery } from '@/stores/tramitadores'
@@ -37,7 +38,7 @@ function validate() {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   actualizarSolicitud(form.value)
     .then(() => model.value = false)
     .catch(err => {
@@ -48,16 +49,18 @@ const submit = () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Asignar">
-    <BForm id="form-asignar" @submit.prevent="submit" density="3">
+  <BModal v-model="model" @hidden="back" title="Asignar"
+    :no-close-on-backdrop="loading" :no-close-on-esc="loading">
+    <BForm id="form-asignar" @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Tramitador" v-bind="errorState.tramitador">
         <BFormSelect v-model="form.tramitador" :options="tramitadores" />
       </BFormGroup>
     </BForm>
     <template #footer>
-      <BButton type="submit" form="form-asignar" :loading="loading" loading-fill variant="primary w-90 me-3">
+      <BotonEnvio type="submit" form="form-asignar" :loading="loading" loading-fill texto-cargando="Asignando…"
+        variant="primary w-90 me-3">
         Asignar
-      </BButton>
+      </BotonEnvio>
       <SeleccionarTipo down v-model="form.tipo" />
     </template>
   </BModal>

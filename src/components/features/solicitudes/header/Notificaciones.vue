@@ -4,26 +4,30 @@ import { ref, computed, inject } from 'vue'
 
 const mobile = inject('app:mobile')
 const linkSolicitud = inject('solicitudes:linkSolicitud')
-const { notificaciones } = useNotificacionesQuery()
-const porAtender = computed(() => notificaciones.value
-  ? notificaciones.value.pendientes.recibidas.por_asignar.length
-  + notificaciones.value.pendientes.recibidas.por_responder.length
-  + notificaciones.value.pendientes.recibidas.por_aprobar.length
-  : false)
+const { notificaciones, isPending } = useNotificacionesQuery()
+const porAtender = computed(() => {
+  const recibidas = notificaciones.value?.pendientes?.recibidas
+  if (!recibidas) return 0
+  return (recibidas.por_asignar?.length ?? 0)
+    + (recibidas.por_responder?.length ?? 0)
+    + (recibidas.por_aprobar?.length ?? 0)
+})
 const model = ref(false)
 </script>
 
 <template>
-  <template v-if="porAtender">
-    <BButton @click="model = true" variant="flat wh-34 me-2" v-tippy="'Notificaciones'"
+  <template v-if="isPending || porAtender">
+    <BButton @click="model = true" variant="flat wh-34 me-2" :disabled="isPending"
+      v-tippy="isPending ? 'Cargando notificaciones' : 'Notificaciones'"
       :class="{ 'me-3 wh-36': !mobile }">
-      <ILucideBell class="center" />
-      <BBadge variant="danger" class="position-absolute top-0 translate-middle-x" pill
+      <BSpinner v-if="isPending" small label="Cargando notificaciones" />
+      <ILucideBell v-else class="center" />
+      <BBadge v-if="porAtender" variant="danger" class="position-absolute top-0 translate-middle-x" pill
         :class="[mobile ? 'start-0' : 'start-100']">
         {{ porAtender }}
       </BBadge>
     </BButton>
-    <BModal v-model="model" title="Notificaciones" no-footer no-stack>
+    <BModal v-if="porAtender" v-model="model" title="Notificaciones" no-footer no-stack>
       <p>
         Solicitudes con acciones pendientes.
       </p>

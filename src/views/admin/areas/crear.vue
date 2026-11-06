@@ -4,6 +4,8 @@ const props = defineProps({
 })
 
 import { isValidationError } from '@/api/client'
+import BotonEnvio from '@/components/commons/BotonEnvio.vue'
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useNivelesQuery } from '@/stores/niveles'
 import { useAreasDelNivelQuery } from '@/stores/areas'
 import { useAreaCreate } from '@/stores/areas'
@@ -53,7 +55,7 @@ const validate = () => {
   return !Object.keys(errors.value).length
 }
 const submit = () => {
-  if (!validate()) return
+  if (loading.value || !validate()) return
   crearArea(form.value)
     .then(() => {
       exito('Nueva área creada.')
@@ -70,7 +72,7 @@ const submit = () => {
   <div class="max-w-500 px-3">
     <h5 class="mb-5">Nueva área</h5>
 
-    <BForm @submit.prevent="submit" density="3">
+    <BForm @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
@@ -79,12 +81,14 @@ const submit = () => {
       </BFormGroup>
       <BFormGroup label="Pertenece a" v-bind="errorState.padre">
         <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending" />
+        <IndicadorCarga v-if="nivelPadre && padresPending" inline texto="Cargando áreas…" class="mt-1" />
       </BFormGroup>
       <BFormButtons class="py-4">
-        <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
+        <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill
+          texto-cargando="Creando área…">
           Crear
-        </BButton>
-        <BButton variant="emphasis w-90" @click="back">
+        </BotonEnvio>
+        <BButton variant="emphasis w-90" :disabled="loading" @click="back">
           Cancelar
         </BButton>
       </BFormButtons>

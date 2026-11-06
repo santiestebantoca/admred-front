@@ -11,17 +11,18 @@ const props = defineProps({
   invalidFeedback: String
 })
 
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useDestinosSelectQuery } from '@/stores/destinos'
 import { vOnClickOutside } from '@vueuse/components'
 import { ref, computed, watch, onMounted } from 'vue'
 
-const { destinos, historial, singleOption, search } = useDestinosSelectQuery()
+const { destinos, historial, singleOption, search, isPending } = useDestinosSelectQuery()
 const focus = ref(null) // input focus
 const dropdown = ref(null)
 const attrs = computed(() => ({
   value: search.value,
-  readonly: singleOption.value,
-  placeholder: active.value ? '' : 'Área consultada',
+  readonly: singleOption.value || isPending.value,
+  placeholder: active.value ? '' : (isPending.value ? 'Cargando áreas…' : 'Área consultada'),
 }))
 const active = computed(() => focus.value || dropdown.value)
 const para = computed(() => active.value || search.value)
@@ -80,7 +81,10 @@ const vInput = {
             <BButton v-if="history" @click.stop="historial.del(id)" v-tippy="'Eliminar del historial'"
               variant="close" />
           </BDropdownItemButton>
-          <BDropdownText v-if="!destinos?.length">
+          <BDropdownText v-if="isPending">
+            <IndicadorCarga inline texto="Cargando áreas…" />
+          </BDropdownText>
+          <BDropdownText v-else-if="!destinos?.length">
             <span class="blockquote-footer">
               <em>Resultados de la busqueda y entradas recientes.</em>
             </span>

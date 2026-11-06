@@ -7,6 +7,7 @@ const props = defineProps({
   eliminar: Object,
 })
 
+import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { formatTime } from '@/composables/useDates'
 import { useAreaQuery } from '@/stores/areas'
 import { provide } from 'vue'
@@ -23,7 +24,7 @@ provide('area:area', area)
         <ILucideArrowLeft class="center" />
       </BButton>
       <h5 class="mb-1">Detalles del área</h5>
-      <template v-if="!isPending">
+      <template v-if="area">
         <BButton :to="editar" variant="flat ms-auto">
           <ILucidePenLine /> Editar
         </BButton>
@@ -32,8 +33,9 @@ provide('area:area', area)
         </BButton>
       </template>
     </div>
-    <div v-if="isPending" class="py-5 text-center">
-      <BSpinner />
+    <IndicadorCarga v-if="isPending" texto="Cargando área…" />
+    <div v-else-if="!area" class="py-5 text-center text-muted">
+      No se pudo cargar la información del área.
     </div>
     <div v-else class="vstack gap-4 mb-4">
       <div class="w-100">

@@ -27,3 +27,19 @@
     --estado-color: var(--bs-estado-por-aprobar-color);
   }
 }
+
+/* Indicador de actualización flotante sobre una tabla que conserva sus datos */
+.indicador-actualizacion {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--bs-border-radius-pill);
+  background-color: rgba(var(--bs-body-bg-rgb), .92);
+  box-shadow: var(--bs-box-shadow-sm);
+  font-size: .875em;
+  pointer-events: none;
+}
