@@ -6,6 +6,63 @@ para que los cambios encajen con el resto del proyecto.
 
 ---
 
+## 0. Protocolo obligatorio de contexto y OpenSpec
+
+Este repositorio usa **OpenSpec** para planificar cambios y documentación persistente para
+el contexto. **No improvises contexto**: léelo en este orden antes de analizar, proponer o
+modificar código.
+
+```text
+1. project-context.md                  → stack, arquitectura, capas y convenciones
+2. openspec/specs/                     → contratos de comportamiento por capacidad
+3. openspec/specs/<capacidad>/spec.md  → comportamiento del módulo afectado
+4. specs/_baseline/                    → referencia detallada del comportamiento actual
+5. Código real del módulo              → vistas, stores, API, tipos y componentes
+6. Backend web2py (si cambia contrato) → D:\proyectos\web2py\applications\admred
+```
+
+| Módulo | Capacidad OpenSpec | Referencia detallada |
+| --- | --- | --- |
+| Solicitudes | `openspec/specs/solicitudes/spec.md` | `specs/_baseline/solicitudes.md` |
+| Usuarios | `openspec/specs/gestion-usuarios/spec.md` | `specs/_baseline/administracion.md` |
+| Áreas | `openspec/specs/estructura-areas/spec.md` | `specs/_baseline/administracion.md` |
+| Tipos | `openspec/specs/tipos-solicitud/spec.md` | `specs/_baseline/administracion.md` |
+| Reportes | `openspec/specs/reportes/spec.md` | `specs/_baseline/reportes.md` |
+| Autenticación | `openspec/specs/autenticacion/spec.md` | `specs/_baseline/README.md` |
+
+Reglas del protocolo:
+
+1. **Leer antes de escribir**. No propongas cambios sin haber leído la capacidad OpenSpec,
+   la referencia detallada y el código que implementa el módulo.
+2. **Jerarquía de verdad**. Para el comportamiento actual mandan el código y el backend;
+   para el contrato acordado mandan `openspec/specs/` y la spec del cambio. Si hay
+   discrepancia, señálala y corrige la documentación en el mismo trabajo.
+3. **No inventar contratos**. Endpoints, parámetros, campos y códigos de estado salen del
+   controlador web2py o de los tipos del frontend, nunca de la memoria.
+4. **OpenSpec es el flujo para cambios de comportamiento**:
+   - explorar o aclarar una idea: `/openspec-explore`;
+   - proponer un cambio: `/openspec-propose`;
+   - implementar las tareas: `/openspec-apply-change`;
+   - archivar y fusionar las specs: `/openspec-archive-change`.
+   Los cambios viven en `openspec/changes/<cambio>/`; no crees carpetas manuales en
+   `specs/` para nuevas propuestas.
+5. **No edites `openspec/specs/` a mano** para cambios de comportamiento. Las
+   modificaciones se hacen con un delta dentro de `openspec/changes/<cambio>/specs/` y se
+   fusionan al archivar. Solo se permite corregir una spec base cuando el cambio sea
+   puramente documental y no altere el contrato.
+6. **Mantén la documentación sincronizada**. Si cambia un contrato, un estado, un permiso
+   o un flujo, actualiza la capacidad OpenSpec mediante el cambio y revisa
+   `project-context.md` y `specs/_baseline/` para que no queden obsoletos.
+7. **Lectura dirigida**. Usa búsquedas por símbolo y lee solo lo necesario; no recorras
+   todo el repositorio para una tarea puntual.
+8. **Detente y pregunta** si el contrato es ambiguo, si hay que borrar datos o si el
+   cambio afecta a ambos lados del sistema sin una regla clara.
+9. **Verifica siempre** con `npm run lint` y `npm run typecheck`; añade `npm run build`
+   (o `build_admred`) si tocas rutas, assets o configuración de publicación. Antes de
+   archivar, ejecuta `openspec.cmd validate --all --strict`.
+
+---
+
 ## 1. Idioma
 
 - Responder **siempre en español**, en todas las respuestas y en cualquier sesión.
@@ -82,6 +139,26 @@ Notas:
   lógica de build o rutas, `npm run build` (o `npm run build_admred` para verificar la
   base de publicación).
 
+### OpenSpec
+
+El CLI se instala aparte del proyecto (`npm install -g @fission-ai/openspec@latest`).
+En Windows, si PowerShell bloquea `openspec.ps1` por la política de ejecución, usa
+`openspec.cmd`.
+
+```bash
+openspec list --specs                     # capacidades existentes
+openspec list                             # cambios activos
+openspec show <capacidad> --type spec     # leer una capacidad
+openspec new change <cambio>              # crear un cambio
+openspec status --change <cambio>         # ver artefactos pendientes
+openspec validate --all --strict          # validar specs y cambios
+openspec archive <cambio> -y              # archivar y fusionar deltas
+openspec view                             # panel general
+```
+
+Flujo con el agente: `/openspec-explore`, `/openspec-propose`,
+`/openspec-apply-change` y `/openspec-archive-change`.
+
 ---
 
 ## 4. Mapa del proyecto
@@ -133,6 +210,10 @@ Directorios y archivos de la raíz relevantes:
 - `components.d.ts`: **generado** por `unplugin-vue-components`; no editar a mano.
 - `vite.config.d.ts`, `tsconfig.node.tsbuildinfo`: artefactos generados; no editar.
 - `.env`, `.env.local`, `.env.production`, `.env.corp`: configuración de `VITE_API_URL`.
+- `project-context.md`: contexto global del proyecto; leerlo antes de trabajar.
+- `openspec/`: configuración, specs por capacidad y cambios en curso.
+- `.agents/skills/`: skills de OpenSpec instaladas para OpenCode; no editar a mano.
+- `specs/_baseline/`: referencia técnica detallada del comportamiento actual.
 
 ---
 
@@ -760,11 +841,20 @@ Variables de entorno (solo se usa `VITE_API_URL`):
     CSV, iconos, tooltips y utilidades reactivas.
 12. **Accesibilidad y feedback** no son opcionales: `aria-busy`, textos de carga concretos
     y botones de envío con `BotonEnvio`.
+13. **La documentación es parte del cambio**: si modificas un contrato, estado, permiso o
+    flujo, actualiza la capacidad OpenSpec mediante el cambio y revisa
+    `project-context.md` y `specs/_baseline/` en el mismo trabajo.
+14. **No asumas por nombres**: verifica siempre en el controlador web2py y en los tipos
+    (`src/types/api.ts`, `models.ts`, `backend.ts`) antes de usar un campo o endpoint.
+15. **Valida OpenSpec antes de archivar**: `openspec.cmd validate --all --strict` debe
+    terminar sin errores.
 
 ---
 
 ## 18. Checklist para añadir un recurso CRUD
 
+- [ ] Crear el cambio con `/openspec-propose` y validar que la capacidad afectada existe
+      en `openspec/specs/` o se declara como nueva.
 - [ ] Revisar el controlador/modelo web2py y acordar el contrato (rutas, parámetros,
       forma de `data`/`meta`, errores de validación).
 - [ ] Crear `src/api/<recurso>.ts` con los métodos necesarios.

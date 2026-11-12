@@ -1,6 +1,22 @@
 # admred
 
-This template should help get you started developing with Vue 3 in Vite.
+Frontend de ADM Red. El contexto del proyecto y las reglas para agentes están en
+[`project-context.md`](./project-context.md) y [`AGENTS.md`](./AGENTS.md).
+
+## OpenSpec
+
+Este repositorio usa [OpenSpec](https://openspec.dev/) para planificar cambios:
+
+```bash
+openspec list --specs          # capacidades existentes
+openspec validate --all        # validar specs y cambios
+openspec view                  # panel de specs y cambios
+```
+
+En Windows, si PowerShell bloquea `openspec.ps1`, usa `openspec.cmd`.
+
+Los contratos están en `openspec/specs/` y los cambios en curso en `openspec/changes/`.
+La referencia técnica detallada está en `specs/_baseline/`.
 
 ## Recommended IDE Setup
 

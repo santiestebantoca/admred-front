@@ -1,0 +1,59 @@
+schema: spec-driven
+
+context: |
+  Proyecto: ADM Red, frontend Vue 3 + Vite de un sistema de gestión de solicitudes
+  entre áreas de ETECSA. El backend es una aplicación web2py independiente en
+  D:\proyectos\web2py\applications\admred. La API se sirve como /<controlador>/<acción>
+  y no es REST pura.
+
+  Fuentes de contexto obligatorias:
+  - project-context.md: stack, arquitectura, capas, contratos y convenciones.
+  - specs/_baseline/: documentación detallada del comportamiento actual.
+  - openspec/specs/: contratos de comportamiento por capacidad.
+  - AGENTS.md: reglas operativas del repositorio.
+
+  Reglas generales:
+  - Escribe todos los artefactos en español; conserva en inglés las cabeceras
+    estructurales de OpenSpec y las palabras normativas SHALL/MUST.
+  - No inventes endpoints, campos, estados ni permisos: verifica el controlador
+    web2py y los tipos del frontend.
+  - Respeta los estados de solicitud: 1 Solicitado, 2 En proceso, 3 En evaluación,
+    4 Terminada.
+  - Mantén la separación por capas: vistas → composables → stores de Pinia Colada →
+    src/api/<recurso>.ts → cliente axios. Nunca llames a axios directamente.
+  - No edites archivos generados: components.d.ts, vite.config.d.ts,
+    tsconfig.node.tsbuildinfo, dist/ ni node_modules/.
+  - Los errores de red, servidor, 401, 403 y 404 ya se notifican globalmente; no
+    dupliques toasts en las vistas.
+
+rules:
+  proposal:
+    - Indica las capacidades nuevas o modificadas usando rutas exactas de openspec/specs/.
+    - Señala el impacto en frontend, backend web2py y contratos de API.
+    - Declara explícitamente lo que queda fuera de alcance.
+    - No inventes endpoints ni comportamientos; si falta información, investígala o pregúntala.
+  specs:
+    - Describe comportamiento observable, no detalles de implementación.
+    - Usa una ruta de capacidad existente cuando el comportamiento ya esté cubierto.
+    - Incluye permisos, errores y estados en los escenarios cuando apliquen.
+    - Cada requisito debe tener al menos un escenario con WHEN y THEN.
+  design:
+    - Explica las decisiones de contrato entre frontend y backend web2py.
+    - Identifica claves de query, stores, mutaciones y vistas afectadas.
+    - Registra riesgos de estados, permisos y datos heredados.
+  tasks:
+    - Cada tarea debe indicar cómo verificar su finalización.
+    - Incluye lint y typecheck en la verificación final; añade build si cambian rutas,
+      assets o configuración de publicación.
+    - Incluye actualizar la spec o project-context.md cuando cambie un contrato.
+
+operations:
+  apply:
+    guidance:
+      - Antes de modificar, lee project-context.md, la spec de la capacidad y el código real.
+      - Ejecuta npm run lint y npm run typecheck antes de cerrar la implementación.
+      - No cambies archivos generados ni añadas dependencias sin necesidad.
+  archive:
+    guidance:
+      - Verifica que openspec/specs/ y project-context.md reflejen el comportamiento final.
+      - Resume qué cambió y qué verificaciones se ejecutaron.
