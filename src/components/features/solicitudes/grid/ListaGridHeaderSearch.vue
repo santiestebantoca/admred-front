@@ -8,11 +8,3 @@ const { search } = toRefs(useSolicitudesFiltro())
 <template>
   <BSearchInput searchIcon v-model="search" lazy class="rounded-4" />
 </template>
-
-<style scoped>
-/** Garantiza una altura de 36px */
-:deep([type="search"]) {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-</style>

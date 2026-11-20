@@ -42,7 +42,7 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
         <ListaPeriod v-if="state === 'terminadas'" />
         <ListaStatus v-else-if="state === 'pendientes'" />
       </BCol>
-      <BCol v-if="!mobile" cols="auto" class="px-3" style="width:400px">
+      <BCol v-if="!mobile" cols="auto" class="px-3" style="width:420px">
         <ListaSearch />
       </BCol>
       <BCol v-if="!mobile" cols="auto">
@@ -88,6 +88,16 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 }
 
 :deep(input) {
-  --bs-border-color: var(--bs-gray-500);
+  --bs-border-color: var(--bs-gray-400);
+
+  &:hover {
+    --bs-border-color: var(--bs-gray-500);
+  }
+
+  &[type="search"] {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2.3rem;
+  }
 }
 </style>

@@ -62,6 +62,11 @@ const handleReset = () => {
 .form-control {
   padding-left: var(--c-padding-left);
   padding-right: var(--c-padding-right);
+
+  &::placeholder {
+    opacity: .7;
+  }
+
 }
 
 .search-group {
@@ -83,7 +88,7 @@ const handleReset = () => {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--bs-gray-600);
+    color: var(--bs-gray-700);
     left: 10px;
     font-size: .9em;
   }

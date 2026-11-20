@@ -23,8 +23,8 @@ const closeDropdown = () => model.value = false
         <template v-else>
           <BDropdown v-model="model" variant="link" auto-close="outside" no-caret :offset="{ alignmentAxis: 50 }">
             <template #button-content>
-              <ILucideFolder style="color:var(--bs-gray-800)" />
-              <ILucideChevronRight class="small opacity-50" />
+              <ILucideFolder style="color:var(--bs-gray-800); width: 18px; height: 18px;" />
+              <ILucideChevronRight class="small" style="opacity: .4;" />
               <span class="letter-spacing-1 w-180">
                 {{ tray }} {{ state }}
               </span>
