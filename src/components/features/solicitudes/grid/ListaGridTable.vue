@@ -68,7 +68,7 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
             <!-- <col style="width:80px" /> -->
             <col style="width:110px" />
             <col style="width:45%" />
-            <col :style="{ width: state === 'pendientes' ? '20%' : '25%' }" />
+            <col :style="{ width: state === 'pendientes' ? '23%' : '30%' }" />
           </template>
           <template #[`cell(3)`]="{ value }">
             <span class="estado-badge" :data-estado="value">{{ value }}</span>
@@ -174,6 +174,11 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
 
           &.td-fecha {
             color: var(--bs-gray-700);
+            // text-align: center; // no tiene longitud fija
+          }
+
+          &.td-estado {
+            text-align: center;
           }
 
           .estado-badge {

@@ -38,7 +38,7 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 <template>
   <BContainer fluid class="">
     <BRow gutter-x="1">
-      <BCol cols="auto" class="me-auto">
+      <BCol cols="auto" class="me-auto ps-2">
         <ListaPeriod v-if="state === 'terminadas'" />
         <ListaStatus v-else-if="state === 'pendientes'" />
       </BCol>
@@ -95,8 +95,7 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
   }
 
   &[type="search"] {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    margin: -1px 0; // mantiene la altura de su contenedor
     padding-left: 2.3rem;
   }
 }

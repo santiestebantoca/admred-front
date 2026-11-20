@@ -59,6 +59,7 @@ const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
     key: '3',
     label: 'Estado',
     sortable: true,
+    tdClass: 'td-estado',
   },
 ]
 
@@ -118,6 +119,7 @@ const fieldsEnviadasPendientes: TableFieldRaw<SolicitudEnviada>[] = [
     key: '3',
     label: 'Estado',
     sortable: true,
+    tdClass: 'td-estado',
   },
 ]
 
