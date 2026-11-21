@@ -86,17 +86,4 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
     margin-right: -2px;
   }
 }
-
-:deep(input) {
-  --bs-border-color: var(--bs-gray-400);
-
-  &:hover {
-    --bs-border-color: var(--bs-gray-500);
-  }
-
-  &[type="search"] {
-    margin: -1px 0; // mantiene la altura de su contenedor
-    padding-left: 2.3rem;
-  }
-}
 </style>

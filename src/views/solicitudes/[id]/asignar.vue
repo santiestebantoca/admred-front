@@ -5,6 +5,7 @@ const props = defineProps({
 
 import type { ErroresDeValidacion } from '@/types/api'
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
+import SolicitarActividad from '@/components/features/solicitudes/[id]/SolicitarActividad.vue'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
 import { useSolicitudUpdate } from '@/stores/solicitudes'
@@ -31,6 +32,22 @@ const { options: tramitadores } = useTramitadoresQuery()
 const { mutateAsync: actualizarSolicitud, asyncStatus } = useSolicitudUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
+// La actividad se define antes de asignar. Mientras falte, la acción queda
+// bloqueada y solo el supervisor del área destino puede desbloquearla.
+const avisoActividad = ref(true)
+const actividadDefinida = ref(false)
+const actividadPendiente = computed(() =>
+  Boolean(solicitud.value.requiere_actividad)
+  && !solicitud.value.actividad
+  && !actividadDefinida.value
+)
+const puedeDefinirActividad = computed(() =>
+  actividadPendiente.value && solicitud.value.puede_definir_actividad
+)
+const bloqueadaPorActividad = computed(() =>
+  actividadPendiente.value && !solicitud.value.puede_definir_actividad
+)
+
 onMounted(() => model.value = true)
 
 function validate() {
@@ -50,7 +67,8 @@ const submit = () => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back()" title="Asignar"
+  <SolicitarActividad v-if="puedeDefinirActividad" :back="back" @definida="actividadDefinida = true" />
+  <BModal v-else-if="!bloqueadaPorActividad" v-model="model" @hidden="back()" title="Asignar"
     :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <BForm id="form-asignar" @submit.prevent="submit" density="3" :aria-busy="loading">
       <BFormGroup label="Tramitador" v-bind="errorState.tramitador">
@@ -63,6 +81,15 @@ const submit = () => {
         Asignar
       </BotonEnvio>
       <SeleccionarTipo down v-model="form.tipo" />
+    </template>
+  </BModal>
+  <BModal v-else v-model="avisoActividad" @hidden="back()" title="Actividad pendiente" size="lg" fullscreen="sm">
+    <p>
+      Esta solicitud requiere que el supervisor del área destino defina si la
+      actividad es de provisión o de administración antes de asignarla.
+    </p>
+    <template #footer>
+      <BButton variant="primary" @click="avisoActividad = false">Entendido</BButton>
     </template>
   </BModal>
 </template>

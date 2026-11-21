@@ -10,7 +10,7 @@ const props = defineProps({
     <BListGroupItem v-if="solicitud.padre" class="padre hstack">
       <IBiCircleFill />
       <BButton :to="linkSolicitud(solicitud.padre.id)" variant="link"
-        v-tippy="`De: ${solicitud.padre.origen} / Para: ${solicitud.origen.nombre}`">
+        v-tippy="{ content: `De: ${solicitud.padre.origen} <br> A: ${solicitud.origen.nombre}`, allowHTML: true }">
         {{ solicitud.padre.codigo }}
       </BButton>
     </BListGroupItem>
@@ -25,7 +25,7 @@ const props = defineProps({
     <BListGroupItem v-for="hijo in solicitud.hijos" class="hijo hstack">
       <ILucideCornerDownRight />
       <IBiCircleFill />
-      <BButton :to="linkSolicitud(hijo.id)" variant="link" v-tippy="`Para: ${hijo.destino}`">
+      <BButton :to="linkSolicitud(hijo.id)" variant="link" v-tippy="`A: ${hijo.destino}`">
         {{ hijo.codigo }}
       </BButton>
       <span v-if="hijo.estado !== 'Terminado'" class="text-dark text-opacity-25">

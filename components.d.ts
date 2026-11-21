@@ -147,6 +147,7 @@ declare module 'vue' {
     SeleccionarCumplir: typeof import('./src/components/features/solicitudes/[id]/SeleccionarCumplir.vue')['default']
     SeleccionarDestino: typeof import('./src/components/features/solicitudes/[id]/SeleccionarDestino.vue')['default']
     SeleccionarTipo: typeof import('./src/components/features/solicitudes/[id]/SeleccionarTipo.vue')['default']
+    SolicitarActividad: typeof import('./src/components/features/solicitudes/[id]/SolicitarActividad.vue')['default']
     TablaEsqueleto: typeof import('./src/components/commons/TablaEsqueleto.vue')['default']
     TablePagination: typeof import('./src/components/commons/TablePagination.vue')['default']
     TiemposSubCard: typeof import('./src/components/features/solicitudes/[id]/TiemposSubCard.vue')['default']

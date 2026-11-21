@@ -11,6 +11,7 @@
 
 import type {
   AdjuntoVistaRow,
+  ActividadSolicitud,
   AreaRow,
   AuthGroupRow,
   EstadoRow,
@@ -171,6 +172,9 @@ export interface SolicitudDetalle {
   cumplir_en: FechaHora | null
   observaciones: string | null
   evaluacion: number | null
+  actividad: ActividadSolicitud | null
+  requiere_actividad: boolean
+  puede_definir_actividad: boolean
   cant_nota: number
   adjuntos_solicitud: AdjuntoSolicitud[]
   adjuntos_respuesta: AdjuntoSolicitud[]
@@ -218,6 +222,12 @@ export interface SolicitudEvaluada {
   evaluacion: number
 }
 
+/** `PUT` con `actividad`: definir la clasificación territorial. */
+export interface SolicitudActividadDefinida {
+  id: Id
+  actividad: ActividadSolicitud
+}
+
 /**
  * Cuerpo de `PUT /solicitudes/solicitudes/:id`.
  * El controlador decide la acción según la clave presente.
@@ -227,6 +237,7 @@ export type SolicitudUpdate =
   | SolicitudRespondida
   | SolicitudAprobada
   | SolicitudEvaluada
+  | SolicitudActividadDefinida
 
 /** Cuerpo de la petición, sin el `id` que va en la ruta. */
 export type SolicitudUpdatePayload =
@@ -234,6 +245,7 @@ export type SolicitudUpdatePayload =
   | Omit<SolicitudRespondida, 'id'>
   | Omit<SolicitudAprobada, 'id'>
   | Omit<SolicitudEvaluada, 'id'>
+  | Omit<SolicitudActividadDefinida, 'id'>
 
 // ---------------------------------------------------------------------------
 // Notas y bitácoras

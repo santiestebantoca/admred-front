@@ -8,6 +8,7 @@ import SeleccionarDestino from '@/components/features/solicitudes/[id]/Seleccion
 import SeleccionarAdjuntos from '@/components/features/solicitudes/[id]/SeleccionarAdjuntos.vue'
 import SeleccionarTipo from '@/components/features/solicitudes/[id]/SeleccionarTipo.vue'
 import SeleccionarCumplir from '@/components/features/solicitudes/[id]/SeleccionarCumplir.vue'
+import SolicitarActividad from '@/components/features/solicitudes/[id]/SolicitarActividad.vue'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import { isValidationError } from '@/api/client'
 import { useTextLimit } from '@/composables/useTextLimit'
@@ -46,6 +47,22 @@ const { mutateAsync: crearSolicitud, asyncStatus } = useSolicitudCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const adjuntosSubiendo = computed(() => Boolean(adjuntos.value?.subiendo))
 const enviando = computed(() => loading.value || adjuntosSubiendo.value)
+
+// La actividad se define antes de reenviar. El tramitador no puede definirla:
+// si falta, se muestra un aviso en lugar de un formulario que fallará.
+const avisoActividad = ref(true)
+const actividadDefinida = ref(false)
+const actividadPendiente = computed(() =>
+  Boolean(solicitud.value.requiere_actividad)
+  && !solicitud.value.actividad
+  && !actividadDefinida.value
+)
+const puedeDefinirActividad = computed(() =>
+  actividadPendiente.value && solicitud.value.puede_definir_actividad
+)
+const bloqueadaPorActividad = computed(() =>
+  actividadPendiente.value && !solicitud.value.puede_definir_actividad
+)
 
 const objetivo = computed({
   get: () => form.value.objetivo,
@@ -89,8 +106,10 @@ const submit = () => {
 </script>
 
 <template>
-  <BModalPlus v-model="model" title="Nueva solicitud (Reenviada)" capsule-title="Nueva solicitud" @hidden="back()"
-    size="lg" fullscreen="sm" :scrollable="false" :no-close-on-backdrop="loading" :no-close-on-esc="loading">
+  <SolicitarActividad v-if="puedeDefinirActividad" :back="back" @definida="actividadDefinida = true" />
+  <BModalPlus v-else-if="!bloqueadaPorActividad" v-model="model" title="Nueva solicitud (Reenviada)"
+    capsule-title="Nueva solicitud" @hidden="back()" size="lg" fullscreen="sm" :scrollable="false"
+    :no-close-on-backdrop="loading" :no-close-on-esc="loading">
     <BForm id="form-reenviar" @submit.prevent="submit" density="3" :aria-busy="enviando">
       <SeleccionarDestino v-model="form.destino" v-bind="errorState.destino" />
       <BFormGroup v-bind="errorState.objetivo">
@@ -120,4 +139,17 @@ const submit = () => {
       <SeleccionarCumplir v-model="form.cumplir_en" />
     </template>
   </BModalPlus>
+  <BModal v-else v-model="avisoActividad" @hidden="back()" title="Actividad pendiente" size="lg" fullscreen="sm">
+    <p>
+      Esta solicitud requiere que el supervisor del área destino defina si la
+      actividad es de provisión o de administración antes de reenviarla.
+    </p>
+    <p class="text-secondary small mb-0">
+      Contacte con el supervisor del área destino para completar la
+      clasificación.
+    </p>
+    <template #footer>
+      <BButton variant="primary" @click="avisoActividad = false">Entendido</BButton>
+    </template>
+  </BModal>
 </template>

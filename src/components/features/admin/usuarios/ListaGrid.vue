@@ -35,9 +35,9 @@ const fields: TableFieldRaw<UsuarioListaItem>[] = [
   {
     key: 'registration_key',
     label: 'Clave de registro',
-    formatter: ({ value }) => value === 'blocked'
-      ? 'Bloqueado'
-      : String(value || 'Activo')
+    // formatter: ({ value }) => value === 'blocked'
+    //   ? 'Bloqueado'
+    //   : String(value || 'Activo')
   },
 ]
 const tableId = 'admin-usuarios-tabla'
@@ -71,6 +71,16 @@ watchEffect(() => usuarioId.value && (active.value = [usuarioId.value]))
         <template #table-colgroup>
           <col style="width:40%" />
           <col style="width:40%" />
+        </template>
+        <template #cell(registration_key)="{ value }">
+          <template v-if="value === 'blocked'">
+            <IBiCircleFill class="text-danger me-1" style="font-size:10px;margin-bottom: 3px;" />
+            Bloqueado
+          </template>
+          <template v-else>
+            <IBiCircleFill class="text-success me-1" style="font-size:10px;margin-bottom: 3px;" />
+            Normal
+          </template>
         </template>
       </BTable>
     </div>

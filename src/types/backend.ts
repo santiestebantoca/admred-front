@@ -83,12 +83,16 @@ export interface EstadoRow {
   descripcion: string
 }
 
+/** Clasificación de las solicitudes territoriales (nivel 7 → nivel 6). */
+export type ActividadSolicitud = 'PROV' | 'ADMIN'
+
 /** Fila de la tabla `solicitud` (models/db_.py). */
 export interface SolicitudRow {
   id: number
   codigo: string | null
   solicitado_en: FechaHora | null
   tipo: number | null
+  actividad: ActividadSolicitud | null
   objetivo: string | null
   origen: number | null
   destino: number | null

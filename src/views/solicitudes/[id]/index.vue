@@ -12,6 +12,7 @@ import ParticipantesSubCard from '@/components/features/solicitudes/[id]/Partici
 import EsquemaSubCard from '@/components/features/solicitudes/[id]/EsquemaSubCard.vue'
 import AdjuntosSubCard from '@/components/features/solicitudes/[id]/AdjuntosSubCard.vue'
 import EvaluacionSubCard from '@/components/features/solicitudes/[id]/EvaluacionSubCard.vue'
+import { ACTIVIDADES } from '@/constants'
 import { useSolicitudQuery } from '@/stores/solicitudes'
 import { useAuthQuery } from '@/stores/auth'
 import { formatDate } from '@/composables/useDates'
@@ -28,6 +29,9 @@ const rootStyle = computed(() => ({
   '--bs-modal-bg': 'var(--bs-surface-1)',
   '--bs-modal-padding': '0',
 }))
+const actividadTexto = computed(() =>
+  ACTIVIDADES.find(a => a.value === solicitud.value?.actividad)?.text
+)
 
 onMounted(() => watchEffect(() => !isPending.value && (model.value = true))) // espera al inicio
 
@@ -93,6 +97,12 @@ provide('solicitud:solicitud', solicitud)
           <div class="label">Área consultada</div>
           <div class="data">
             {{ solicitud.destino.nombre }}
+          </div>
+        </div>
+        <div v-if="solicitud.actividad">
+          <div class="label">Actividad</div>
+          <div class="data">
+            {{ actividadTexto }}
           </div>
         </div>
         <div>

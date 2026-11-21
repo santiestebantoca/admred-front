@@ -26,8 +26,8 @@ const computedPlaceholder = computed(() => {
   return props.lazy ? 'Buscar... (Presiona Enter ↵)' : 'Buscar...'
 })
 const rootStyle = computed(() => ({
-  '--c-padding-left': props.searchIcon ? '2rem' : '0.75rem',
-  '--c-padding-right': props.resetIcon ? '2rem' : '0.75rem',
+  '--c-padding-left': props.searchIcon ? '2.25rem' : '0.75rem',
+  '--c-padding-right': props.resetIcon ? '2.25rem' : '0.75rem',
 }))
 
 const debounceValue = computed(() => (props.lazy ? 0 : Number(props.debounce)))
@@ -90,7 +90,6 @@ const handleReset = () => {
     transform: translateY(-50%);
     color: var(--bs-gray-700);
     left: 10px;
-    font-size: .9em;
   }
 }
 </style>

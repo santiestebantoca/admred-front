@@ -110,12 +110,15 @@ Validaciones del backend:
 - **Aprobar**: exige ser el `supervisor` de la solicitud.
 - **Evaluar**: exige ser el `remitente`.
 - **Comentar**: exige ser tramitador, remitente o supervisor de la solicitud.
+- **Definir actividad**: exige membresía `supervisor` y área del usuario igual al destino,
+  además de estado 1 o 2, solicitud territorial y `actividad` nula.
 
 > `AR` no concede permisos de acción sobre solicitudes; solo afecta a reportes.
 
 > **Importante**: las validaciones del backend comprueban la relación del usuario con la
-> solicitud, pero **no el estado** en `PUT`. La máquina de estados se garantiza por la UI;
-> una llamada directa a la API podría ejecutar una transición fuera de orden.
+> solicitud, pero **no el estado** en `PUT`, salvo la rama de `actividad`, que exige estado
+> 1 o 2. La máquina de estados se garantiza por la UI; una llamada directa a la API podría
+> ejecutar una transición fuera de orden.
 
 ---
 
@@ -184,6 +187,8 @@ Devuelve la solicitud con:
 - `padre` (resumen) y `hijos` (array de resúmenes);
 - `cant_nota`;
 - `adjuntos_solicitud` (tipo 1) y `adjuntos_respuesta` (tipo 2);
+- `actividad` (`"PROV" | "ADMIN" | null`), `requiere_actividad` y
+  `puede_definir_actividad`;
 - `permisos`.
 
 ### 4.3 Crear
@@ -215,6 +220,9 @@ El backend completa:
 Si viene `padre`, además actualiza el padre: `supervisor = tramitador = auth.user_id`,
 `tramitador_en = now`, `estado = 2`.
 
+Si el padre requiere actividad y todavía no la tiene, el `POST` responde HTTP 422
+**antes** de crear la solicitud hija.
+
 Respuesta: `{ id, errors }`. Errores de validación → HTTP 422.
 
 ### 4.4 Actualizar / ejecutar acción
@@ -227,11 +235,16 @@ El backend decide la acción por la **clave presente** en el cuerpo:
 
 | Clave | Acción | Efectos |
 | --- | --- | --- |
+| `actividad` | Definir la actividad territorial | Guarda `actividad` una única vez |
 | `tramitador` | Asignar o reasignar | `supervisor = auth.user_id`, `tramitador_en = now`, `estado = 2` |
 | `observaciones` | Responder | `respuesta_en = now`, `estado = 3`; sincroniza adjuntos de respuesta |
 | `aprobado = '1'` | Aprobar | `estado = 4`, `terminado_en = now` |
 | `aprobado = '0'` | Rechazar | `estado = 2`; el frontend puede añadir nota con evento `Respuesta rechazada` |
 | `evaluacion` | Evaluar | Guarda la calificación |
+
+La rama `actividad` valida que la solicitud sea territorial, que el estado sea 1 o 2, que
+el usuario sea supervisor del área destino y que `actividad` sea nula. Asignar y reenviar
+se bloquean con HTTP 422 mientras falte la actividad.
 
 Respuestas:
 
@@ -319,6 +332,12 @@ rechazo y evaluación desde `models/db_callbacks.py`. Es solo lectura.
 11. **El reenvío no tiene validación explícita en el POST**: cualquier usuario
     autenticado puede enviar `padre`. La restricción real es de UI (`permisos.reenviar`)
     y debe corregirse en el backend si se considera un riesgo.
+12. **Solicitud territorial**: requiere actividad cuando el origen es un área de nivel 7
+    y el destino es su área padre de nivel 6. La regla se calcula en el backend.
+13. **Actividad**: solo la define el supervisor del área destino, una única vez, en estado
+    1 o 2. Valores admitidos: `PROV` (provisión) y `ADMIN` (administración).
+14. **Bloqueo por actividad**: sin actividad definida no se puede asignar ni reenviar una
+    solicitud territorial; ambas acciones responden HTTP 422.
 
 ---
 
@@ -355,6 +374,11 @@ rechazo y evaluación desde `models/db_callbacks.py`. Es solo lectura.
   sobre el detalle.
 - El detalle se provee como `provide('solicitud:solicitud', solicitud)`.
 - Los modales de acción reciben `back` y cierran con él.
+- Si la solicitud es territorial y falta la actividad, `asignar.vue` y `reenviar.vue`
+  muestran primero `SolicitarActividad.vue` (solo si el usuario puede definirla) o un
+  aviso de bloqueo. Al guardar, el detalle se invalida y aparece el formulario normal.
+- El detalle muestra la actividad cuando está definida; el listado y los reportes no la
+  incluyen.
 - Las mutaciones invalidan `solicitudes.listas()`, `solicitudes.detalles()` y
   `notificaciones.listas()`.
 - La lista usa `useSolicitudesQuery` con `staleTime` de 5 minutos e indicador local de
@@ -376,6 +400,8 @@ rechazo y evaluación desde `models/db_callbacks.py`. Es solo lectura.
   supervisor/tramitador del padre.
 - `evaluacion` no tiene plazo en el backend; el `TODO` de acotarlo sigue abierto.
 - La UI no permite comentar terminadas, pero el backend no lo impide por sí solo.
+- Las solicitudes territoriales existentes en estado 1 o 2 sin actividad quedan bloqueadas
+  hasta que el supervisor del destino la defina; no se hace backfill.
 
 ---
 
@@ -389,6 +415,9 @@ Tras un cambio en el módulo:
 - [ ] Responder guarda `respuesta_en`, pasa a estado 3 y sincroniza adjuntos tipo 2.
 - [ ] Aprobar `1` pasa a estado 4 con `terminado_en`; aprobar `0` vuelve a estado 2.
 - [ ] Evaluar solo funciona una vez y solo para el remitente.
+- [ ] Una solicitud territorial sin actividad responde 422 al asignar y al reenviar.
+- [ ] El supervisor del destino define `PROV`/`ADMIN` una sola vez en estado 1 o 2; un
+      segundo intento responde 422 y un usuario no autorizado recibe 403.
 - [ ] Las bandejas recibidas/enviadas respetan las reglas de supervisor vs. usuario.
 - [ ] Los permisos del detalle coinciden con las validaciones del backend.
 - [ ] `npm run lint` y `npm run typecheck` terminan sin errores.

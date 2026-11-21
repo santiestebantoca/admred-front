@@ -6,5 +6,5 @@ const { search } = toRefs(useSolicitudesFiltro())
 </script>
 
 <template>
-  <BSearchInput searchIcon v-model="search" lazy class="rounded-4" />
+  <BSearchInput searchIcon v-model="search" lazy class="rounded-4" placeholder="Buscar en la carpeta" />
 </template>

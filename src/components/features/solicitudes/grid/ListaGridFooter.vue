@@ -39,8 +39,9 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
       </BCol>
       <!--  -->
       <BCol cols="auto" class="text-danger" v-if="isStale">
-        <BButton variant="flat py-1 text-danger" @click="refresh()" v-tippy="'Los datos pueden estar desactualizados'">
-          <ILucideRefreshCcw class="small" />
+        <BButton variant="flat btn-sm py-1 text-danger" @click="refresh()"
+          v-tippy="'Los datos pueden estar desactualizados'">
+          <ILucideRefreshCcw />
           Actualizar
         </BButton>
       </BCol>
@@ -51,7 +52,12 @@ const { search_in, search, isFiltered, filtro } = toRefs(useSolicitudesFiltro())
 <style scoped lang="scss">
 .footer-row {
   height: 40px;
-  color: var(--bs-warning-text-emphasis);
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--bs-secondary);
+  margin-left: 0;
+  margin-right: 0;
+  // color: var(--bs-warning-text-emphasis);
 
   * {
     line-height: 24px;

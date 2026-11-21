@@ -150,6 +150,9 @@ Convenciones del backend:
 - Algunos catálogos devuelven un **array plano** (destinos, niveles, grupos, tramitadores,
   consultadas, demandantes).
 - Errores de validación: HTTP 422 con `{ campo: ["mensaje"] }` o `{ errors: {...} }`.
+- **Actividad territorial**: `GET /solicitudes/solicitudes/:id` expone `actividad`,
+  `requiere_actividad` y `puede_definir_actividad`. Se escribe con
+  `PUT { actividad: "PROV" | "ADMIN" }`; sin actividad, asignar y reenviar responden 422.
 
 ### Endpoints usados por el frontend
 
@@ -480,6 +483,8 @@ datepicker → tokens → utilities → overrides → density → admred
 - `useTextLimit` no recorta texto heredado que ya supere el máximo; solo impide ampliarlo.
 - Los cálculos de tiempo laborable son una regla de negocio del frontend
   (`useTimeDelta`): L–V, 8:00–12:00 y 12:30–17:30; viernes hasta 16:30.
+- `solicitud.actividad` está en `models/db_.py`, pero la tabla usa `migrate=False`; la
+  columna debe existir en la base desplegada antes de usar la clasificación territorial.
 
 ---
 

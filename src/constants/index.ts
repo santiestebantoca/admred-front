@@ -1,4 +1,5 @@
 import type { EstadoId, Periodo } from '@/types/api'
+import type { ActividadSolicitud } from '@/types/backend'
 
 export const PENDIENTE_STATUS: { text: string; value: EstadoId | undefined }[] = [
   { text: 'Todas', value: undefined },
@@ -31,6 +32,12 @@ export const CURSO_SOLICITUD: { text: string; value: 1 | 2 }[] = [
 ]
 
 export const DIRECCION_ADMINISTRACION_ID = 2
+
+/** Clasificación de las solicitudes territoriales (nivel 7 → nivel 6). */
+export const ACTIVIDADES: { text: string; value: ActividadSolicitud }[] = [
+  { text: 'Provisión', value: 'PROV' },
+  { text: 'Administración', value: 'ADMIN' },
+]
 
 export const USOS_DEL_TIPO = [
   { value: undefined, text: '' },

@@ -50,7 +50,7 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
       <BContainer v-if="mobile" class="table-mobile-container" :style="rootStyle">
         <BRow v-for="d in solicitudes" :key="d[0]" @click="onSelectedItem(d)">
           <BCol class="presentacion-de-para">
-            {{ tray === 'recibidas' ? 'De:' : 'Para:' }}
+            {{ tray === 'recibidas' ? 'De:' : 'A:' }}
             {{ d[6] }}
           </BCol>
           <BCol cols="auto" class="presentacion-presentada">
@@ -190,7 +190,5 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
       }
     }
   }
-
-
 }
 </style>
