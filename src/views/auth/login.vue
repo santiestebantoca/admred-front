@@ -53,7 +53,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
 
 <template>
   <div class="grid">
-    <div class="mb-3 content">
+    <div class="mb-3 content px-3 px-md-0">
       <h4 class="text-primary-emphasis mt-1 text-center">ADM Red</h4>
       <h5 class="text-primary-emphasis fw-semibold text-center">Inicio de sesión</h5>
       <div class="text-muted login-hint">
@@ -78,8 +78,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           </BButton>
         </BFormGroup>
         <BFormButtons class="py-2">
-          <BotonEnvio type="submit" variant="primary w-100 lh-lg" :loading="loading"
-            texto-cargando="Iniciando sesión…">
+          <BotonEnvio type="submit" variant="primary w-100 lh-lg" :loading="loading" texto-cargando="Iniciando sesión…">
             Iniciar sesión
           </BotonEnvio>
         </BFormButtons>
