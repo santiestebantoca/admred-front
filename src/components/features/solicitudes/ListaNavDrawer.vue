@@ -15,9 +15,8 @@ const { hide: hideDrawer } = useToggle('drawer-left')
       <TreeNode v-for="data in options" :data="data" :key="data.id">
         <template #default="{ data }">
           <BListGroupItem v-if="data.to" @click="hideDrawer" :to="data.to" class="highlight-active">
-            <UIcon :name="data.icon" />
             {{ data.label }}
-            <span v-if="data.count" v-text="data.count" class="float-end text-secondary" />
+            <span class="float-end text-secondary">{{ data.count }}</span>
           </BListGroupItem>
           <BListGroupItem v-else class="small hstack">
             {{ data.label }}
