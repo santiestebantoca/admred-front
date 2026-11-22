@@ -72,7 +72,9 @@ const vInput = {
       </BCol>
       <BCol class="px-1 hstack">
         <BFormInput v-input v-bind="attrs" :class="{ warning }" debounce="600" />
-        <BDropdown v-model="dropdown" :auto-close="false" variant="emphasis">
+        <!-- Con una sola área destino no hay nada que elegir: el desplegable
+             quedaría vacío, así que se deshabilita el toggle. -->
+        <BDropdown v-model="dropdown" :auto-close="false" variant="emphasis" :disabled="Boolean(singleOption)">
           <BDropdownItemButton v-for="{ nombre, id, history } in destinos" :key="id" @click="select(id, nombre)"
             :class="{ history }">
             <ILucideClockFading v-if="history" />

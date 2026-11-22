@@ -24,11 +24,10 @@ type SolicitudEnviada = [
   number | null        // 7 - root
 ]
 
-// BTable aplica `unref` al resultado del formatter, así que puede recibir el
-// Ref reactivo de `listTime` (se actualiza a medianoche), pero su tipo
-// declarado exige un string.
+// `listTime` devuelve el texto formateado y registra la dependencia del día en
+// el efecto que renderiza la tabla, así que el texto se refresca a medianoche.
 const formatearFecha = ({ value }: { value: unknown }) =>
-  listTime(value as string) as unknown as string
+  listTime(value as string)
 
 const fieldsRecibidasPendientes: TableFieldRaw<SolicitudRecibida>[] = [
   {

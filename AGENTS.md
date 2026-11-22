@@ -778,10 +778,12 @@ Accesibilidad:
 Fechas:
 
 - `formatTime` / `formatDate` / `formatHM` devuelven **string** (`DD/MM/YYYY HH:mm`, etc.).
-- `shortTime` / `shorterTime` / `listTime` devuelven un **`Ref<string | null>`** que se
-  actualiza a medianoche; úsalos directamente en plantillas o dentro de `computed`.
+- `shortTime` / `shorterTime` / `listTime` devuelven **`string | null`** y pueden
+  invocarse durante el render: leen el día compartido, así que el efecto que renderiza
+  se recalcula cuando cambia el día (medianoche).
 - `getDate` acepta `Date`, ISO, `"YYYY-MM-DD HH:mm:ss"` (formato del backend) y
-  `"YYYY-MM-DD"` (datepicker). No reinventes el parseo.
+  `"YYYY-MM-DD"` (datepicker). Devuelve `null` para valores vacíos o no interpretables.
+  No reinventes el parseo.
 - `timeDeltaW` calcula minutos laborables (L–V, 8:00–12:00 y 12:30–17:30; viernes hasta
   16:30).
 

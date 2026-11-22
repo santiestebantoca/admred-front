@@ -1,5 +1,5 @@
 import { useDateFormat } from "@vueuse/core"
-import { ref, watch, onScopeDispose, type Ref } from "vue"
+import { ref, type Ref } from "vue"
 
 /**
  * Tipo aceptado por las funciones de fecha: Date, string o timestamp numérico,
@@ -7,35 +7,64 @@ import { ref, watch, onScopeDispose, type Ref } from "vue"
  */
 type DateInput = Date | string | number | null | undefined
 
+/** Devuelve la fecha solo si es válida; de lo contrario, null. */
+const toValidDate = (date: Date): Date | null =>
+  isNaN(date.getTime()) ? null : date
+
+/**
+ * Construye una fecha local y descarta desbordamientos (mes 13, día 40, etc.).
+ * @returns La fecha si todos sus componentes coinciden, o null.
+ */
+const fromParts = (
+  y: number,
+  m: number,
+  d: number,
+  hh = 0,
+  mi = 0,
+  ss = 0
+): Date | null => {
+  const date = new Date(y, m - 1, d, hh, mi, ss)
+  const valida = date.getFullYear() === y &&
+    date.getMonth() === m - 1 &&
+    date.getDate() === d &&
+    date.getHours() === hh &&
+    date.getMinutes() === mi &&
+    date.getSeconds() === ss
+  return valida ? date : null
+}
+
 /**
  * Convierte un valor a objeto Date de forma segura.
  * @param val - Fecha en formato Date, string, número, o null/undefined.
- * @returns Instancia de Date o null si no es convertible.
+ * @returns Instancia de Date válida o null si no es convertible.
  */
 const getDate = (val: DateInput): Date | null => {
-  if (val instanceof Date) return val
+  if (val instanceof Date) return toValidDate(val)
   if (typeof val === "string") {
     // Caso servidor: "YYYY-MM-DD HH:mm:ss"
     if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(val)) {
       const [datePart, timePart] = val.split(" ")
       const [y, m, d] = datePart.split("-").map(Number)
       const [hh, mm, ss] = timePart.split(":").map(Number)
-      return new Date(y, m - 1, d, hh, mm, ss)
+      return fromParts(y, m, d, hh, mm, ss)
     }
 
     // Caso ISO con T y zona
     if (/T\d{2}:\d{2}/.test(val)) {
-      const d = new Date(val)
-      return isNaN(d.getTime()) ? null : d
+      return toValidDate(new Date(val))
     }
 
     // Caso simple del datepicker: "YYYY-MM-DD"
-    const [y, m, d] = val.split("-").map(Number)
-    return new Date(y, m - 1, d)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+      const [y, m, d] = val.split("-").map(Number)
+      return fromParts(y, m, d)
+    }
+
+    // Cualquier otro texto (vacío, basura, formatos no soportados)
+    return null
   }
   if (typeof val === "number") {
-    const d = new Date(val)
-    return isNaN(d.getTime()) ? null : d
+    return toValidDate(new Date(val))
   }
   return null
 }
@@ -66,195 +95,117 @@ const daysAgo = (val: DateInput): number | undefined => {
   return Math.round(timeDelta / (1000 * 3600 * 24))
 }
 
-// Estado global compartido
-const now = ref(new Date())
-const day = ref(now.value.getDate())
-const hour = ref(now.value.getHours())
+// Estado del reloj compartido. `day` es la dependencia reactiva que leen los
+// formateadores relativos: al cambiar el día, el efecto que los invoca (el
+// render de la tabla o de la vista móvil) se vuelve a ejecutar.
+const day = ref(new Date().getDate())
+const hour = ref(new Date().getHours())
 
 let intervalTimer: ReturnType<typeof setInterval> | null = null
-let refCount = 0
 
-/** Inicia el intervalo si no está ya corriendo. */
-function startInterval(): void {
+/**
+ * Inicia el reloj compartido una sola vez.
+ *
+ * Los formateadores relativos se invocan durante el render, donde no existe un
+ * `EffectScope` al que asociar limpiezas. Por eso no se usan `onScopeDispose` ni
+ * watchers propios: quedarían sin limpiar y se acumularían en cada render. La
+ * reactividad la aporta la lectura de `day` dentro del efecto que renderiza.
+ */
+function ensureClock(): void {
   if (intervalTimer) return
+
   intervalTimer = setInterval(() => {
-    now.value = new Date()
-    day.value = now.value.getDate()
-    hour.value = now.value.getHours()
+    const actual = new Date()
+    day.value = actual.getDate()
+    hour.value = actual.getHours()
   }, 1000)
 }
 
-/** Detiene el intervalo si existe. */
-function stopInterval(): void {
-  if (intervalTimer) {
-    clearInterval(intervalTimer)
-    intervalTimer = null
-  }
-}
-
 /**
- * Composable que provee la fecha y hora actuales (actualiza cada segundo).
- * Es un singleton: todos los consumidores comparten el mismo estado y el
- * intervalo se inicia/detiene automáticamente según el número de usuarios activos.
+ * Devuelve las refs compartidas de día y hora del reloj de la aplicación.
+ * El intervalo se inicia la primera vez que se usa cualquier función de fecha.
  * @returns Objeto con las refs reactivas `day` y `hour`.
  */
 export function useDateTime(): { day: Ref<number>; hour: Ref<number> } {
-  // Si es el primer consumidor, arrancamos el intervalo
-  if (refCount === 0) {
-    startInterval()
-  }
-  refCount++
-
-  // Al desmontar el componente, decrementamos el contador y paramos si es el último
-  onScopeDispose(() => {
-    refCount--
-    if (refCount === 0) {
-      stopInterval()
-    }
-  })
-
-  // Devolvemos las mismas refs compartidas para todos
+  ensureClock()
   return { day, hour }
 }
 
 /**
- * Devuelve una referencia reactiva con un texto formateado que representa
- * la fecha relativa al día actual. Ejemplos:
+ * Devuelve el texto formateado de una fecha relativa al día actual. Ejemplos:
  *   - Si es hoy: "Hoy 14:30"
  *   - Si fue ayer: "Ayer 10:15"
  *   - Otros días: "12 Mar 08:00"
  *
- * La referencia se actualiza automáticamente cuando cambia el día (a medianoche)
- * gracias al watcher sobre `day` de `useDateTime`.
+ * Al leer `day`, el efecto que invoca la función (normalmente el render del
+ * componente) se recalcula cuando cambia el día.
  *
  * @param strDate - Fecha a formatear (Date, string, o null/undefined).
- * @returns Ref<string | null> - Texto formateado o null si la fecha es inválida.
+ * @returns Texto formateado o null si la fecha es inválida.
  */
-export function shortTime(strDate: DateInput): Ref<string | null> {
-  const res = ref<string | null>(null)
+export function shortTime(strDate: DateInput): string | null {
   const date = getDate(strDate)
+  if (!date) return null
 
-  if (!date) {
-    return res // devolvemos null directamente
-  }
+  ensureClock()
+  day.value // Dependencia del render: refresca el texto al cambiar el día.
 
-  // Obtenemos la ref compartida del día actual
-  const { day } = useDateTime()
-
-  // Función que actualiza el valor de res según la fecha dada
-  const updateValue = (): void => {
-    const ago = daysAgo(date)
-    if (ago === 0) {
-      res.value = `Hoy ${useDateFormat(date, "HH:mm").value}`
-    } else if (ago === 1) {
-      res.value = `Ayer ${useDateFormat(date, "HH:mm").value}`
-    } else {
-      res.value = useDateFormat(date, "D MMM HH:mm").value
-    }
-  }
-
-  // Creamos el watcher y guardamos su función de parada
-  const stopWatch = watch(day, updateValue, { immediate: true })
-
-  // Al desmontar el componente, detenemos este watcher y limpiamos la ref
-  onScopeDispose(() => {
-    stopWatch()
-    res.value = null
-  })
-
-  return res
+  const hora = useDateFormat(date, "HH:mm").value
+  const ago = daysAgo(date)
+  if (ago === 0) return `Hoy ${hora}`
+  if (ago === 1) return `Ayer ${hora}`
+  return useDateFormat(date, "D MMM HH:mm").value
 }
 
 /**
- * Devuelve una referencia reactiva con un texto formateado compacto que
- * representa la fecha relativa al día actual. Ejemplos:
+ * Devuelve el texto formateado compacto de una fecha relativa al día actual.
+ * Ejemplos:
  *   - Si es hoy: "14:30"
  *   - Si fue ayer: "Ayer"
  *   - Otros días: "12/03/2025"
  *
- * La referencia se actualiza automáticamente cuando cambia el día (a medianoche)
- * gracias al watcher sobre `day` de `useDateTime`.
+ * Al leer `day`, el efecto que invoca la función (normalmente el render del
+ * componente) se recalcula cuando cambia el día.
  *
  * @param strDate - Fecha a formatear (Date, string, o null/undefined).
- * @returns Ref<string | null> - Texto formateado o null si la fecha es inválida.
+ * @returns Texto formateado o null si la fecha es inválida.
  */
-export function shorterTime(strDate: DateInput): Ref<string | null> {
-  const res = ref<string | null>(null)
+export function shorterTime(strDate: DateInput): string | null {
   const date = getDate(strDate)
+  if (!date) return null
 
-  if (!date) {
-    return res // devolvemos null directamente
-  }
+  ensureClock()
+  day.value // Dependencia del render: refresca el texto al cambiar el día.
 
-  // Obtenemos la ref compartida del día actual
-  const { day } = useDateTime()
-
-  // Función que actualiza el valor de res según la fecha dada
-  const updateValue = (): void => {
-    const ago = daysAgo(date)
-    if (ago === 0) {
-      res.value = useDateFormat(date, "HH:mm").value
-    } else if (ago === 1) {
-      res.value = "Ayer"
-    } else {
-      res.value = useDateFormat(date, "DD/MM/YYYY").value
-    }
-  }
-
-  // Creamos el watcher y guardamos su función de parada
-  const stopWatch = watch(day, updateValue, { immediate: true })
-
-  // Al desmontar el componente, detenemos este watcher y limpiamos la ref
-  onScopeDispose(() => {
-    stopWatch()
-    res.value = null
-  })
-
-  return res
+  const hora = useDateFormat(date, "HH:mm").value
+  const ago = daysAgo(date)
+  if (ago === 0) return hora
+  if (ago === 1) return "Ayer"
+  return useDateFormat(date, "DD/MM/YYYY").value
 }
 
 /**
- * Devuelve una referencia reactiva con un texto formateado de tipo lista que
- * representa la fecha relativa al día actual. Ejemplos:
+ * Devuelve el texto formateado de tipo lista de una fecha relativa al día
+ * actual. Ejemplos:
  *   - Si es hoy: "14:30"
  *   - Otros días: "12/03/2025 14:30"
  *
- * La referencia se actualiza automáticamente cuando cambia el día (a medianoche)
- * gracias al watcher sobre `day` de `useDateTime`.
+ * Al leer `day`, el efecto que invoca la función (normalmente el render del
+ * componente) se recalcula cuando cambia el día.
  *
  * @param strDate - Fecha a formatear (Date, string, o null/undefined).
- * @returns Ref<string | null> - Texto formateado o null si la fecha es inválida.
+ * @returns Texto formateado o null si la fecha es inválida.
  */
-export function listTime(strDate: DateInput): Ref<string | null> {
-  const res = ref<string | null>(null)
+export function listTime(strDate: DateInput): string | null {
   const date = getDate(strDate)
+  if (!date) return null
 
-  if (!date) {
-    return res // devolvemos null directamente
-  }
+  ensureClock()
+  day.value // Dependencia del render: refresca el texto al cambiar el día.
 
-  // Obtenemos la ref compartida del día actual
-  const { day } = useDateTime()
-
-  // Función que actualiza el valor de res según la fecha dada
-  const updateValue = (): void => {
-    if (daysAgo(date) === 0) {
-      res.value = useDateFormat(date, "HH:mm").value
-    } else {
-      res.value = useDateFormat(date, "DD/MM/YYYY HH:mm").value
-    }
-  }
-
-  // Creamos el watcher y guardamos su función de parada
-  const stopWatch = watch(day, updateValue, { immediate: true })
-
-  // Al desmontar el componente, detenemos este watcher y limpiamos la ref
-  onScopeDispose(() => {
-    stopWatch()
-    res.value = null
-  })
-
-  return res
+  return daysAgo(date) === 0
+    ? useDateFormat(date, "HH:mm").value
+    : useDateFormat(date, "DD/MM/YYYY HH:mm").value
 }
 
 /**
