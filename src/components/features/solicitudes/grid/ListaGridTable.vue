@@ -47,7 +47,7 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
       <div v-if="isLoading" class="indicador-actualizacion">
         <IndicadorCarga inline texto="Actualizando…" />
       </div>
-      <BContainer v-if="mobile" class="table-mobile-container" :style="rootStyle">
+      <BContainer v-if="mobile" fluid class="table-mobile-container" :style="rootStyle">
         <BRow v-for="d in solicitudes" :key="d[0]" @click="onSelectedItem(d)">
           <BCol class="presentacion-de-para">
             {{ tray === 'recibidas' ? 'De:' : 'A:' }}
@@ -57,7 +57,7 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
             {{ shorterTime(d[4]) }}
           </Bcol>
           <BCol cols="12" class="presentacion-objetivo">
-            <p>{{ d[2] }}</p>
+            <p class="text-wrap">{{ d[2] }}</p>
           </BCol>
         </BRow>
       </BContainer>
@@ -72,6 +72,9 @@ const onSelectedItem = (val: SolicitudListaTupla) => setSolicitudId.value(val[0]
           </template>
           <template #[`cell(3)`]="{ value }">
             <span class="estado-badge" :data-estado="value">{{ value }}</span>
+          </template>
+          <template #[`cell(2)`]="{ value }">
+            <span :title="filaExpandida ? '' : (value as string)">{{ value }}</span>
           </template>
         </BTable>
       </div>

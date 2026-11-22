@@ -36,9 +36,9 @@ const expandir = () => filaExpandida.value = !filaExpandida.value
 </script>
 
 <template>
-  <BContainer fluid class="">
+  <BContainer fluid :class="{ 'px-0': mobile }">
     <BRow gutter-x="1">
-      <BCol cols="auto" class="me-auto ps-2">
+      <BCol cols="auto" class="me-auto ps-md-2">
         <ListaPeriod v-if="state === 'terminadas'" />
         <ListaStatus v-else-if="state === 'pendientes'" />
       </BCol>

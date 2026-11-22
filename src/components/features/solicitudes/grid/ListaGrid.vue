@@ -11,8 +11,8 @@ const mobile = inject('app:mobile')
 <template>
   <div class="root">
     <ListaHeader />
-    <div class="grid px-3 py-1 py-md-2">
-      <ListaGridHeader class="py-2" />
+    <div class="grid p-2 px-md-3 overflow-hidden">
+      <ListaGridHeader class="py-md-2" />
       <ListaGridTable class="overflow-hidden me-n3" />
       <ListaGridFooter :class="{ 'd-none': mobile }" />
     </div>
