@@ -23,7 +23,7 @@ const form = ref<UsuarioUpdate>({
   last_name: usuario.value.last_name,
   username: usuario.value.username, // si no tiene actividad auditable (coincide con permiso de eliminar)
   email: usuario.value.email, // se actualiza con username, no aparece en la IU
-  area: usuario.value.area.id,
+  area: usuario.value.area?.id ?? null,
   fijo: usuario.value.fijo,
   movil: usuario.value.movil,
   grupos: usuario.value.grupos.map((d) => d.id),
@@ -74,8 +74,10 @@ const errorState = computed(() => ({
 }))
 const { mutateAsync: actualizarUsuario, asyncStatus } = useUsuarioUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
-const showUsername = computed(() => usuario.value?.permisos.eliminar)
-const showArea = computed(() => authUser.value?.AR)
+const showUsername = computed(() => usuario.value?.permisos.editar_username)
+const showArea = computed(() => !!authUser.value?.admin)
+const esPropioNoAr = computed(() =>
+  !authUser.value?.AR && props.usuarioId === authUser.value?.id)
 const { groups } = useAuthGroupsQuery()
 const { areas } = useAreasOpcionesQuery(showArea)
 
@@ -132,8 +134,9 @@ const submit = () => {
           </BFormGroup>
         </BCol>
       </BRow>
-      <BFormGroup v-if="showArea" label="Pertenece al área" v-bind="errorState.area">
-        <BFormSelect v-model="form.area" :options="areas" />
+      <BFormGroup v-if="showArea" label="Pertenece al área" v-bind="errorState.area"
+        :description="esPropioNoAr ? 'El área del propio usuario no se puede cambiar.' : undefined">
+        <BFormSelect v-model="form.area" :options="areas" :disabled="esPropioNoAr" />
       </BFormGroup>
       <BFormGroup v-slot="{ ariaDescribedby }" label="Grupos">
         <BFormCheckboxGroup v-model="form.grupos" :aria-describedby="ariaDescribedby" class="form-control-border">

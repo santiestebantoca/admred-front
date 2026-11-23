@@ -67,13 +67,20 @@ const errorState = computed(() => ({
 }))
 const { mutateAsync: crearUsuario, asyncStatus } = useUsuarioCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
-const showArea = computed(() => authUser.value?.AR)
+const showArea = computed(() => !!authUser.value?.admin)
 const { groups } = useAuthGroupsQuery()
 const { areas } = useAreasOpcionesQuery(showArea)
 
 watchEffect(() => {
   if (form.value.username) form.value.email = form.value.username + '@etecsa.cu'
   else form.value.email = null
+})
+
+// El no AR parte de su propia área; puede cambiarla dentro de su ámbito.
+watchEffect(() => {
+  if (!authUser.value?.AR && !form.value.area) {
+    form.value.area = authUser.value?.area ?? null
+  }
 })
 
 const validate = () => {

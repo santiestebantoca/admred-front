@@ -37,20 +37,19 @@ Fuera de alcance: autenticación (ver README), solicitudes y reportes.
 | Administrador | Puede ver / gestionar |
 | --- | --- |
 | Área `AR` | Todos los usuarios |
-| Área distinta de `AR` | Usuarios de su misma área y usuarios sin área creados por él |
+| Área distinta de `AR` | Usuarios de su subárbol y usuarios sin área creados por él |
 
 Detalles del backend:
 
-- El listado no-AR filtra por `area_id == auth.user.area` **o**
+- El listado no-AR filtra por `area_id IN subárbol(auth.user.area)` **o**
   (`area_id == None` **y** `created_by == auth.user_id`).
-- La validación de escritura (`user_in_scope`) acepta usuarios de la misma área,
-  usuarios sin área, o cualquiera si el administrador es AR.
-- Un administrador no-AR **no puede cambiar** el área de un usuario: el campo se elimina
-  del payload.
-- En el alta, un administrador no-AR fuerza `area = auth.user.area`.
-
-> Matiz conocido: el listado solo muestra usuarios sin área creados por el propio
-> administrador, pero la validación de edición acepta cualquier usuario sin área.
+- La validación de escritura (`user_in_scope`) acepta usuarios del subárbol y
+  usuarios sin área creados por el administrador; AR no se acota.
+- Un administrador no-AR **puede cambiar** el área dentro de su subárbol; el área
+  de su propio usuario se conserva.
+- En el alta, el área debe pertenecer al subárbol; si falta, se usa el área propia.
+- El listado, el detalle y las mutaciones usan el mismo predicado de ámbito, incluida
+  la regla de `created_by` para usuarios sin área.
 
 ### Alcance de áreas
 
@@ -67,7 +66,7 @@ Detalles del backend:
   `padre` y `nivel` son inmutables.
 - El alta usa el área de contexto (o la propia) como padre y deriva el nivel.
 - No puede fijar `rol_key` ni `is_active` en el alta ni en la edición.
-- El ámbito de usuarios no se amplía: sigue siendo el de la sección anterior.
+- El ámbito de usuarios se detalla en la sección anterior.
 
 ---
 
@@ -100,8 +99,10 @@ Parámetros: `search`, `search_in`, `nombre`, `area`, `rol`, `estado`, `page`, `
 
 - `rol` filtra por `auth_membership.group_id`.
 - `estado` filtra por `registration_key`.
-- Devuelve `id`, `name`, `username`, `registration_key` desde `vw_usuario`.
+- Devuelve `id`, `name`, `username`, `registration_key`, `area` y `area_id` desde `vw_usuario`.
 - Respuesta paginada `{ data, meta }` o `{ data, meta: { total } }`.
+- Para el administrador no AR, el query se acota al subárbol y a los usuarios sin
+  área creados por él.
 
 #### Detalle
 
@@ -112,9 +113,12 @@ Devuelve:
 - `grupos` como filas de `auth_group`;
 - `modified_by` como nombre del usuario;
 - `permisos.eliminar`.
+- `permisos.editar_username`, verdadero cuando el usuario no tiene actividad auditable.
+
+El detalle de un usuario fuera del ámbito del administrador no AR responde 403.
 
 `permisos.eliminar` es `true` solo si el usuario **no** aparece como `tramitador`,
-`remitente` ni `supervisor` en ninguna solicitud.
+`remitente` ni `supervisor` en ninguna solicitud y **no** es el propio usuario.
 
 #### Alta
 
@@ -122,31 +126,45 @@ Devuelve:
 - El backend crea la membresía con `grupos`.
 - Los campos de registro (`registration_key`, `reset_password_key`,
   `registration_id`) se fuerzan a `NULL`.
-- Un administrador no-AR no elige área.
+- El área debe pertenecer al subárbol del administrador no AR; si falta, se usa su
+  área propia. Un área ajena responde 403.
 
 #### Edición
 
 - `email` y `username` no vacíos y no repetidos.
-- Un administrador no-AR no puede cambiar `area`.
+- Un administrador no AR puede cambiar `area` dentro de su subárbol; un área ajena
+  responde 403. El área del propio usuario se conserva.
 - `username` **no se puede cambiar** si el usuario tiene actividad auditable
   (es tramitador, remitente o supervisor de alguna solicitud).
 - La membresía se reemplaza con `grupos`.
 
 #### Borrado
 
+- Para el administrador no AR, el usuario debe estar en su ámbito; fuera responde 403.
+- Un administrador no puede borrar su propio usuario: responde 403.
 - Bloqueado con HTTP 405 si el usuario está referenciado por alguna solicitud como
   `tramitador`, `remitente` o `supervisor`.
 - Mensaje: «No permitido por una regla de integridad.»
+
+#### Interfaz
+
+- El selector de área se muestra en el alta, la edición y el filtro para todo
+  administrador; para el no AR las opciones se acotan a su subárbol.
+- El alta propone el área propia del administrador no AR.
+- En la edición del propio usuario, el selector de área se deshabilita.
+- El listado incluye la columna «Área» y el filtro por área respeta el ámbito.
 
 ### Reglas de negocio
 
 1. `username` es identificador estable una vez que el usuario participa en solicitudes.
 2. `email` y `username` son únicos.
-3. El área solo la decide un administrador AR.
+3. El área la decide un administrador AR en cualquier área; un no AR dentro de su
+   subárbol, salvo la de su propio usuario.
 4. Un usuario no se borra si tiene historial; se desactiva con `registration_key`.
 5. Los grupos definen roles (`administrador`, `supervisor`); no se guardan en
    `auth_user`.
 6. El borrado es físico (`DELETE`), no lógico.
+7. Un administrador no puede borrarse a sí mismo.
 
 ---
 
@@ -388,14 +406,18 @@ crear.vue        formulario de alta
 ## 8. Criterios de verificación
 
 - [ ] Un administrador AR ve y gestiona todos los usuarios.
-- [ ] Un administrador no-AR solo ve su área y sus usuarios sin área.
-- [ ] Un no-AR no puede cambiar el área de un usuario.
+- [ ] Un administrador no-AR ve y gestiona su subárbol y sus usuarios sin área.
+- [ ] Un no-AR puede cambiar el área dentro de su subárbol y conserva la de su propio usuario.
+- [ ] Un no-AR no puede ver ni editar usuarios fuera de su ámbito.
+- [ ] Un administrador no puede borrarse a sí mismo.
 - [ ] `username` queda bloqueado si el usuario tiene solicitudes asociadas.
 - [ ] El borrado de usuario, área o tipo referenciado devuelve 405 y no borra.
 - [ ] Niveles 1, 4 y 6 guardan `padre = null`; nivel 2 guarda `padre = 1`; nivel 5 conserva padre 4 o 5.
 - [ ] La vista de áreas alterna entre Lista y Navegar; para AR la raíz muestra 1, 4 y 6; para no AR la raíz es su propia área.
 - [ ] El alta desde un nivel y desde un área propone el nivel y el padre correctos; para no AR el padre es el área de contexto y el nivel se deriva.
 - [ ] `permisos.editar` y `permisos.eliminar` coinciden con la validación del backend.
+- [ ] El listado de usuarios muestra el área y el filtro respeta el ámbito.
+- [ ] `permisos.eliminar` es falso en el propio usuario.
 - [ ] Tipos solo se escriben desde un área AR.
 - [ ] Un administrador no AR gestiona su subárbol y no puede editar ni borrar su propia área.
 - [ ] Un administrador no AR no puede fijar `rol_key` ni `is_active`.

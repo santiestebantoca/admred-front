@@ -34,6 +34,12 @@ export interface PermisosArea {
   eliminar: boolean
 }
 
+/** Permisos contextuales del detalle de usuario. */
+export interface PermisosUsuario {
+  editar_username: boolean
+  eliminar: boolean
+}
+
 // ---------------------------------------------------------------------------
 // Áreas
 // ---------------------------------------------------------------------------
@@ -125,7 +131,7 @@ export interface UsuarioDetalle {
   modified_on: FechaHora | null
   modified_by: string | null
   grupos: AuthGroupRow[]
-  permisos: PermisosEliminar
+  permisos: PermisosUsuario
 }
 
 // ---------------------------------------------------------------------------

@@ -95,7 +95,7 @@ export interface UsuariosParams extends BusquedaParams, PaginacionParams {
 /** Proyección de `vw_usuario` que devuelve `GET /usuarios/usuarios`. */
 export type UsuarioListaItem = Pick<
   VwUsuarioRow,
-  'id' | 'name' | 'username' | 'registration_key'
+  'id' | 'name' | 'username' | 'registration_key' | 'area' | 'area_id'
 >
 
 export type UsuariosListaResponse = ListResponse<UsuarioListaItem>

@@ -33,6 +33,11 @@ const fields: TableFieldRaw<UsuarioListaItem>[] = [
     label: 'Nombre de usuario',
   },
   {
+    key: 'area',
+    label: 'Área',
+    formatter: ({ value }) => String(value ?? '-')
+  },
+  {
     key: 'registration_key',
     label: 'Clave de registro',
     // formatter: ({ value }) => value === 'blocked'
@@ -69,8 +74,9 @@ watchEffect(() => usuarioId.value && (active.value = [usuarioId.value]))
       <BTable v-else :id="tableId" :items="usuarios" :fields="fields" :empty-text="emptyText" show-empty hover
         primary-key="id" selectable select-mode="single" v-model:selected-items="selectedItems">
         <template #table-colgroup>
-          <col style="width:40%" />
-          <col style="width:40%" />
+          <col style="width:30%" />
+          <col style="width:30%" />
+          <col style="width:25%" />
         </template>
         <template #cell(registration_key)="{ value }">
           <template v-if="value === 'blocked'">

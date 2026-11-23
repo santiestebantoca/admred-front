@@ -30,7 +30,7 @@ const form = ref<FiltroUsuarios>({
   estado: undefined
 })
 const { authUser } = useAuthQuery()
-const showArea = computed(() => authUser.value?.AR)
+const showArea = computed(() => !!authUser.value?.admin)
 const { areas } = useAreasOpcionesQuery(showArea)
 const emit = defineEmits(['reset'])
 const dropdown = ref(false)
