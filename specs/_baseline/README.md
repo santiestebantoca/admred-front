@@ -133,7 +133,7 @@ Significado operativo:
 | --- | --- |
 | `admin` | Acceso a la sección de administración |
 | `supervisor` | Permisos de supervisión sobre el área destino/origen |
-| `AR` | Reportes globales y administración de áreas/tipos |
+| `AR` | Reportes globales, tipos y administración de todas las áreas |
 | `DAR` | Presente en el contrato; el frontend no lo usa para menús |
 | `area` | Área del usuario; base de casi todos los permisos contextuales |
 | `can_impersonate` | Habilita el menú de personificación |
@@ -160,11 +160,11 @@ Significado operativo:
 
 | Rol / grupo | Efecto |
 | --- | --- |
-| `administrador` | Gestiona usuarios de su alcance |
+| `administrador` | Gestiona usuarios de su alcance y, si su área no es AR, las áreas de su subárbol |
 | `supervisor` | Asigna, reenvía, aprueba y ve solicitudes de su área |
 | `tramitador` (implícito por asignación) | Responde y reenvía solicitudes asignadas |
 | `remitente` (implícito por autoría) | Evalúa y comenta sus solicitudes |
-| Área con `rol_key = 'AR'` | Acceso global a reportes y catálogos administrativos |
+| Área con `rol_key = 'AR'` | Acceso global a reportes, tipos y todas las áreas |
 
 ---
 

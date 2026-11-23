@@ -129,12 +129,12 @@ export function useNavigationAdmin() {
       to: { name: 'admin-usuarios' },
       icon: 'lucide-users',
     },
+    {
+      label: 'Áreas',
+      to: { name: 'admin-areas' },
+      icon: 'lucide-land-plot'
+    },
     ...AR ? [
-      {
-        label: 'Áreas',
-        to: { name: 'admin-areas' },
-        icon: 'lucide-land-plot'
-      },
       {
         label: 'Tipos de solicitud',
         to: { name: 'admin-tipos' },

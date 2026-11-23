@@ -16,17 +16,23 @@ const {
   filas,
   breadcrumb,
   esRaiz,
+  esAR,
   actual,
   subir,
   entrarNivel,
   entrarArea,
   contextoCrear,
+  puedeCrear,
   isPending,
   isLoading,
 } = useAreasNavegacion()
 
 const vacioTexto = computed(() => {
-  if (esRaiz.value) return 'No hay niveles configurados.'
+  if (esRaiz.value) {
+    return esAR.value
+      ? 'No hay niveles configurados.'
+      : 'No hay áreas para administrar.'
+  }
   return actual.value?.tipo === 'nivel'
     ? 'No hay áreas en este nivel.'
     : 'Esta área no tiene áreas hijas.'
@@ -41,7 +47,7 @@ const textoTotal = (total: number) => `${total} ${total === 1 ? 'área' : 'área
   <div>
     <div class="hstack flex-wrap align-items-center gap-2 mb-3">
       <ModoConmutador v-model="modo" />
-      <BButton :to="linkCrear?.(contextoCrear)" class="ms-auto">
+      <BButton v-if="puedeCrear" :to="linkCrear?.(contextoCrear)" class="ms-auto">
         <ILucidePlus /> Agregar
       </BButton>
     </div>

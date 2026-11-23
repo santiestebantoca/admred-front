@@ -27,7 +27,9 @@ Fuera de alcance: autenticación (ver README), solicitudes y reportes.
 
 - Sesión iniciada.
 - Membresía `administrador` para **escritura** de usuarios.
-- Para áreas y tipos, además, el área del usuario debe tener `rol_key = 'AR'`.
+- Para **tipos**, además, el área del usuario debe tener `rol_key = 'AR'`.
+- Para **áreas**, la escritura está disponible para administradores AR (cualquier
+  área) y para administradores no AR dentro del subárbol de su propia área.
 - La lectura de catálogos está disponible para usuarios autenticados.
 
 ### Alcance de usuarios
@@ -49,6 +51,23 @@ Detalles del backend:
 
 > Matiz conocido: el listado solo muestra usuarios sin área creados por el propio
 > administrador, pero la validación de edición acepta cualquier usuario sin área.
+
+### Alcance de áreas
+
+| Administrador | Puede ver / gestionar |
+| --- | --- |
+| Área `AR` | Todas las áreas |
+| Área distinta de `AR` | Su propia área y todos sus descendientes |
+
+Detalles del backend:
+
+- El `GET` de listado y detalle se acota al subárbol del administrador no AR.
+- Su propia área aparece en la lista y el detalle, pero es de solo lectura.
+- En las áreas de su subárbol, el administrador no AR solo cambia el nombre:
+  `padre` y `nivel` son inmutables.
+- El alta usa el área de contexto (o la propia) como padre y deriva el nivel.
+- No puede fijar `rol_key` ni `is_active` en el alta ni en la edición.
+- El ámbito de usuarios no se amplía: sigue siendo el de la sección anterior.
 
 ---
 
@@ -159,14 +178,19 @@ Parámetros: `search`, `search_in`, `nombre`, `padre`, `nivel`, `rol_key`,
 El listado también expone `padre_id` y `nivel_id`. La navegación usa esos ids para
 construir la jerarquía sin depender de los nombres.
 
+Para un administrador no AR, el listado se acota a su subárbol (su área y sus
+descendientes). Un administrador AR conserva el listado completo.
+
 #### Modos de visualización
 
 La vista de áreas ofrece dos modos:
 
 - **Lista**: la tabla paginada con sus filtros.
-- **Navegar**: raíz con los niveles 1, 4 y 6. Al elegir un nivel se listan sus áreas;
-  al entrar en un área se listan sus hijas. La primera fila de toda lista no raíz
-  vuelve al nivel superior. En este modo no hay paginación ni filtro.
+- **Navegar**: para un administrador AR, raíz con los niveles 1, 4 y 6. Para un
+  administrador no AR, raíz con una fila única que representa su propia área. Al
+  elegir un nivel se listan sus áreas; al entrar en un área se listan sus hijas. La
+  primera fila de toda lista no raíz vuelve al nivel superior. En este modo no hay
+  paginación ni filtro.
 
 En navegación, el clic en el nombre abre el detalle y el icono de carpeta entra en las
 hijas. La carpeta solo aparece si el área tiene hijas reales.
@@ -175,10 +199,14 @@ hijas. La carpeta solo aparece si el área tiene hijas reales.
 
 - `nivel` y `padre` expandidos a fila.
 - `modified_by` como nombre.
+- `permisos.editar` es `true` para un administrador AR y para las áreas del
+  subárbol de un no AR distintas de la propia; es `false` para el área propia del
+  no AR.
 - `permisos.eliminar` es `true` solo si el área no está referenciada por:
   - otra área como padre;
   - un usuario (`auth_user.area`);
   - una solicitud como origen o destino.
+  Además, es `false` para el área propia de un administrador no AR.
 
 #### Alta y edición
 
@@ -205,9 +233,20 @@ Al crear desde el navegador:
 Cuando el nivel es 5, el selector «Pertenece a» y el filtro «Padre» ofrecen áreas de
 nivel 4 y de nivel 5.
 
+Para un administrador no AR, el alta y la edición siguen otras reglas:
+
+- El padre es el área de contexto (el nodo actual de la navegación o su propia área
+  desde la lista) y debe pertenecer a su subárbol.
+- El nivel se deriva del padre: 5 para una hija de nivel 5 y el nivel hijo del
+  catálogo para el resto; un padre de nivel 3 o 7 no admite hijas (HTTP 422).
+- En la edición solo cambia `nombre`; `padre`, `nivel`, `rol_key` e `is_active` se
+  descartan.
+- El formulario no ofrece los selectores de nivel ni de padre.
+
 #### Borrado
 
-- Exige ser AR y `administrador`.
+- Exige ser `administrador`: AR opera sobre cualquier área; no AR, solo sobre las
+  áreas de su subárbol y nunca sobre la propia.
 - Bloqueado con HTTP 405 si el área es padre de otra, tiene usuarios o aparece en
   solicitudes.
 
@@ -217,8 +256,12 @@ nivel 4 y de nivel 5.
 2. El nivel 2 siempre cuelga del área 1.
 3. El nivel 5 puede colgar de un área de nivel 4 o de otra de nivel 5 y puede tener hijas de nivel 5.
 4. No se puede borrar un área en uso.
-5. `rol_key = 'AR'` habilita reportes globales y administración de áreas/tipos.
+5. `rol_key = 'AR'` habilita reportes globales, la administración de tipos y la
+   administración global de áreas.
 6. Cambiar `rol_key` cambia permisos de todos los usuarios del área.
+7. Un administrador no AR administra el subárbol de su área y no puede editar ni
+   borrar su propia área.
+8. Un administrador no AR no puede fijar `rol_key` ni `is_active`.
 
 ---
 
@@ -350,8 +393,10 @@ crear.vue        formulario de alta
 - [ ] `username` queda bloqueado si el usuario tiene solicitudes asociadas.
 - [ ] El borrado de usuario, área o tipo referenciado devuelve 405 y no borra.
 - [ ] Niveles 1, 4 y 6 guardan `padre = null`; nivel 2 guarda `padre = 1`; nivel 5 conserva padre 4 o 5.
-- [ ] La vista de áreas alterna entre Lista y Navegar; la raíz muestra 1, 4 y 6 y el detalle se abre desde la fila.
-- [ ] El alta desde un nivel y desde un área propone el nivel y el padre correctos.
-- [ ] `permisos.eliminar` coincide con la validación del backend.
-- [ ] Áreas y tipos solo se escriben desde un área AR.
+- [ ] La vista de áreas alterna entre Lista y Navegar; para AR la raíz muestra 1, 4 y 6; para no AR la raíz es su propia área.
+- [ ] El alta desde un nivel y desde un área propone el nivel y el padre correctos; para no AR el padre es el área de contexto y el nivel se deriva.
+- [ ] `permisos.editar` y `permisos.eliminar` coinciden con la validación del backend.
+- [ ] Tipos solo se escriben desde un área AR.
+- [ ] Un administrador no AR gestiona su subárbol y no puede editar ni borrar su propia área.
+- [ ] Un administrador no AR no puede fijar `rol_key` ni `is_active`.
 - [ ] `npm run lint` y `npm run typecheck` terminan sin errores.

@@ -3,6 +3,10 @@ import { useNivelesQuery } from '@/stores/niveles'
 import { useAreasPadresQuery, nivelesPadreDe } from '@/stores/areas'
 import { computed, ref } from 'vue'
 
+const props = defineProps({
+  mostrarRolKey: { type: Boolean, default: true }
+})
+
 // Los filtros son estado de quien usa el componente (ListaGrid); aquí sólo se
 // editan los buffers locales y se emiten los cambios.
 // Los buffers locales no cambian cuando el modelo cambia desde fuera (Puede ser un error).
@@ -50,7 +54,7 @@ const updateInputFromForm = () => {
   if (form.value.nombre) text.push('nombre:' + form.value.nombre.trim())
   if (form.value.nivel) text.push('nivel:' + form.value.nivel)
   if (form.value.padre) text.push('de:' + form.value.padre)
-  if (form.value.rol_key) text.push('marca:true')
+  if (form.value.rol_key && props.mostrarRolKey) text.push('marca:true')
   inputValue.value = text.join(' ')
   submit()
 }
@@ -67,7 +71,7 @@ function getValuesFromInput(): FiltroAreas {
         if (arrayValores[0] === 'nombre') obj.nombre = arrayValores[1]
         if (arrayValores[0] === 'nivel') obj.nivel = parseInt(arrayValores[1])
         if (arrayValores[0] === 'de') obj.padre = parseInt(arrayValores[1])
-        if (arrayValores[0] === 'marca') obj.rol_key = true
+        if (arrayValores[0] === 'marca' && props.mostrarRolKey) obj.rol_key = true
       }
     }
   })

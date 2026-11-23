@@ -25,12 +25,14 @@ provide('area:area', area)
       </BButton>
       <h5 class="mb-1">Detalles del área</h5>
       <template v-if="area">
-        <BButton :to="editar" variant="flat ms-auto">
-          <ILucidePenLine /> Editar
-        </BButton>
-        <BButton v-if="area.permisos.eliminar" :to="eliminar" variant="flat">
-          <ILucideTrash /> Eliminar
-        </BButton>
+        <div v-if="area.permisos.editar || area.permisos.eliminar" class="ms-auto d-flex gap-2">
+          <BButton v-if="area.permisos.editar" :to="editar" variant="flat">
+            <ILucidePenLine /> Editar
+          </BButton>
+          <BButton v-if="area.permisos.eliminar" :to="eliminar" variant="flat">
+            <ILucideTrash /> Eliminar
+          </BButton>
+        </div>
       </template>
     </div>
     <IndicadorCarga v-if="isPending" texto="Cargando área…" />

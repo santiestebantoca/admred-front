@@ -7,9 +7,11 @@ export {
     useAreasOpcionesQuery
 } from './useAreasQuery'
 export { useAreaUpdate } from './useAreaUpdate'
+export { useAreaPropiaQuery } from './useAreaPropiaQuery'
 export { useAreasFiltro } from './useAreasFiltro'
 export { useAreasLista } from './useAreasLista'
-export { useAreasNavegacion, nivelHijo, nivelesPadreDe } from './useAreasNavegacion'
+export { useAreasNavegacion } from './useAreasNavegacion'
+export { nivelHijo, nivelesPadreDe } from './niveles'
 export type {
     ContextoCrearArea,
     FilaNavegacion,

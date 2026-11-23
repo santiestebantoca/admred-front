@@ -221,7 +221,9 @@ Objeto `AuthUser` relevante:
 }
 ```
 
-`AR` habilita reportes globales y administración de áreas/tipos.
+`AR` habilita reportes globales, la administración de tipos y la administración
+global de áreas. Un administrador de un área no AR gestiona las áreas de su
+subárbol; su propia área queda en solo lectura.
 `DAR` existe en el contrato, pero el frontend no lo usa para menús.
 
 ---

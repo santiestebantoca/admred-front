@@ -10,12 +10,16 @@ import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useNivelesQuery } from '@/stores/niveles'
-import { useAreasPadresQuery, useAreaCreate, nivelesPadreDe } from '@/stores/areas'
+import { useAreasPadresQuery, useAreaCreate, useAreasQuery, nivelesPadreDe } from '@/stores/areas'
+import { useAuthQuery } from '@/stores/auth'
 import type { AreaCreate } from '@/types/models.js'
 import { useNotificaciones } from '@/composables/useNotificaciones'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 
 const { exito } = useNotificaciones()
+const { authUser } = useAuthQuery()
+const esAR = computed(() => !!authUser.value?.AR)
+const { areas } = useAreasQuery({})
 const form = ref<AreaCreate>({
   nombre: null,
   nivel: props.nivelInicial ?? null,
@@ -46,18 +50,37 @@ const nivelesPadre = computed(() =>
   nivelesPadreDe(form.value.nivel, niveles.value ?? []))
 const { options: padres, isPending: padresPending } = useAreasPadresQuery(nivelesPadre)
 
+// El no AR crea siempre bajo un área de su ámbito: la de contexto o la propia.
+watchEffect(() => {
+  if (!esAR.value && !form.value.padre) {
+    form.value.padre = props.padreInicial ?? authUser.value?.area ?? null
+  }
+})
+
+const padreNombre = computed(() => {
+  if (esAR.value) return undefined
+  const id = form.value.padre
+  if (!id) return '-'
+  if (id === authUser.value?.area) return authUser.value?.area_nombre ?? '-'
+  return (areas.value ?? []).find(area => area.id === id)?.nombre ?? `Área ${id}`
+})
+
 watch(() => form.value.nivel, () => form.value.padre = null)
 
 const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío.'
-  if (!form.value.nivel) errors.value.nivel = 'Seleccione un valor.'
-  if (nivelesPadre.value.length && !form.value.padre) errors.value.padre = 'Seleccione un valor.'
+  if (esAR.value) {
+    if (!form.value.nivel) errors.value.nivel = 'Seleccione un valor.'
+    if (nivelesPadre.value.length && !form.value.padre) errors.value.padre = 'Seleccione un valor.'
+  } else if (!form.value.padre) {
+    errors.value.padre = 'No se pudo determinar el área.'
+  }
   return !Object.keys(errors.value).length
 }
 const submit = () => {
   if (loading.value || !validate()) return
-  crearArea(form.value)
+  crearArea(esAR.value ? form.value : { ...form.value, nivel: null })
     .then(() => {
       exito('Nueva área creada.')
       props.back()
@@ -77,12 +100,15 @@ const submit = () => {
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
-      <BFormGroup label="Nivel" v-bind="errorState.nivel">
+      <BFormGroup v-if="esAR" label="Nivel" v-bind="errorState.nivel">
         <BFormSelect v-model="form.nivel" :options="niveles" />
       </BFormGroup>
-      <BFormGroup label="Pertenece a" v-bind="errorState.padre">
+      <BFormGroup v-if="esAR" label="Pertenece a" v-bind="errorState.padre">
         <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending" />
         <IndicadorCarga v-if="nivelesPadre.length && padresPending" inline texto="Cargando áreas…" class="mt-1" />
+      </BFormGroup>
+      <BFormGroup v-else label="Pertenece a" v-bind="errorState.padre">
+        <BFormInput :model-value="padreNombre ?? ''" disabled />
       </BFormGroup>
       <BFormButtons class="py-4">
         <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill

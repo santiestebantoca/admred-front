@@ -6,7 +6,8 @@ import ModoConmutador from './ModoConmutador.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
-import { useAreasLista } from '@/stores/areas'
+import { useAreasLista, useAreaPropiaQuery } from '@/stores/areas'
+import { useAuthQuery } from '@/stores/auth'
 import type { ContextoCrearArea } from '@/stores/areas'
 import { useSelectedItems } from '@/composables/useSelectedItems'
 import type { AreaListaItem } from '@/types/api'
@@ -19,6 +20,10 @@ const linkCrear = inject<Ref<((contexto?: ContextoCrearArea) => RouteLocationRaw
 const setAreaId = inject<Ref<(areaId: number) => void>>('admin:areas:setAreaId')
 const active = ref<number[]>([])
 const selectedItems = useSelectedItems<AreaListaItem>(active, (ids) => ids.length && setAreaId.value(ids[0]))
+const { authUser } = useAuthQuery()
+const { puedeCrear: propiaPuedeCrear } = useAreaPropiaQuery()
+const esAR = computed(() => !!authUser.value?.AR)
+const puedeCrear = computed(() => esAR.value || propiaPuedeCrear.value)
 // Orquesta el estado de la lista (filtros + paginación del servidor) y las
 // dos interfaces que lo consumen: Filtro y TablePagination.
 const {
@@ -56,9 +61,9 @@ watchEffect(() => areaId.value && (active.value = [areaId.value]))
       <ModoConmutador v-model="modo" />
       <div class="col-8 max-w-500">
         <Filtro v-model:search="search" v-model:nombre="nombre" v-model:padre="padre" v-model:nivel="nivel"
-          v-model:rol_key="rol_key" @reset="reset" />
+          v-model:rol_key="rol_key" :mostrar-rol-key="esAR" @reset="reset" />
       </div>
-      <BButton :to="linkCrear?.()" class="ms-auto">
+      <BButton v-if="puedeCrear" :to="linkCrear?.()" class="ms-auto">
         <ILucidePlus /> Agregar
       </BButton>
     </div>

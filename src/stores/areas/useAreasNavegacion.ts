@@ -1,4 +1,7 @@
 import { useAreasQuery } from './useAreasQuery'
+import { useAreaPropiaQuery } from './useAreaPropiaQuery'
+import { nivelHijo } from './niveles'
+import { useAuthQuery } from '@/stores/auth'
 import { useNivelesQuery } from '@/stores/niveles'
 import type { AreaListaItem } from '@/types/api'
 import type { NivelRow } from '@/types/backend'
@@ -21,42 +24,14 @@ const ordenarPorNombre = (a: AreaListaItem, b: AreaListaItem) =>
   (a.nombre ?? '').localeCompare(b.nombre ?? '', 'es', { sensitivity: 'base' })
 
 /**
- * Nivel que corresponde a las hijas de un área.
- *
- * El nivel 5 es autorrecursivo: sus hijas también son de nivel 5. El resto
- * sigue el `padre_id` del catálogo de niveles.
- */
-export function nivelHijo(
-  nivelId: number | null | undefined,
-  niveles: NivelRow[],
-) {
-  if (!nivelId) return undefined
-  if (nivelId === 5) return 5
-  return niveles.find(nivel => nivel.padre_id === nivelId)?.id
-}
-
-/**
- * Niveles que pueden aparecer como padre de un área del nivel indicado.
- *
- * El nivel 5 acepta padres de nivel 4 y de nivel 5. El resto sigue el
- * `padre_id` del catálogo. Los niveles raíz devuelven una lista vacía.
- */
-export function nivelesPadreDe(
-  nivelId: number | null | undefined,
-  niveles: NivelRow[],
-) {
-  if (!nivelId) return []
-  if (nivelId === 5) return [4, 5]
-  const nivel = niveles.find(item => item.id === nivelId)
-  return nivel?.padre_id ? [nivel.padre_id] : []
-}
-
-/**
  * Estado de la navegación jerárquica de áreas.
  *
  * Carga todas las áreas una sola vez y construye el árbol en el cliente. El
  * navegador solo necesita los ids de la vista (`padre_id` y `nivel_id`), no
  * los nombres, para no depender de coincidencias de texto.
+ *
+ * El administrador AR navega desde los niveles raíz. El no AR navega desde su
+ * propia área, que es la raíz de su ámbito y se muestra en solo lectura.
  */
 export function useAreasNavegacion() {
   const {
@@ -65,7 +40,10 @@ export function useAreasNavegacion() {
     isLoading: areasLoading,
   } = useAreasQuery({})
   const { niveles, isPending: nivelesPending } = useNivelesQuery()
+  const { authUser } = useAuthQuery()
+  const { areaPropia } = useAreaPropiaQuery()
 
+  const esAR = computed(() => !!authUser.value?.AR)
   const nodos = ref<NodoNavegacion[]>([])
 
   const nivelesRaiz = computed(() =>
@@ -112,6 +90,15 @@ export function useAreasNavegacion() {
   const filas = computed<FilaNavegacion[]>(() => {
     const nodo = actual.value
     if (!nodo) {
+      if (!esAR.value) {
+        return areaPropia.value
+          ? [{
+            tipo: 'area',
+            area: areaPropia.value,
+            hijas: hijosDe(areaPropia.value.id).length,
+          }]
+          : []
+      }
       return nivelesRaiz.value.map(nivel => ({
         tipo: 'nivel',
         id: nivel.id,
@@ -140,7 +127,20 @@ export function useAreasNavegacion() {
 
   const etiquetaActual = computed(() => actual.value?.label)
 
+  const areaDeContexto = computed(() => {
+    const nodo = actual.value
+    if (!nodo) return esAR.value ? undefined : areaPropia.value
+    if (nodo.tipo === 'nivel') return undefined
+    return (areas.value ?? []).find(item => item.id === nodo.areaId)
+  })
+
+  const puedeCrear = computed(() => {
+    if (esAR.value) return true
+    return !!nivelHijo(areaDeContexto.value?.nivel_id, niveles.value ?? [])
+  })
+
   const entrarNivel = (nivelId: number) => {
+    if (!esAR.value) return
     const nivel = nivelPorId.value.get(nivelId)
     if (!nivel) return
     nodos.value.push({ tipo: 'nivel', nivelId, label: nivel.nombre })
@@ -162,13 +162,23 @@ export function useAreasNavegacion() {
 
   const contextoCrear = computed<ContextoCrearArea>(() => {
     const nodo = actual.value
-    if (!nodo) return {}
+    if (!nodo) {
+      if (!esAR.value) {
+        return areaPropia.value ? { padre: areaPropia.value.id } : {}
+      }
+      return {}
+    }
+
     if (nodo.tipo === 'nivel') {
       return { nivel: nodo.nivelId, padre: null }
     }
 
     const area = (areas.value ?? []).find(item => item.id === nodo.areaId)
     if (!area) return {}
+
+    if (!esAR.value) {
+      return { padre: area.id }
+    }
 
     return {
       nivel: nivelHijo(area.nivel_id, niveles.value ?? []),
@@ -184,6 +194,7 @@ export function useAreasNavegacion() {
     filas,
     breadcrumb,
     esRaiz,
+    esAR,
     actual,
     etiquetaActual,
     nivelesRaiz,
@@ -192,6 +203,7 @@ export function useAreasNavegacion() {
     subir,
     hijosDe,
     contextoCrear,
+    puedeCrear,
     nivelHijo: (nivelId: number | null | undefined) =>
       nivelHijo(nivelId, niveles.value ?? []),
     isPending,

@@ -28,6 +28,12 @@ export interface PermisosEliminar {
   eliminar: boolean
 }
 
+/** Permisos contextuales del detalle de área. */
+export interface PermisosArea {
+  editar: boolean
+  eliminar: boolean
+}
+
 // ---------------------------------------------------------------------------
 // Áreas
 // ---------------------------------------------------------------------------
@@ -53,7 +59,7 @@ export interface AreaDetalle
   padre: AreaRow | null
   nivel: NivelRow | null
   modified_by: string | null
-  permisos: PermisosEliminar
+  permisos: PermisosArea
 }
 
 // ---------------------------------------------------------------------------
