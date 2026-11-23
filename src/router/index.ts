@@ -10,6 +10,12 @@ const idDeRuta = (valor: string | string[] | undefined) => parseInt(String(valor
 /** Normaliza un valor de `query` a texto. */
 const textoDeQuery = (valor: string | string[] | undefined) => String(valor ?? '')
 
+/** Normaliza un valor de `query` a número (o `undefined` si no es válido). */
+const numeroDeQuery = (valor: unknown) => {
+  const texto = Array.isArray(valor) ? valor[0] : valor
+  return texto == null || texto === '' ? undefined : Number(texto)
+}
+
 const folderDefault = () => {  const folders = [
     'recibidas/pendientes',
     'recibidas/terminadas',
@@ -373,7 +379,13 @@ const routesAdmin: RouteRecordRaw[] = [
         props: (route) => ({
           showLista: route.name === 'admin-areas',
           areaId: idDeRuta(route.params.areaId),
-          linkCrear: { name: 'admin-areas-crear' },
+          linkCrear: (contexto?: { nivel?: number; padre?: number | null }) => ({
+            name: 'admin-areas-crear',
+            query: {
+              ...(contexto?.nivel ? { nivel: contexto.nivel } : {}),
+              ...(contexto?.padre ? { padre: contexto.padre } : {}),
+            }
+          }),
           setAreaId: (areaId) => areaId && router.push({
             name: 'admin-area',
             params: { areaId }
@@ -384,8 +396,10 @@ const routesAdmin: RouteRecordRaw[] = [
             path: 'crear',
             name: 'admin-areas-crear',
             component: () => import('@/views/admin/areas/crear.vue'),
-            props: () => ({
-              back: () => router.push({ name: 'admin-areas' })
+            props: (route) => ({
+              back: () => router.push({ name: 'admin-areas' }),
+              nivelInicial: numeroDeQuery(route.query.nivel),
+              padreInicial: numeroDeQuery(route.query.padre),
             })
           },
           {

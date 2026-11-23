@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const props = defineProps({
-  back: Function
+  back: Function,
+  nivelInicial: Number,
+  padreInicial: Number,
 })
 
 import type { ErroresDeValidacion } from '@/types/api'
@@ -8,8 +10,7 @@ import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useNivelesQuery } from '@/stores/niveles'
-import { useAreasDelNivelQuery } from '@/stores/areas'
-import { useAreaCreate } from '@/stores/areas'
+import { useAreasPadresQuery, useAreaCreate, nivelesPadreDe } from '@/stores/areas'
 import type { AreaCreate } from '@/types/models.js'
 import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, watch } from 'vue'
@@ -17,8 +18,8 @@ import { ref, computed, watch } from 'vue'
 const { exito } = useNotificaciones()
 const form = ref<AreaCreate>({
   nombre: null,
-  nivel: null,
-  padre: null // se reinicia cuando cambia 'nivel'
+  nivel: props.nivelInicial ?? null,
+  padre: props.padreInicial ?? null // se reinicia cuando cambia 'nivel'
 })
 const errors = ref<ErroresDeValidacion>({})
 const errorState = computed(() => ({
@@ -41,10 +42,9 @@ const errorState = computed(() => ({
 const { mutateAsync: crearArea, asyncStatus } = useAreaCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const { options: niveles } = useNivelesQuery()
-const nivelPadre = computed(() => form.value.nivel
-  ? niveles.value?.find((d) => d.id === form.value.nivel)?.padre_id
-  : undefined)
-const { options: padres, isPending: padresPending } = useAreasDelNivelQuery(nivelPadre)
+const nivelesPadre = computed(() =>
+  nivelesPadreDe(form.value.nivel, niveles.value ?? []))
+const { options: padres, isPending: padresPending } = useAreasPadresQuery(nivelesPadre)
 
 watch(() => form.value.nivel, () => form.value.padre = null)
 
@@ -52,7 +52,7 @@ const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío.'
   if (!form.value.nivel) errors.value.nivel = 'Seleccione un valor.'
-  if (padres.value && !form.value.padre) errors.value.padre = 'Seleccione un valor.'
+  if (nivelesPadre.value.length && !form.value.padre) errors.value.padre = 'Seleccione un valor.'
   return !Object.keys(errors.value).length
 }
 const submit = () => {
@@ -82,7 +82,7 @@ const submit = () => {
       </BFormGroup>
       <BFormGroup label="Pertenece a" v-bind="errorState.padre">
         <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending" />
-        <IndicadorCarga v-if="nivelPadre && padresPending" inline texto="Cargando áreas…" class="mt-1" />
+        <IndicadorCarga v-if="nivelesPadre.length && padresPending" inline texto="Cargando áreas…" class="mt-1" />
       </BFormGroup>
       <BFormButtons class="py-4">
         <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill

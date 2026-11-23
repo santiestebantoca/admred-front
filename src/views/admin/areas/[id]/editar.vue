@@ -9,8 +9,7 @@ import { isValidationError } from '@/api/client'
 import BotonEnvio from '@/components/commons/BotonEnvio.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import { useNivelesQuery } from '@/stores/niveles'
-import { useAreasDelNivelQuery } from '@/stores/areas'
-import { useAreaUpdate } from '@/stores/areas'
+import { useAreasPadresQuery, useAreaUpdate, nivelesPadreDe } from '@/stores/areas'
 import type { AreaUpdate } from '@/types/models.js'
 import { ref, computed, watch, inject, Ref } from 'vue'
 
@@ -42,10 +41,12 @@ const errorState = computed(() => ({
 const { mutateAsync: actualizarArea, asyncStatus } = useAreaUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const { options: niveles } = useNivelesQuery()
-const nivelPadre = computed(() => form.value.nivel
-  ? niveles.value?.find((d) => d.id === form.value.nivel)?.padre_id
-  : undefined)
-const { options: padres, isPending: padresPending } = useAreasDelNivelQuery(nivelPadre)
+const nivelesPadre = computed(() =>
+  nivelesPadreDe(form.value.nivel, niveles.value ?? []))
+const { options: padres, isPending: padresPending } = useAreasPadresQuery(nivelesPadre)
+// El área no puede ser padre de sí misma.
+const padresDisponibles = computed(() =>
+  padres.value?.filter(padre => padre.value !== props.areaId))
 
 watch(() => form.value.nivel, () => form.value.padre = null)
 
@@ -53,7 +54,7 @@ const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío.'
   if (!form.value.nivel) errors.value.nivel = 'Seleccione un valor.'
-  if (padres.value && !form.value.padre) errors.value.padre = 'Seleccione un valor.'
+  if (nivelesPadre.value.length && !form.value.padre) errors.value.padre = 'Seleccione un valor.'
   return !Object.keys(errors.value).length
 }
 const submit = () => {
@@ -79,8 +80,9 @@ const submit = () => {
         <BFormSelect v-model="form.nivel" :options="niveles" />
       </BFormGroup>
       <BFormGroup label="Pertenece a" v-bind="errorState.padre">
-        <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending" />
-        <IndicadorCarga v-if="nivelPadre && padresPending" inline texto="Cargando áreas…" class="mt-1" />
+        <BFormSelect v-model="form.padre" :options="padresDisponibles"
+          :disabled="!padresDisponibles?.length || padresPending" />
+        <IndicadorCarga v-if="nivelesPadre.length && padresPending" inline texto="Cargando áreas…" class="mt-1" />
       </BFormGroup>
       <BFormButtons class="py-4">
         <BotonEnvio type="submit" variant="primary w-90" :loading="loading" loading-fill

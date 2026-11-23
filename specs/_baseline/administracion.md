@@ -156,6 +156,21 @@ Parámetros: `search`, `search_in`, `nombre`, `padre`, `nivel`, `rol_key`,
 
 `rol_key` actúa como booleano: filtra las áreas que tienen rol definido.
 
+El listado también expone `padre_id` y `nivel_id`. La navegación usa esos ids para
+construir la jerarquía sin depender de los nombres.
+
+#### Modos de visualización
+
+La vista de áreas ofrece dos modos:
+
+- **Lista**: la tabla paginada con sus filtros.
+- **Navegar**: raíz con los niveles 1, 4 y 6. Al elegir un nivel se listan sus áreas;
+  al entrar en un área se listan sus hijas. La primera fila de toda lista no raíz
+  vuelve al nivel superior. En este modo no hay paginación ni filtro.
+
+En navegación, el clic en el nombre abre el detalle y el icono de carpeta entra en las
+hijas. La carpeta solo aparece si el área tiene hijas reales.
+
 #### Detalle
 
 - `nivel` y `padre` expandidos a fila.
@@ -173,11 +188,22 @@ Antes de guardar se aplica la lógica de jerarquía:
 | --- | --- |
 | `1` | `NULL` (raíz) |
 | `4` | `NULL` (raíz) |
+| `6` | `NULL` (raíz) |
 | `2` | `1` (VPOR) |
+| `5` | `4` o `5` (se respeta el valor recibido) |
 | otros | Se respeta el valor recibido |
 
-> `TODO` pendiente en el backend: la lógica de territorios (niveles 5 y 6) no está
-> incorporada.
+> El nivel 5 es autorrecursivo: puede colgar de un área de nivel 4 o de otra de
+> nivel 5 y puede tener hijas de nivel 5.
+
+Al crear desde el navegador:
+
+- desde la lista de un nivel: `nivel = N`, `padre = null`;
+- desde las hijas del área X: `padre = X`, `nivel = nivel de las hijas`;
+- para un área de nivel 5, el nivel hijo es 5.
+
+Cuando el nivel es 5, el selector «Pertenece a» y el filtro «Padre» ofrecen áreas de
+nivel 4 y de nivel 5.
 
 #### Borrado
 
@@ -187,11 +213,12 @@ Antes de guardar se aplica la lógica de jerarquía:
 
 ### Reglas de negocio
 
-1. Los niveles 1 y 4 son raíz y no tienen padre.
+1. Los niveles 1, 4 y 6 son raíz y no tienen padre.
 2. El nivel 2 siempre cuelga del área 1.
-3. No se puede borrar un área en uso.
-4. `rol_key = 'AR'` habilita reportes globales y administración de áreas/tipos.
-5. Cambiar `rol_key` cambia permisos de todos los usuarios del área.
+3. El nivel 5 puede colgar de un área de nivel 4 o de otra de nivel 5 y puede tener hijas de nivel 5.
+4. No se puede borrar un área en uso.
+5. `rol_key = 'AR'` habilita reportes globales y administración de áreas/tipos.
+6. Cambiar `rol_key` cambia permisos de todos los usuarios del área.
 
 ---
 
@@ -310,7 +337,7 @@ crear.vue        formulario de alta
 - Un administrador no-AR puede editar usuarios sin área que no creó, aunque no los vea
   en el listado.
 - El borrado de áreas y tipos devuelve 405, no 409.
-- La jerarquía de áreas no cubre todavía los niveles 5 y 6.
+- El nivel 5 es autorrecursivo: la tabla `nivel` no expresa que pueda tener hijas de su mismo nivel; el frontend lo trata como caso especial.
 - Cambiar `rol_key` de un área tiene efecto inmediato en reportes y administración.
 
 ---
@@ -322,7 +349,9 @@ crear.vue        formulario de alta
 - [ ] Un no-AR no puede cambiar el área de un usuario.
 - [ ] `username` queda bloqueado si el usuario tiene solicitudes asociadas.
 - [ ] El borrado de usuario, área o tipo referenciado devuelve 405 y no borra.
-- [ ] Niveles 1 y 4 guardan `padre = null`; nivel 2 guarda `padre = 1`.
+- [ ] Niveles 1, 4 y 6 guardan `padre = null`; nivel 2 guarda `padre = 1`; nivel 5 conserva padre 4 o 5.
+- [ ] La vista de áreas alterna entre Lista y Navegar; la raíz muestra 1, 4 y 6 y el detalle se abre desde la fila.
+- [ ] El alta desde un nivel y desde un área propone el nivel y el padre correctos.
 - [ ] `permisos.eliminar` coincide con la validación del backend.
 - [ ] Áreas y tipos solo se escriben desde un área AR.
 - [ ] `npm run lint` y `npm run typecheck` terminan sin errores.

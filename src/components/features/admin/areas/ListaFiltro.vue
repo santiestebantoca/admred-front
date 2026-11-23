@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useNivelesQuery } from '@/stores/niveles'
-import { useAreasDelNivelQuery } from '@/stores/areas'
+import { useAreasPadresQuery, nivelesPadreDe } from '@/stores/areas'
 import { computed, ref } from 'vue'
 
 // Los filtros son estado de quien usa el componente (ListaGrid); aquí sólo se
@@ -32,10 +32,9 @@ const { options: niveles } = useNivelesQuery()
 const emit = defineEmits(['reset'])
 const dropdown = ref(false)
 const inputValue = ref(undefined) // valor del input principal ej., "info nombre:informa"
-const nivelPadre = computed(() => form.value.nivel
-  ? niveles.value.find((d) => d.id === form.value.nivel).padre_id
-  : undefined)
-const { options: padres, isPending: padresPending } = useAreasDelNivelQuery(nivelPadre)
+const nivelesPadre = computed(() =>
+  nivelesPadreDe(form.value.nivel, niveles.value ?? []))
+const { options: padres, isPending: padresPending } = useAreasPadresQuery(nivelesPadre)
 
 const updateFormFromInput = () => {
   const obj = getValuesFromInput()
@@ -115,7 +114,7 @@ const reset = () => {
         <BFormGroup label="Nivel " label-cols-md="2" content-cols-md>
           <BFormSelect v-model="form.nivel" :options="niveles" />
         </BFormGroup>
-        <BFormGroup v-if="nivelPadre" label="Padre " label-cols-md="2" content-cols-md>
+        <BFormGroup v-if="nivelesPadre.length" label="Padre " label-cols-md="2" content-cols-md>
           <BFormSelect v-model="form.padre" :options="padres" :disabled="!padres?.length || padresPending" />
         </BFormGroup>
         <BFormButtons>

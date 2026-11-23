@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+const modo = defineModel<'lista' | 'navegar'>('modo', { default: 'lista' })
+
 import Filtro from './ListaFiltro.vue'
+import ModoConmutador from './ModoConmutador.vue'
 import IndicadorCarga from '@/components/commons/IndicadorCarga.vue'
 import TablaEsqueleto from '@/components/commons/TablaEsqueleto.vue'
 import TablePagination from '@/components/commons/TablePagination.vue'
 import { useAreasLista } from '@/stores/areas'
+import type { ContextoCrearArea } from '@/stores/areas'
 import { useSelectedItems } from '@/composables/useSelectedItems'
 import type { AreaListaItem } from '@/types/api'
 import type { TableFieldRaw } from 'bootstrap-vue-next'
@@ -11,7 +15,7 @@ import type { RouteLocationRaw } from 'vue-router'
 import { ref, computed, inject, watchEffect, type Ref } from 'vue'
 
 const areaId = inject<Ref<number | undefined>>('admin:areas:areaId')
-const linkCrear = inject<RouteLocationRaw>('admin:areas:linkCrear')
+const linkCrear = inject<Ref<((contexto?: ContextoCrearArea) => RouteLocationRaw) | undefined>>('admin:areas:linkCrear')
 const setAreaId = inject<Ref<(areaId: number) => void>>('admin:areas:setAreaId')
 const active = ref<number[]>([])
 const selectedItems = useSelectedItems<AreaListaItem>(active, (ids) => ids.length && setAreaId.value(ids[0]))
@@ -48,12 +52,13 @@ watchEffect(() => areaId.value && (active.value = [areaId.value]))
 
 <template>
   <div>
-    <div class="hstack align-items-center mb-3 max-w-700">
-      <div class="col-8">
+    <div class="hstack flex-wrap align-items-center gap-2 mb-3">
+      <ModoConmutador v-model="modo" />
+      <div class="col-8 max-w-500">
         <Filtro v-model:search="search" v-model:nombre="nombre" v-model:padre="padre" v-model:nivel="nivel"
           v-model:rol_key="rol_key" @reset="reset" />
       </div>
-      <BButton :to="linkCrear" class="ms-auto">
+      <BButton :to="linkCrear?.()" class="ms-auto">
         <ILucidePlus /> Agregar
       </BButton>
     </div>

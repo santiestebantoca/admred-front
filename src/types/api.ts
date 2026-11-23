@@ -121,7 +121,7 @@ export interface AreasParams extends BusquedaParams, PaginacionParams {
 /** Proyección de la vista `areas` que devuelve `GET /areas/areas`. */
 export type AreaListaItem = Pick<
   AreaVistaRow,
-  'id' | 'nombre' | 'padre' | 'nivel' | 'rol_key'
+  'id' | 'nombre' | 'padre' | 'nivel' | 'rol_key' | 'padre_id' | 'nivel_id'
 >
 
 export type AreasListaResponse = ListResponse<AreaListaItem>
